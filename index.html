@@ -411,6 +411,23 @@
     font-size:9px;font-weight:900;color:var(--strong);background:#fff;line-height:1.5;letter-spacing:.3px;}
   .capopt .big{display:flex;align-items:center;justify-content:center;height:22px;margin-bottom:6px;color:var(--strong);}
   .capopt .big svg{width:20px;height:20px;}
+  .htitle .htico{display:inline-flex;width:22px;height:22px;vertical-align:-4px;color:var(--warn);}
+  .htitle .htico svg{width:100%;height:100%;}
+  .statuspill{display:flex;align-items:center;gap:8px;border:2px solid var(--soft);border-radius:var(--r-pill);
+    padding:8px 12px;margin-bottom:9px;background:#fff;font-size:10px;font-weight:900;
+    color:var(--strong);letter-spacing:.3px;}
+  .statuspill .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;}   /* pass state */
+  .adcaption{font-size:10px;font-weight:700;color:var(--anno);text-align:center;line-height:1.55;
+    padding:0 4px;margin-top:15px;font-style:italic;}
+  .scorebanner{display:flex;align-items:baseline;gap:9px;margin-bottom:14px;padding:0 2px;}
+  .scorebanner .sb1{font-size:26px;font-weight:900;color:var(--strong);line-height:1;}
+  .scorebanner .sb2{font-size:9.5px;font-weight:900;letter-spacing:.6px;color:var(--anno);}
+  .diagrow{display:flex;gap:8px;margin-bottom:14px;}
+  .diag{flex:1;border-radius:var(--r-card);background:var(--alt);padding:10px 7px;text-align:center;}
+  .diag .dl{font-size:7.5px;font-weight:900;letter-spacing:.5px;color:var(--mut);margin-bottom:5px;}
+  .diag .dv{font-size:11px;font-weight:900;color:var(--strong);}
+  .ctasub{font-size:9.5px;font-weight:800;color:var(--anno);text-align:center;
+    margin:-6px 0 13px;letter-spacing:.2px;line-height:1.45;}
   .mclose{position:absolute;top:10px;right:10px;width:26px;height:26px;border:0;background:transparent;
     color:var(--anno);cursor:pointer;padding:3px;font-family:inherit;}
   .mclose svg{width:100%;height:100%;}
@@ -528,15 +545,15 @@ const ic = (n,s)=>`<span class="ic" style="width:${s}px;height:${s}px">${I[n]}</
 
 const SB = '<div class="statusbar"><span class="ph" style="width:34px;height:9px"></span><span class="ph" style="width:52px;height:9px"></span></div>';
 /* ---- global top bar tokens: French · Streak · Gems · Energy ---- */
-const tbar = (energy, extra) => `<div class="topbar">
+const tbar = (energy, extra, label) => `<div class="topbar">
   <span class="tk"><span class="ic" style="width:15px;height:15px">${I.flag}</span>French</span>
-  <span class="tk"><span class="ic" style="width:14px;height:14px">${I.flame}</span>12</span>
-  <span class="tk"><span class="ic" style="width:14px;height:14px">${I.gem}</span>500</span>
-  <span class="tk${energy === '0' ? ' low' : ''}"><span class="ic" style="width:17px;height:17px">${energy === '0' ? I.batt0 : I.batt}</span>${energy}</span>${extra || ''}
+  <span class="tk"><span class="ic" style="width:14px;height:14px">${I.flame}</span>126</span>
+  <span class="tk"><span class="ic" style="width:14px;height:14px">${I.gem}</span>1156</span>
+  <span class="tk${energy === '0' ? ' low' : ''}"><span class="ic" style="width:17px;height:17px">${energy === '0' ? I.batt0 : I.batt}</span>${energy}${label ? ' ' + label : ''}</span>${extra || ''}
 </div>`;
-const TB  = tbar('5');
-const TB0 = tbar('0');                                   /* depleted — Frame 1 */
-const TBFLOW = tbar('∞', '<span class="timer">3:00</span>');
+const TB  = tbar('5');                                   /* energy restored after the ad */
+const TB0 = tbar('0');                                   /* depleted — 1.1 / 1.2 / ad  */
+const TBFLOW = tbar('∞', '<span class="timer">02:45</span>', 'Energy');
 
 /* ---- bottom navigation: Home · Quests · Leaderboard · Practice · Profile ---- */
 const NAV = (on) => `<div class="navbar">
@@ -550,7 +567,7 @@ const NAV = (on) => `<div class="navbar">
 const FRAMES = [
 
   /* ================= 1 · NEW — out-of-hearts trigger ================= */
-  { id:'hearts', title:'Frame 1 — Out of Energy Trigger', sub:'Rewarded-ad interrupt at Energy = 0 · the highest-intent moment a free learner has', core:true, strip:'1 Out of Energy',
+  { id:'hearts', title:'Frame 1.1 — Out of Energy Trigger', sub:'Scenario A · rewarded-ad interrupt the moment Energy hits 0', core:true, strip:'1.1 Out of Energy',
     body: SB + TB0 + `
       <div class="canvas flush">
         <div class="lesson">
@@ -575,34 +592,35 @@ const FRAMES = [
             <div class="harrow">→</div>
             <div class="hcell full"><span class="hico">${I.batt}</span><span class="hcap">100% CHARGE</span></div>
           </div>
-          <div class="htitle">Out of Energy!</div>
-          <div class="hsub">Watch a 30s sponsored video to instantly refill 100% Energy and unlock a 3-minute AI Voice Challenge for FREE!</div>
+          <div class="htitle">Out of Energy! <span class="htico">${I.batt0}</span></div>
+          <div class="hsub">Don’t let your French streak pause here. Watch a quick 30s video to top up <b>100% Energy</b> and claim a <b>FREE 3-Min Express Voice Flow</b>!</div>
           <div class="sponbadge">${ic('play',12)} Sponsored by Marriott</div>
-          <button class="btn accent">${ic('play',15)} WATCH AD &amp; UNLOCK AI CHALLENGE</button>
+          <button class="btn accent">${ic('play',15)} WATCH AD &amp; TOP UP ENERGY</button>
           <button class="btn tx">Quit Lesson</button>
           <div class="hnote">1 OF 2 FREE ENERGY REFILLS USED TODAY</div>
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.hpair', pos:'right', html:'<b>Delta — Heart-Out friction hook.</b> The ad is bound to two things the learner already wants: their lesson survives, and a 3-minute AI session comes free. Restore alone is a toll; restore + Flow is a trade.'}
+      {n:1, tgt:'.hpair', pos:'right', html:'<b>[Delta 1] Friction-to-Value Hook.</b> Converts an out-of-energy drop-off moment into a rewarded ad view bundled with a zero-cost AI voice challenge.'}
     ],
     notes:[
-      '<b>Why this moment.</b> Energy = 0 is the highest-intent point a free learner ever reaches — they have already decided the lesson matters, and they are about to lose it.',
+      '<b>Scenario A — the hard interrupt.</b> Energy = 0 is the highest-intent point a free learner ever reaches: they have already decided the lesson matters and they are about to lose it.',
+      '<b>Convergence.</b> 1.1 and 1.2 are two doors into one room — the same rewarded ad (Frame 2) and the same 3-min AI Flow. Only the entry motive differs.',
       '<b>Why not refill-only.</b> Selling energy back reads as a penalty. Bundling one free 3-min AI Voice Challenge reframes the same 30 seconds as an upgrade.',
       '<b>Guardrails.</b> Capped at 2 free refills/day → the Cap branch handles the cap and any ad-fill failure.'
     ]},
 
   /* ================= 2 — path entry ================= */
-  { id:'trigger', title:'Frame 2 — Path Entry', sub:'Where the AI node lives on the Duolingo learning path', core:true, strip:'2 Path Entry',
-    body: SB + TB + `
+  { id:'trigger', title:'Frame 1.2 — Path Entry', sub:'Scenario B · the learner taps the AI challenge node on the path', core:true, strip:'1.2 Path Entry',
+    body: SB + TB0 + `
       <div class="canvas" style="padding:0">
         <div class="unitbar">
           <span class="ubico">${I.menu}</span>
-          <span class="ubname">PHASE 2 · SECTION 1</span>
+          <span class="ubname">Section 2, Unit 1</span>
           <span class="ubname" style="color:var(--mut)">2/5</span>
         </div>
         <div class="sectcard">
-          <div><div class="st">SECTION 1: ORDER DRINKS &amp; FOOD</div><div class="ss">2 OF 5 AUDIO LESSONS COMPLETE</div></div>
+          <div><div class="st">Order Drinks &amp; Food in Paris</div><div class="ss">2 OF 5 AUDIO LESSONS COMPLETE</div></div>
           <span class="ubico">${I.bag}</span>
         </div>
 
@@ -617,7 +635,7 @@ const FRAMES = [
           <div class="node done" style="left:72px;top:0;width:46px;height:46px">${I.headphones}<span class="tick">${I.check}</span></div>
           <div class="node done" style="left:194px;top:48px;width:46px;height:46px">${I.headphones}<span class="tick">${I.check}</span></div>
 
-          <div class="bub filled" style="left:24px;top:74px">3-MIN AI CHALLENGE</div>
+          <div class="bub filled" style="left:14px;top:74px">3-MIN EXPRESS FLOW</div>
           <div class="node mic" style="left:60px;top:112px;width:56px;height:56px">${I.mic}</div>
 
           <div class="duo" style="left:136px;top:220px;width:40px;height:40px">DUO</div>
@@ -637,27 +655,28 @@ const FRAMES = [
             </div>
           </div>
           <div class="sponsorline">SPONSOR PAYS · YOU DON'T</div>
-          <button class="btn cta2"><span>${ic('play',13)} WATCH 30s SPONSOR VIDEO</span><span style="font-size:9px;font-weight:800;opacity:.85">UNLOCKS 3-MIN AI ROLEPLAY</span></button>
+          <button class="btn cta2"><span>${ic('play',13)} WATCH 30s SPONSOR VIDEO</span><span style="font-size:9px;font-weight:800;opacity:.85">UNLOCKS A 3-MIN EXPRESS FLOW</span></button>
         </div>
 
         ${NAV('home')}
       </div>`,
     callouts:[
-      {n:1, tgt:'.node.mic', pos:'right', html:'<b>Delta — a labelled AI entry on the path.</b> The one node that isn’t a lesson. Filled solid against the hollow lesson nodes, with a dashed halo and a labelled pill above it. No invented icon — Duolingo’s own mic.'}
+      {n:1, tgt:'.node.mic', pos:'right', html:'<b>[Delta 1] Incentive Voice Node.</b> Visual anchor for the 3-minute oral micro-flow, seamlessly embedded into the standard learning path — the one node that isn’t a lesson.'}
     ],
     notes:[
       '<b>Node state system.</b> Four states, distinguished only by icon + 3-D base — a completed check with a flat base, the active star with its Duo anchor and START bubble, a dashed locked padlock with no base, and the new AI node.',
+      '<b>Scenario B — the opt-in.</b> Here the learner chooses the AI challenge while browsing the path. Same ad, same session, but self-directed rather than intercepted.',
       '<b>Why the snake matters.</b> The AI challenge has to read as part of the course, not a side door. Same path geometry, same node grammar.',
       '<b>Copy.</b> “3-min AI Challenge” rides above the node so the offer is discoverable before anything is tapped.'
     ]},
 
   /* ================= 3 — rewarded ad ================= */
-  { id:'ad', title:'Frame 3 — Sponsored Video', sub:'Rewarded ad container · countdown + sponsor badge, one container', core:false, strip:'3 Sponsored Video',
-    body: SB + TB + `
+  { id:'ad', title:'Frame 2 — Sponsored Video', sub:'Shared convergence · 1.1 and 1.2 feed the same rewarded ad', core:false, strip:'2 Sponsored Video',
+    body: SB + TB0 + `
       <div class="canvas flush">
         <div class="adslot">
           <div class="adhead">
-            <span class="adbadge"><span class="ic" style="width:12px;height:12px">${I.play}</span>Sponsored by Marriott</span>
+            <span class="adbadge"><span class="ic" style="width:12px;height:12px">${I.play}</span>Sponsored by Marriott Bonvoy</span>
             <span class="adtimer">Ad ends in 30s</span>
           </div>
           <div class="adbody">
@@ -666,6 +685,8 @@ const FRAMES = [
                 <div class="lm">MARRIOTT BONVOY</div>
                 <div class="ls">BRAND LOGO PLACEHOLDER</div>
               </div>
+            </div>
+            <div class="adcaption">Unwind in Paris. Earn points wherever your language journey takes you.
             </div>
           </div>
           <div class="adfoot">
@@ -677,7 +698,7 @@ const FRAMES = [
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.adframe', pos:'right', html:'<b>Delta — Ad-to-Native handshake.</b> On the Ad SDK’s <b>AdCompleted</b> event we do not bounce to home: the WebSocket pipeline is already warm, so the next frame is native again.'}
+      {n:1, tgt:'.adframe', pos:'right', html:'<b>[Delta 1] Zero-Interruption Handshake.</b> Listens to the <b>AdCompleted</b> SDK event to pre-connect the backend WebSocket voice pipeline — no bounce back to the home map.'}
     ],
     notes:[
       '<b>One container, no nested frames.</b> The player, the sponsor badge and the advertiser CTA all live inside a single ad surface — anything tappable in here is billed as ad interaction.',
@@ -686,7 +707,7 @@ const FRAMES = [
     ]},
 
   /* ================= 4 — room check ================= */
-  { id:'check', title:'Frame 4 — Room Check', sub:'Mic + SNR · quiet vs noisy, with the degrade path', core:false, strip:'4 Room Check',
+  { id:'check', title:'Frame 3 — Room Check', sub:'Mic + SNR · quiet vs noisy, with the degrade path', core:false, strip:'3 Room Check',
     body: SB + TB + `
       <div class="canvas flush">
         <div class="overlay">
@@ -701,8 +722,9 @@ const FRAMES = [
           </div>
           <div class="modal">
             <button class="mclose">${I.close}</button>
-            <div class="mtitle">3-Minute Micro-Flow Challenge</div>
-            <div class="mbody">Environment Check: Optimal. Find a quiet spot for real-time barge-in voice feedback.</div>
+            <div class="mtitle">Ready for a 3-Min Express Flow?</div>
+            <div class="mbody">Lily’s locked in! Find a quiet spot for real-time, live conversation practice.</div>
+            <div class="statuspill"><span class="dot"></span>QUIET SPOT DETECTED · LIVE JUMP-IN ACTIVE</div>
             <div class="mrow mic"><div class="ic">${I.mic}</div>
               <div style="flex:1"><div class="lbl">MICROPHONE</div><div class="val">Connected · input level good</div>
               <div class="track"><i style="width:74%"></i></div></div></div>
@@ -717,16 +739,16 @@ const FRAMES = [
             </div>
 
             <button class="switchrow" id="modesw" onclick="toggleFallback()">
-              <span class="stx">High background noise detected? Switch to Hold-to-Talk mode</span>
+              <span class="stx">Too noisy around you? Tap for Hold-to-Talk Mode</span>
               <span class="switch"></span>
             </button>
 
-            <button class="btn">${ic('mic',14)} I'M READY, LET'S TALK</button>
+            <button class="btn">${ic('mic',14)} I'M READY, LET'S TALK!</button>
           </div>
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.mrow.noise', pos:'right', html:'<b>Delta — SNR noise check &amp; toggle.</b> On-device SNR against a stated 60 dB threshold. Over it, we pre-select hold-to-talk so full-duplex VAD can never misfire on a train platform.'}
+      {n:1, tgt:'.mrow.noise', pos:'right', html:'<b>[Delta 1] Adaptive SNR Fallback.</b> Evaluates ambient noise levels (&gt;60 dB) to gracefully degrade full-duplex barge-in into a hold-to-talk mode.'}
     ],
     notes:[
       '<b>One exit only.</b> The close control at the top-right dismisses. The old second “Maybe later” button was a duplicate — the two mode cards already carry the real decision.',
@@ -735,21 +757,21 @@ const FRAMES = [
     ]},
 
   /* ================= 5 — zero-touch bridge ================= */
-  { id:'bridge', title:'Frame 5 — Auto Hand-off', sub:'2s native transition · zero touchable elements', core:false, strip:'5 Auto 2s',
+  { id:'bridge', title:'Frame 4 — Auto Hand-off', sub:'2s native transition · zero touchable elements', core:false, strip:'4 Auto 2s',
     body: SB + `
       <div class="canvas flush">
         <div class="bridgebox">
-          <div class="autopill">AUTO · NO TAP NEEDED</div>
+          <div class="autopill">Connecting to Lily…</div>
           <div class="phavatar wm" style="width:104px;height:104px;font-size:12px">
             <span class="wmbg">${I.wm}</span><span class="wmfg">LILY</span>
           </div>
-          <div class="line">“Ready? Let’s practice ordering coffee in Paris!”</div>
+          <div class="line">“Enchantée! Ready to order a fresh croissant in Paris?”</div>
           <div class="loadbar"><i></i></div>
-          <div class="bridgenote">CONNECTING THE LIVE CHANNEL…<br>MIC IS ALREADY ON · 2s</div>
+          <div class="bridgenote">Setting up real-time voice pipeline…</div>
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.bridgebox', pos:'right', html:'<b>Delta — Zero-touch transition.</b> 2 seconds, no button, no tab bar, nothing tappable at all. The WebSocket full-duplex stream opens behind the character beat.'}
+      {n:1, tgt:'.bridgebox', pos:'right', html:'<b>[Delta 1] Zero-Touch Transition.</b> A 2-second, zero-click animated intro that masks WebSocket handshake latency.'}
     ],
     notes:[
       '<b>Every control removed on purpose.</b> Any button here would be friction disguised as agency.',
@@ -758,12 +780,12 @@ const FRAMES = [
     ]},
 
   /* ================= 6 — micro-flow ================= */
-  { id:'core', title:'Frame 6 — 3-min Micro-Flow', sub:'barge-in + semantic mirroring · blue marks every AI surface', core:true, strip:'6 Micro-Flow',
+  { id:'core', title:'Frame 5 — 3-min Micro-Flow', sub:'barge-in + semantic mirroring · blue marks every AI surface', core:true, strip:'5 Micro-Flow',
     body: SB + TBFLOW + `
       <div class="canvas">
         <div class="vadbanner">
           <span class="ic" style="width:15px;height:15px">${I.mic}</span>
-          <span class="tx">Lily is listening… (&lt;100ms Barge-in Active)</span>
+          <span class="tx">LILY’S ALL EARS · JUMP IN ANYTIME</span>
         </div>
         <div class="vadbars"><i></i><i></i><i></i><i></i></div>
 
@@ -777,9 +799,9 @@ const FRAMES = [
           <div class="phavatar sm">LILY</div>
           <div class="tbub">
             <div class="tlab">LILY · FIRST LINE</div>
-            <div class="mirrorchip">SEMANTIC MIRROR</div>
-            <div class="mirrorline">Got it! One hot coffee coming right up.</div>
-            <div class="frline">Bien sûr. Avec du sucre ou sans sucre ?</div>
+            <div class="mirrorchip">INTENT ECHOING</div>
+            <div class="mirrorline">Ah, un café chaud! One hot coffee coming right up.</div>
+            <div class="frline">Anything sweet on the side ?</div>
             <div class="bargin"></div>
           </div>
         </div>
@@ -799,8 +821,8 @@ const FRAMES = [
         <button class="btn sec sm" style="margin-top:auto">END SESSION</button>
       </div>`,
     callouts:[
-      {n:1, tgt:'.vadbanner', pos:'right', html:'<b>Delta — &lt;100ms barge-in VAD.</b> On-device voice detection physically cuts the AI’s TTS the instant the learner opens their mouth. No “please wait”.'},
-      {n:2, tgt:'.mirrorline', pos:'right', html:'<b>Delta — Semantic mirroring.</b> The AI’s first line restates intent before it answers — the moment the learner <i>feels</i> understood, not just processed.'}
+      {n:1, tgt:'.vadbanner', pos:'right', html:'<b>[Delta 1] &lt;100ms Jump-In VAD.</b> On-device voice activity detection cuts off AI text-to-speech audio within 100 ms whenever the user speaks.'},
+      {n:2, tgt:'.mirrorchip', pos:'right', html:'<b>[Delta 2] Intent Echoing.</b> AI validates user intent in the opening clause before prompting the next conversational turn.'}
     ],
     notes:[
       '<b>Blue means AI.</b> The banner, the five pill bars, the timer and Lily’s live bubble all draw from one colour so the immersive layer is legible at a glance.',
@@ -809,19 +831,16 @@ const FRAMES = [
     ]},
 
   /* ================= 7 — peak diagnosis ================= */
-  { id:'report', title:'Frame 7 — Peak Diagnosis', sub:'flat phoneme report · conversion CTA straight under the waveform', core:true, strip:'7 Diagnosis + CTA',
+  { id:'report', title:'Frame 6 — Peak Diagnosis', sub:'flat phoneme report · conversion CTA straight under the waveform', core:true, strip:'6 Diagnosis + CTA',
     body: SB + TB + `
       <div class="canvas">
         <div class="rhead">
-          <div class="rh1">Lesson Complete!</div>
+          <div class="rh1">Challenge Smashed!</div>
           <div class="rh2">ORAL FLUENCY REPORT</div>
         </div>
-        <div class="scorebox">
-          <div class="num">92%</div>
-          <div style="flex:1">
-            <div style="font-size:10px;font-weight:900;letter-spacing:.6px;color:var(--anno)">PHONEME ACCURACY · CEFR B1 LEVEL</div>
-            <div class="ph txt" style="width:78%;margin-top:8px"></div>
-          </div>
+        <div class="scorebanner">
+          <span class="sb1">92%</span>
+          <span class="sb2">FLUENCY SCORE · CEFR B1 LEVEL</span>
         </div>
 
         <div class="phoneme">
@@ -836,7 +855,14 @@ const FRAMES = [
           <div class="phonlegend"><span>▮ ON TARGET</span><span>▭ OFF</span></div>
         </div>
 
+        <div class="diagrow">
+          <div class="diag"><div class="dl">PHONEME ACCURACY</div><div class="dv">Spot on!</div></div>
+          <div class="diag"><div class="dl">RHYTHM</div><div class="dv">Natural</div></div>
+          <div class="diag"><div class="dl">VOCAB</div><div class="dv">Café Ready</div></div>
+        </div>
+
         <button class="btn accent">${ic('rocket',15)} START 3-DAY FREE SUPER TRIAL</button>
+        <div class="ctasub">Get Unlimited Energy + Infinite Express Voice Flows</div>
         <div class="rewardrow">
           <div class="rw"><span>+40</span>XP EARNED</div>
           <div class="rw"><span>3</span>NEW WORDS</div>
@@ -847,18 +873,18 @@ const FRAMES = [
           <div class="wc"><div class="w">chaud</div><div class="g">hot</div></div>
           <div class="wc"><div class="w">sans sucre</div><div class="g">no sugar</div></div>
         </div>
-        <button class="btn tx">Claim Rewards &amp; Return Home</button>
+        <button class="btn tx">Claim Rewards &amp; Exit</button>
         <div class="practise">PRACTISE THESE 3 WORDS →</div>
         <div class="footline">SESSION SAVED · RETURNING TO PHASE 2</div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.phoneme', pos:'right', html:'<b>Delta — Phoneme waveform diagnostic.</b> Per-phoneme comparison against the native model, plus a CEFR read. Off-target segments are grey, never red: data, not judgement.'},
-      {n:2, tgt:'.btn.accent', pos:'right', html:'<b>Delta — Emotional-peak upsell.</b> The 1-tap trial sits directly under the waveform, no second scroll. The offer lands while the high of being understood is still warm.'}
+      {n:1, tgt:'.phoneme', pos:'right', html:'<b>[Delta 2] Phoneme-Level Diagnostic.</b> Instant audio-wave comparison that highlights specific mispronunciations — off-target segments are grey, never red: data, not judgement.'},
+      {n:2, tgt:'.btn.accent', pos:'right', html:'<b>[Delta 1] Peak-End Paywall Trigger.</b> Capitalises on the emotional high of finishing a fluid voice chat to present a 1-tap Super Duolingo conversion entry point.'}
     ],
     notes:[
       '<b>Flat by design.</b> The report is a score, a waveform and three word cards — no nested card borders around them, no orphaned container in the header.',
       '<b>Green means a primary action.</b> This is the only green button outside Frame 1, because it is the same kind of thing: the path forward.',
-      '<b>Exit is first-class.</b> “Claim Rewards &amp; Return Home”, never “Close”. The session is marked as experienced so it is not re-offered today.'
+      '<b>Exit is first-class.</b> “Claim Rewards &amp; Exit”, never “Close”. The session is marked as experienced so it is not re-offered today.'
     ]},
 
   /* ================= branch · tap mode ================= */
@@ -883,7 +909,7 @@ const FRAMES = [
         <button class="btn sec sm">END SESSION</button>
       </div>`,
     callouts:[
-      {n:1, tgt:'.tapopts', pos:'right', html:'<b>Delta — the same conversation, tapped instead of spoken.</b> Real French replies in Duolingo’s voice, and the diagnostic downgrades from phoneme scoring to sentence scoring.'}
+      {n:1, tgt:'.tapopts', pos:'right', html:'<b>[Delta 1] Degraded Input Path.</b> The same conversation, tapped instead of spoken. Real French replies in Duolingo’s voice, and the diagnostic downgrades from phoneme scoring to sentence scoring.'}
     ],
     notes:[
       '<b>The downgrade is labelled, not disguised.</b> The banner tells the learner why the mode changed — no silent failure.',
@@ -922,7 +948,7 @@ const FRAMES = [
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.caprow', pos:'right', html:'<b>Delta — same sheet, honest change of offer.</b> Frequency cap hit or the SDK returned no fill — either way the learner never sees a dead end, and never sees an ad that isn’t there.'}
+      {n:1, tgt:'.caprow', pos:'right', html:'<b>[Delta 1] Graceful Ad Fallback.</b> Same sheet, honest change of offer. Frequency cap hit or the SDK returned no fill — either way the learner never sees a dead end, and never sees an ad that isn’t there.'}
     ],
     notes:[
       '<b>Frequency cap (2/day).</b> Hitting the cap swaps the ad offer for gems or the Super/Max trial instead of showing a broken button.',
