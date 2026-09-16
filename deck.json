@@ -1,0 +1,144 @@
+{
+  "slide_size": "16:9",
+  "slides": [
+    {
+      "layout": "title",
+      "background": "0B6E4F",
+      "title": "Super Pass 超级通行证",
+      "subtitle": "用「广告积分解锁的限时 Super 体验」撬动免费用户价值跃迁\nDuolingo Monetization PM Case | Jackey Wang | 2026.09 | 1–2 个季度可上线"
+    },
+    {
+      "layout": "title_content",
+      "title": "① 我为哪个 KPI 负主要责任",
+      "bullets": [
+        {"text": "主责 KPI：收入 Revenue —— 具体指标 = 免费用户 Blended ARPU（转化率 × 订阅ARPU + 广告 ARPDAU）", "level": 0, "bold": true},
+        {"text": "为什么选它：这是 Monetization PM 的本职；且我的广告 × 订阅交叉背景（Hulu Ad Intelligence + JD 广告归因）正是这道题的最优解", "level": 1},
+        {"text": "为什么不是 DAU / 学习效率：它们是「必须守住」的护栏，不是主战场——单独优化不足以修复当下的收入结构", "level": 1},
+        {"text": "护栏指标（不可劣化）：", "level": 0, "bold": true},
+        {"text": "DAU 侧：能量墙人群次日留存率、streak 存活率", "level": 1},
+        {"text": "学习效率侧：免费用户日均练习题数、单次 session 完成课数", "level": 1},
+        {"text": "实验采用非劣（non-inferiority）判据：收入做功不得以 DAU 或学习效率下滑为代价", "level": 0, "bold": true, "color": "B33A3A"}
+      ],
+      "notes": "开场立旗：主动为收入负责，但把 DAU 与学习效率设为硬护栏，直接回应当下「能量系统惩罚完美学习者」的核心矛盾。"
+    },
+    {
+      "layout": "title_content",
+      "title": "② 现状诊断：能量系统制造了「三方 KPI 互斥」",
+      "bullets": [
+        {"text": "机制：2025 年上线 Energy 取代 Hearts。免费用户 25 点/天，每道题扣 1 点（答对答错都扣）；Super/Max 无限", "level": 0},
+        {"text": "能量耗尽后仅三条路：等待回充 / 花宝石 / 升级订阅", "level": 1},
+        {"text": "代价一（DAU）：出现卸载威胁——949 天连续打卡用户公开表示要删 App；「完美作答也撑不过 3 节课」", "level": 0, "color": "B33A3A"},
+        {"text": "代价二（学习效率）：用户为省能量改做更短的 Hanzi 课，停止主路径推进——学习进度被变现机制反向扭曲", "level": 0, "color": "B33A3A"},
+        {"text": "代价三（变现质量）：短期转化靠「堵」而非「值」，留存差、压力大、口碑受损", "level": 0, "color": "B33A3A"},
+        {"text": "旁证：Web 端仍保留较温和的 Hearts → 大量用户回流桌面端套利，说明移动端摩擦已超合理阈值", "level": 0},
+        {"text": "结论：当前机制在「收入↑」同时牺牲「DAU」与「学习效率」——不做改动的增长不可持续", "level": 0, "bold": true}
+      ],
+      "notes": "问题定义页。数据来自公开报道与用户评论（duoplanet / classcentral / androidauthority）。要点：不是反对变现，而是反对用摩擦变现。"
+    },
+    {
+      "layout": "title_content",
+      "title": "③ 关键洞察：Hulu / JD PLUS 的三条实证",
+      "bullets": [
+        {"text": "洞察 1｜Hulu：先体验价值，再谈付费", "level": 0, "bold": true},
+        {"text": "有门槛试用 / 逆向试用转化显著高于纯 freemium；试用转化用户 LTV 比促销渠道获客高约 34%", "level": 1},
+        {"text": "freemium→付费中位数仅 2–5%，「逆向试用」（先给完整体验再降回免费）可达 8–12%——差距 2 倍以上", "level": 1},
+        {"text": "洞察 2｜Hulu Ad Selector：给用户广告选择权", "level": 0, "bold": true},
+        {"text": "二选一广告提升完播率与容忍度，反而抬高有效 eCPM——自愿激励广告 > 强制插屏", "level": 1},
+        {"text": "洞察 3｜JD PLUS：用「可换取的权益」替代「惩罚」，并做分层挽回", "level": 0, "bold": true},
+        {"text": "到期「预报 + 续费概率预测 + 分层触达」把续费做成增长引擎；联合会员借异业流量低成本获客", "level": 1},
+        {"text": "收口：把能量墙从「惩罚门槛」改造成「价值体验入口」——同时是变现、DAU、学习效率的最优解", "level": 0, "bold": true, "color": "0B6E4F"}
+      ],
+      "notes": "把前几轮调研的 Hulu / JD PLUS 案例落成设计原则：摩擦变现 vs 价值变现。"
+    },
+    {
+      "layout": "title_content",
+      "title": "④ 新功能：Super Pass「超级通行证」四大机制",
+      "bullets": [
+        {"text": "机制 1｜能量安全网 Energy Safety Net（修正死路）", "level": 0, "bold": true},
+        {"text": "能量见底弹出三选项：看 1 条激励视频 +5 能量 / 使用超级积分 / 升级 Super。永不出现「只能退出」的死路", "level": 1},
+        {"text": "机制 2｜超级积分 Super Points（把广告变成可积累的价值）", "level": 0, "bold": true},
+        {"text": "看激励广告 +1、完成一节课 +2、当日维持连续打卡 +5；每日上限 20 分（控成本、防刷）", "level": 1},
+        {"text": "机制 3｜超级通行证 Super Pass（逆向试用的载体）", "level": 0, "bold": true},
+        {"text": "累积 20 分兑换 24 小时 Pass：无限能量 + 无广告 + 任选 1 项 Max AI 能力（如 Explain My Answer）", "level": 1},
+        {"text": "到期即转化黄金点：展示「你昨天完成 12 节课，相当于 3 天进度」+ 个性化优惠——用损失厌恶替代摩擦", "level": 1},
+        {"text": "机制 4｜广告选择权 Ad Choice + 品牌赞助课：广告 2 选 1；品牌赞助复习课直接为学习者发放能量", "level": 0, "bold": true}
+      ],
+      "notes": "四大机制各对应一条公网验证过的原则。重点：机制 3 的到期转化时刻 = 收入主引擎。"
+    },
+    {
+      "layout": "title_content",
+      "title": "⑤ 用户旅程改造：从「摩擦流失」到「价值跃迁」",
+      "bullets": [
+        {"text": "改造前（现状）：练习 → 能量耗尽 → 只能等待/花宝石/付费 → 退出或卸载 → streak 断裂 → 流失", "level": 0},
+        {"text": "改造后（Super Pass）：练习 → 能量耗尽 → 能量安全网 → 看广告 / 用积分 → 继续练习 → 攒满 20 分 → 解锁 24h Super Pass → 体验无限能量与 AI → 到期价值对比 → 付费转化", "level": 0},
+        {"text": "路径 A（不看广告/不升级）：体验碎裂，短期流失风险高——现状即路径 A", "level": 1},
+        {"text": "路径 B（看广告换能量）：广告收入↑、DAU↑（不断 streak）、学习效率↑（继续练习而非退出）", "level": 1},
+        {"text": "路径 C（攒积分 → Super Pass → 付费）：试用启动率↑、转化质量↑（体验过价值的人）、LTV↑", "level": 1},
+        {"text": "关键差异：把「3 个被动选项」变成「4 段主动旅程」，每一段同时贡献三个 KPI", "level": 0, "bold": true},
+        {"text": "可交互原型已随本方案交付，可直接演示这条完整链路", "level": 0, "bold": true, "color": "0B6E4F"}
+      ],
+      "notes": "用路径 A/B/C 讲清 before/after。配套原型会演示完整链路。"
+    },
+    {
+      "layout": "title_content",
+      "title": "⑥ 指标与目标：一个北极星 + 两组护栏（2 个季度）",
+      "tables": [
+        {
+          "left": 0.5, "top": 1.5, "width": 9.0, "height": 3.4,
+          "rows": [
+            ["指标", "类型", "现状基线", "2 季度目标"],
+            ["免费 → Super 试用启动率", "主指标", "基线 A", "+15% ~ +20%"],
+            ["试用 → 付费转化率", "主指标", "2–5%（freemium 基准）", "8–12%（逆向试用基准）"],
+            ["激励广告 ARPDAU", "主指标", "基线 B", "+25%"],
+            ["能量墙人群次日留存", "护栏 · DAU", "基线 C", "+8% ~ +10%"],
+            ["免费用户日均练习题数", "护栏 · 学习", "基线 D", "+10%"],
+            ["streak 断裂率", "护栏 · DAU", "基线 E", "-15%"]
+          ]
+        }
+      ],
+      "shapes": [
+        {"type": "rounded_rectangle", "left": 0.5, "top": 5.15, "width": 9.0, "height": 0.9, "fill": "B33A3A", "text": "验收规则：三个主指标任一显著为正，且两个护栏均满足非劣（劣化 ≤ 2%）方可放量。基线 A–E 于 Q1 前两周用现有埋点补齐。", "text_color": "FFFFFF"}
+      ],
+      "notes": "把收入、DAU、学习效率三方约束写进验收标准，是本页的工程关键。"
+    },
+    {
+      "layout": "title_content",
+      "title": "⑦ 实验设计：分三波灰度，2 个季度完成",
+      "bullets": [
+        {"text": "Q1 · 波次 1｜能量安全网 A/B：对照 = 现状单向付费弹窗；实验 = 三选项安全网。主指标：试用启动率；护栏：次日留存、练习题数", "level": 0},
+        {"text": "Q1 · 波次 2｜Ad Choice vs 强制插屏：观察 eCPM、完播率、跳出率、广告厌恶度 → 验证「选择权提升有效 eCPM」", "level": 0},
+        {"text": "Q2 · 波次 3｜积分经济调参 + 到期 Offer：积分成本 20/30/40 三档；到期文案 A（损失厌恶）vs B（增益框架）；每周 Pass 上限 2 次", "level": 0},
+        {"text": "实施要点：", "level": 0, "bold": true},
+        {"text": "先在新兴市场/小体量市场灰度；Web 端（Hearts 机制）作为天然对照组", "level": 1},
+        {"text": "埋点：能量见底事件、安全网点击路径、积分流水、Pass 解锁与到期、offer 曝光/点击/转化", "level": 1},
+        {"text": "样本量按 +15% 试用启动率、80% power 反推，单波至少 2 周稳定观测", "level": 1}
+      ],
+      "notes": "可落地性：Q1 两波验证机制有效性，Q2 一波做变现调优。Web 端 Hearts 是现成对照组。"
+    },
+    {
+      "layout": "title_content",
+      "title": "⑧ 风险与对策",
+      "bullets": [
+        {"text": "风险 1｜看广告换能量稀释广告收入 → 以 eCPM × 完播率算净收入而非展示量；激励广告单独 floor price；每日积分上限控成本", "level": 0},
+        {"text": "风险 2｜免费体验变好蚕食订阅 → Pass 每周上限 2 次、24h 时效；保留付费专属核心差异（无限 Legendary、离线下载、完整 Max AI）", "level": 0},
+        {"text": "风险 3｜儿童用户 / 品牌安全合规 → 广告内容分级、家长模式、赞助课仅限非儿童账户；法务前置评审（GDPR/COPPA）", "level": 0},
+        {"text": "风险 4｜品牌赞助课损害学习质量 → 仅开放复习类课程位、内容审核委员会把关、不进入主路径新知识点", "level": 0},
+        {"text": "风险 5｜多机制并存造成指标噪音 → 互斥分流（同一用户不同时进两个实验）+ 分市场隔离", "level": 0},
+        {"text": "评审最会追问的是风险 1 与风险 2——两者都有明确的量化与结构对策", "level": 0, "bold": true, "color": "0B6E4F"}
+      ],
+      "notes": "风险页体现工程严谨性。重点讲 1 与 2。"
+    },
+    {
+      "layout": "title_content",
+      "title": "⑨ 交付物与所需支持",
+      "bullets": [
+        {"text": "本次交付：① 本 10 页方案 Deck；② 可交互原型（演示能量→积分→Pass→转化完整链路）；③ 埋点与指标口径表；④ 实验看板草案", "level": 0},
+        {"text": "时间线：Q1 方案评审 → 埋点补齐 → 波次 1/2 灰度；Q2 波次 3 调参 → 全量放量 → 变现优化", "level": 0},
+        {"text": "所需支持：产品设计 1、数据科学 1（积分经济与实验设计）、广告运营 1（floor price 与品牌赞助）、法务/合规 0.5", "level": 0},
+        {"text": "预期影响（2 个季度）：免费→付费转化率提升至逆向试用基准区间；激励广告 ARPDAU +25%；能量墙人群次日留存 +8~10%；练习量 +10%", "level": 0},
+        {"text": "一句话总结：不再用「堵」逼用户付费，而是用「值」让用户走向付费——收入、DAU、学习效率首次同向", "level": 0, "bold": true, "color": "0B6E4F"}
+      ],
+      "notes": "收尾：把三方 KPI 从互斥变成同向，是本方案的最大价值主张。"
+    }
+  ]
+}

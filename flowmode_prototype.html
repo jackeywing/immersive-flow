@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow Mode · 原型走查 | Duolingo Monetization PM</title>
+<style>
+  :root{
+    --g:#58CC02; --g-d:#46A302; --g-l:#E5F8D4;
+    --b:#1CB0F6; --b-d:#1899D6; --b-l:#DDF4FF;
+    --gold:#FFC800; --gold-d:#E6A500;
+    --red:#FF4B4B; --red-d:#E03E3E;
+    --txt:#3C3C3C; --mut:#AFAFAF; --mutd:#777;
+    --bd:#E5E5E5; --bg:#F7F7F7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;
+    background:linear-gradient(160deg,#0B6E4F,#127F5C 45%,#1CB0F6 140%);
+    min-height:100vh;padding:20px 14px 50px;color:var(--txt);
+  }
+  .wrap{max-width:1120px;margin:0 auto;}
+  header.top{text-align:center;color:#fff;margin-bottom:18px;}
+  header.top h1{font-size:23px;letter-spacing:.4px;}
+  header.top p{font-size:12.5px;opacity:.88;margin-top:7px;line-height:1.6;}
+  .layout{display:grid;grid-template-columns:390px 1fr;gap:22px;align-items:start;}
+  @media(max-width:880px){.layout{grid-template-columns:1fr;}}
+  .col-l{display:flex;flex-direction:column;gap:12px;}
+
+  /* ---------- PHONE ---------- */
+  .phone{
+    width:390px;max-width:100%;background:#fff;border:9px solid #1b1b1b;border-radius:38px;
+    overflow:hidden;box-shadow:0 22px 55px rgba(0,0,0,.35);position:relative;
+  }
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:22px;background:#1b1b1b;border-radius:0 0 14px 14px;z-index:5;}
+  .sbar{display:flex;justify-content:space-between;font-size:10.5px;color:#9a9a9a;padding:8px 14px 4px;font-weight:700;}
+  .hud{display:flex;justify-content:space-between;align-items:center;padding:2px 14px 8px;font-size:13px;font-weight:900;}
+  .hud .it{display:flex;align-items:center;gap:4px;}
+  .hud .flame{color:#FF9600;} .hud .en{color:var(--gold-d);} .hud .gem{color:var(--b-d);}
+  .screen{padding:0 16px 18px;min-height:560px;display:flex;flex-direction:column;}
+
+  .bar{height:14px;background:#EFEFEF;border-radius:9px;overflow:hidden;margin:4px 0 14px;}
+  .bar > i{display:block;height:100%;background:var(--g);transition:width .5s;}
+  .bar.gold > i{background:linear-gradient(90deg,#FFD84D,var(--gold));}
+  .bar.blue > i{background:var(--b);}
+
+  .duo{display:flex;gap:10px;align-items:flex-start;margin:6px 0 14px;}
+  .owl{width:46px;height:46px;border-radius:50%;background:var(--g-l);display:flex;align-items:center;justify-content:center;font-size:24px;flex:0 0 46px;}
+  .bubble{background:#F7F7F7;border-radius:14px;padding:10px 13px;font-size:13px;line-height:1.5;font-weight:600;}
+
+  h2.st{font-size:21px;font-weight:900;line-height:1.35;margin-bottom:8px;}
+  p.sp{font-size:13px;color:var(--mutd);line-height:1.6;margin-bottom:14px;font-weight:600;}
+
+  .btn{
+    display:block;width:100%;border:none;border-radius:15px;padding:15px;font-size:15px;font-weight:900;
+    color:#fff;cursor:pointer;font-family:inherit;border-bottom:4px solid rgba(0,0,0,.2);
+    transition:transform .1s;margin-bottom:10px;letter-spacing:.2px;
+  }
+  .btn:active{transform:translateY(2px);border-bottom-width:2px;}
+  .btn.g{background:var(--g);border-bottom-color:var(--g-d);}
+  .btn.b{background:var(--b);border-bottom-color:var(--b-d);}
+  .btn.gold{background:var(--gold);color:#7A5800;border-bottom-color:var(--gold-d);}
+  .btn.gh{background:#fff;color:var(--mutd);border:2px solid var(--bd);border-bottom-width:4px;}
+  .btn.sm{padding:11px;font-size:13.5px;}
+
+  .opt{border:2px solid var(--bd);border-bottom-width:4px;border-radius:14px;padding:13px 15px;font-size:14.5px;font-weight:700;
+    margin-bottom:9px;background:#fff;width:100%;text-align:left;font-family:inherit;color:var(--txt);cursor:pointer;}
+  .opt:hover{border-color:#d5d5d5;background:#fafafa;}
+  .opt.ok{border-color:var(--g);background:var(--g-l);color:var(--g-d);}
+
+  .card{border:2px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:10px;background:#fff;}
+  .card.hl{border-color:var(--g);background:#F3FDE9;}
+  .card .t{font-size:14px;font-weight:900;}
+  .card .d{font-size:12px;color:var(--mutd);margin-top:3px;line-height:1.5;font-weight:600;}
+
+  .pill{display:inline-block;font-size:11px;font-weight:900;padding:4px 9px;border-radius:8px;background:var(--b-l);color:var(--b-d);margin-bottom:9px;}
+  .pill.g{background:var(--g-l);color:var(--g-d);}
+  .pill.gold{background:#FFF6DB;color:var(--gold-d);}
+  .pill.red{background:#FFEAEA;color:var(--red-d);}
+
+  .timerbox{background:linear-gradient(135deg,var(--g),var(--b));border-radius:18px;padding:18px;color:#fff;text-align:center;margin:10px 0 14px;}
+  .timerbox .big{font-size:38px;font-weight:900;letter-spacing:2px;line-height:1.1;}
+  .timerbox .sm{font-size:11.5px;opacity:.95;font-weight:800;margin-top:5px;}
+
+  .focus{background:#0E1B14;border-radius:18px;padding:22px 16px;color:#fff;text-align:center;margin:8px 0 12px;}
+  .focus .k{font-size:11px;letter-spacing:2px;color:#6fdc8c;font-weight:900;}
+  .focus .v{font-size:34px;font-weight:900;margin:8px 0 3px;}
+  .focus .s{font-size:11.5px;color:#9fb8ab;font-weight:700;}
+
+  .art{background:#FBFBFB;border:2px dashed #E0E0E0;border-radius:14px;padding:14px;font-size:13.5px;line-height:1.85;margin-bottom:12px;}
+  .art mark{background:#D9F2FF;color:#12628C;font-weight:900;border-radius:4px;padding:0 3px;}
+  .art .src{display:block;font-size:10.5px;color:var(--mut);margin-top:9px;font-weight:700;}
+
+  .stat3{display:flex;gap:8px;margin:10px 0 14px;}
+  .stat3 .c{flex:1;background:#F7F9FB;border:1.5px solid #EDF1F4;border-radius:12px;padding:9px 4px;text-align:center;}
+  .stat3 .c .v{font-size:17px;font-weight:900;color:var(--b-d);}
+  .stat3 .c .k{font-size:10px;color:var(--mutd);font-weight:800;margin-top:2px;}
+
+  /* ---------- PRESENTER ---------- */
+  .pres{display:flex;gap:8px;align-items:center;justify-content:space-between;background:rgba(255,255,255,.16);
+    border:1.5px solid rgba(255,255,255,.4);border-radius:14px;padding:9px 11px;}
+  .pres button{background:#fff;border:none;border-radius:10px;padding:9px 13px;font-family:inherit;font-weight:900;
+    font-size:12.5px;cursor:pointer;color:#0B6E4F;}
+  .pres button:disabled{opacity:.4;cursor:default;}
+  .pres .lbl{color:#fff;font-size:12px;font-weight:800;text-align:center;flex:1;line-height:1.4;}
+
+  /* ---------- PANEL ---------- */
+  .panel{background:#fff;border-radius:20px;padding:20px;box-shadow:0 18px 50px rgba(0,0,0,.22);}
+  .panel h2{font-size:16.5px;margin-bottom:4px;}
+  .panel .hint{font-size:12px;color:var(--mutd);line-height:1.55;margin-bottom:14px;}
+  .fu{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+  .furow{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:10px;border:1.5px solid transparent;transition:.2s;}
+  .furow .nm{font-size:11.5px;font-weight:800;width:118px;flex:0 0 118px;color:#4a4a4a;}
+  .furow .tr{flex:1;height:15px;background:#F0F0F0;border-radius:8px;overflow:hidden;}
+  .furow .tr > i{display:block;height:100%;background:var(--b);border-radius:8px;}
+  .furow .vv{font-size:11.5px;font-weight:900;width:52px;text-align:right;color:var(--b-d);}
+  .furow.on{border-color:var(--g);background:#F5FDEB;}
+  .furow.on .tr > i{background:var(--g);}
+  .furow.on .vv{color:var(--g-d);}
+  .furow.on .nm{color:var(--g-d);}
+  .guard{border:1.5px solid #DCEBFF;background:#F4F9FF;border-radius:13px;padding:11px 13px;margin-bottom:14px;}
+  .guard .lbl{font-size:11.5px;font-weight:900;color:var(--b-d);margin-bottom:7px;}
+  .guard .chips{display:flex;gap:7px;}
+  .guard .ch{flex:1;background:#fff;border-radius:9px;padding:7px 4px;text-align:center;border:1px solid #E4EFFA;}
+  .guard .ch .v{font-size:13.5px;font-weight:900;color:var(--b-d);}
+  .guard .ch .k{font-size:9.5px;color:var(--mutd);font-weight:800;margin-top:1px;}
+  .edge{border-top:1px dashed var(--bd);padding-top:13px;}
+  .edge .lbl{font-size:11.5px;font-weight:900;margin-bottom:9px;color:#4a4a4a;}
+  .edge label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#4a4a4a;
+    padding:7px 9px;border:1.5px solid var(--bd);border-radius:10px;margin-bottom:7px;cursor:pointer;}
+  .edge label:hover{border-color:var(--b);background:#F7FCFF;}
+  .edge input{width:15px;height:15px;accent-color:var(--b);}
+  .note{color:#fff;opacity:.85;font-size:11.5px;text-align:center;margin-top:20px;line-height:1.7;}
+  .note code{background:rgba(255,255,255,.18);padding:1px 5px;border-radius:5px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Flow Mode · 原型走查</h1>
+    <p>Duolingo Monetization PM — 5 min 问题框定 + 40 min 原型走查<br>
+    逐屏演示：<b>激励广告不打断你，它是通往「高峰体验」的那道门</b></p>
+  </header>
+
+  <div class="layout">
+    <div class="col-l">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="sbar"><span id="clock">9:41</span><span>Duolingo</span><span>▮▮▮</span></div>
+        <div class="hud">
+          <span class="it flame">🔥 <span id="hStreak">7</span></span>
+          <span class="it en">⚡ <span id="hEnergy">25</span></span>
+          <span class="it gem">💎 <span id="hGem">120</span></span>
+        </div>
+        <div class="screen" id="screen"></div>
+      </div>
+
+      <div class="pres">
+        <button id="btnPrev" onclick="prev()">◀ 上一步</button>
+        <span class="lbl" id="stepLabel">—</span>
+        <button id="btnNext" onclick="next()">下一步 ▶</button>
+        <button onclick="reset()">↻</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>指标漏斗 · 实时高亮</h2>
+      <p class="hint">每翻一屏，漏斗对应环节点亮。这条漏斗就是 40 分钟走查的骨架——每屏都在为其中一格做功。</p>
+      <div class="fu" id="funnel"></div>
+
+      <div class="guard">
+        <div class="lbl">护栏指标（非劣判据 ≤2%）</div>
+        <div class="chips">
+          <div class="ch"><div class="v" id="gdAd">100</div><div class="k">广告 ARPDAU 指数</div></div>
+          <div class="ch"><div class="v" id="gdStreak">7</div><div class="k">连续天数</div></div>
+          <div class="ch"><div class="v" id="gdLes">0</div><div class="k">本次练习题数</div></div>
+        </div>
+      </div>
+
+      <div class="edge">
+        <div class="lbl">边缘情况开关（现场切换，走查时会跳转对应分支）</div>
+        <label><input type="checkbox" id="tgAdFail" onchange="onToggle()"> 广告加载失败 / 无填充</label>
+        <label><input type="checkbox" id="tgSub" onchange="onToggle()"> 已订阅用户</label>
+        <label><input type="checkbox" id="tgChild" onchange="onToggle()"> 儿童账户</label>
+        <label><input type="checkbox" id="tgNoArt" onchange="onToggle()"> 目标语言缺真实素材</label>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">纯前端演示原型，数字为模拟值。<code>下一步 ▶</code> 按叙事顺序走查 · <code>上一步</code> 回看 · 右侧勾选边缘情况会即时改变流程分支。</p>
+</div>
+
+<script>
+/* ============================================================
+   漏斗定义
+   ============================================================ */
+const FUNNEL = [
+  {id:'entry', nm:'① Flow 入口曝光', val:'100',             w:100},
+  {id:'ad',    nm:'② 激励广告完成', val:'62%',              w:62},
+  {id:'flow',  nm:'③ Flow Mode 激活',val:'58%',             w:58},
+  {id:'deep',  nm:'④ 深流达成(7+课)',val:'41%',             w:41},
+  {id:'peak',  nm:'⑤ 高峰时刻到达', val:'38%',              w:38},
+  {id:'conv',  nm:'⑥ 峰值后转化',   val:'+3.2pp',           w:30},
+  {id:'d1',    nm:'⑦ D1 回访/重复', val:'44%',              w:44}
+];
+
+const S = { step:0, seq:[], streak:7, energy:25, gem:120, lessons:0, adIdx:100, flowLeft:0, timerId:null };
+
+function toggles(){ return {
+  adFail: document.getElementById('tgAdFail').checked,
+  sub:    document.getElementById('tgSub').checked,
+  child:  document.getElementById('tgChild').checked,
+  noArt:  document.getElementById('tgNoArt').checked
+};}
+
+function buildSeq(){
+  const t = toggles();
+  // 已订阅：无广告、无 offer
+  if(t.sub)  return ['home','taper','flowon','deepflow','peak','celebrate','day2'];
+  // 儿童账户：无广告，改用任务解锁
+  if(t.child) return ['home','taper','energywall','childtask','flowon','deepflow', t.noArt?'peakalt':'peak','celebrate','offer','day2'];
+  const seq = ['home','lesson','taper','energywall'];
+  if(t.adFail) seq.push('adfail');
+  else seq.push('adchoice','adplay');
+  seq.push('flowon','deepflow', t.noArt?'peakalt':'peak', 'celebrate','offer','day2');
+  return seq;
+}
+
+/* ============================================================
+   各屏渲染
+   ============================================================ */
+const SCREENS = {
+
+home: ()=>({
+  stage:null, title:'第 1 屏 · 免费用户日常',
+  html:`
+    <div class="bar"><i style="width:12%"></i></div>
+    <div class="duo"><div class="owl">🦉</div><div class="bubble">今天继续加油！你已经连续 <b>7 天</b> 了。</div></div>
+    <h2 class="st">开始今天的第 1 节课</h2>
+    <p class="sp">免费版 · 含广告 · 每日 25 点能量</p>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">开始学习</button>
+    <p class="sp" style="text-align:center;margin:0">基线状态：广告按标准负荷投放</p>`
+}),
+
+lesson: ()=>({
+  stage:null, title:'第 2 屏 · 学习中（广告基线）',
+  html:`
+    <div class="bar"><i style="width:30%"></i></div>
+    <p class="sp">第 1 节 · 基础练习</p>
+    <h2 class="st">「苹果」对应的英文是？</h2>
+    <button class="opt" onclick="answer(this)">apple</button>
+    <button class="opt" onclick="answer(this)">banana</button>
+    <button class="opt" onclick="answer(this)">orange</button>
+    <div style="flex:1"></div>
+    <p class="sp" style="text-align:center;margin:0">答对 / 答错都扣 1 点能量</p>`
+}),
+
+taper: ()=>({
+  stage:null, title:'第 3 屏 · 广告自动递减（Hulu binge 迁移）',
+  html:`
+    <span class="pill g">✓ 连续第 3 节完成 · +10 XP</span>
+    <div class="card hl">
+      <div class="t">⏱ 你今天学得很投入</div>
+      <div class="d">系统已自动减少广告打扰。继续保持专注，还能解锁「无打扰 Flow 模式」。</div>
+    </div>
+    <div class="card">
+      <div class="t">广告负荷：100% → 75%</div>
+      <div class="d">随「流深度」自动下调 —— 不是心情好，是因为你学得好。用户归因于自己的能力。</div>
+    </div>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">继续下一节</button>`
+}),
+
+energywall: ()=>({
+  stage:'entry', title:'第 4 屏 · 能量告急 → 激励广告入口',
+  html:`
+    <span class="pill gold">⚡ 剩余 3 点能量</span>
+    <div class="duo"><div class="owl">🦉</div><div class="bubble">能量快用完了 —— 不过你今天状态特别好，别停在这儿。</div></div>
+    <h2 class="st">看一条广告<br>解锁 15 分钟无打扰 Flow</h2>
+    <p class="sp">不是宝石，不是折扣 —— 是一段真正专注的时间。</p>
+    <div style="flex:1"></div>
+    <button class="btn b" onclick="next()">🎬 看广告 · 解锁 15 分钟 Flow</button>
+    <button class="btn gh sm" onclick="noPoints()">🎁 用积分兑换（0 / 20）</button>
+    <button class="btn gh sm" onclick="convert('安全网内直接升级')">👑 升级 Super</button>`
+}),
+
+adchoice: ()=>({
+  stage:'ad', title:'第 5 屏 · Ad Choice（2 选 1）',
+  html:`
+    <h2 class="st">选择你想看的那条</h2>
+    <p class="sp">给选择权 → 完播率与有效 eCPM 同时上升（Hulu Ad Selector 原则）。</p>
+    <button class="card" style="text-align:left;width:100%;cursor:pointer;font-family:inherit" onclick="next()">
+      <div class="t">🗣️ 语言学习品牌 · 30 秒</div><div class="d">与你当前目标最相关</div></button>
+    <button class="card" style="text-align:left;width:100%;cursor:pointer;font-family:inherit" onclick="next()">
+      <div class="t">✈️ 跨境旅行 App · 30 秒</div><div class="d">基于你的学习语种推荐</div></button>
+    <div style="flex:1"></div>
+    <p class="sp" style="text-align:center;margin:0">广告不再是「税」，而是进入高峰的门票</p>`
+}),
+
+adplay: ()=>({
+  stage:'ad', title:'第 6 屏 · 激励广告播放',
+  html:`
+    <h2 class="st">🗣️ 语言学习品牌</h2>
+    <p class="sp">正在播放…</p>
+    <div class="bar blue"><i id="adBar" style="width:0%"></i></div>
+    <div style="flex:1"></div>
+    <p class="sp" style="text-align:center">看完即进入 Flow Mode</p>
+    <button class="btn g" onclick="next()">跳过演示 · 直接进入</button>`
+}),
+
+adfail: ()=>({
+  stage:'flow', title:'第 4′ 屏 · 边缘情况：广告加载失败',
+  html:`
+    <span class="pill red">广告暂无填充</span>
+    <h2 class="st">没关系，这次免费送你 5 分钟</h2>
+    <p class="sp">无填充 / 超时 / 用户断网，都不能变成死路 —— 直接降级为一段短 Flow 体验。</p>
+    <div class="card hl"><div class="t">降级策略</div>
+      <div class="d">5 分钟 Flow（而非 15 分钟）· 不计广告收入 · 高峰时刻照常触发，但素材降级为「复利可视化」</div></div>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">进入 5 分钟 Flow</button>`
+}),
+
+childtask: ()=>({
+  stage:'flow', title:'第 4″ 屏 · 边缘情况：儿童账户',
+  html:`
+    <span class="pill">儿童账户 · 无广告</span>
+    <h2 class="st">完成 3 节复习<br>解锁 15 分钟 Flow</h2>
+    <p class="sp">儿童账户不投放任何广告，用「学习任务」替代激励视频作为入场券 —— 同样的门，不同的门票。</p>
+    <div class="card"><div class="t">已完成 1 / 3 节复习</div><div class="d">任务进度对儿童透明可见，不制造付费压力</div></div>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">完成复习 · 解锁</button>`
+}),
+
+flowon: ()=>({
+  stage:'flow', title:'第 7 屏 · Flow Mode 激活',
+  html:`
+    <span class="pill g">👑 Flow Mode 已开启</span>
+    <div class="timerbox"><div class="big" id="flowTimer">15:00</div><div class="sm">无限能量 · 零广告 · 不被打断</div></div>
+    <div class="card hl"><div class="t">接下来 15 分钟，交给你</div>
+      <div class="d">能量显示变为 ∞，广告全部暂停，退出无惩罚。</div></div>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">开始专注</button>`
+}),
+
+deepflow: ()=>({
+  stage:'deep', title:'第 8 屏 · 深流中（连续 7 节）',
+  html:`
+    <div class="focus">
+      <div class="k">FLOW MODE</div>
+      <div class="v">18:42</div>
+      <div class="s">已连续专注 · 未被打断</div>
+    </div>
+    <h2 class="st">第 7 节 · 完成</h2>
+    <div class="stat3">
+      <div class="c"><div class="v">7</div><div class="k">连续课数</div></div>
+      <div class="c"><div class="v">∞</div><div class="k">能量</div></div>
+      <div class="c"><div class="v">0</div><div class="k">广告中断</div></div>
+    </div>
+    <p class="sp">用户进入「流」状态：挑战与能力匹配、反馈即时、时间感消失 —— 这是高峰体验的前置条件。</p>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">继续</button>`
+}),
+
+peak: ()=>({
+  stage:'peak', title:'第 9 屏 · 高峰时刻「你听懂了」',
+  html:`
+    <span class="pill gold">✨ 等一下 —— 看看这个</span>
+    <h2 class="st">这段你从没背过</h2>
+    <div class="art">
+      <mark>El cambio climático</mark> afecta a las <mark>cosechas</mark> del <mark>sur</mark> de <mark>España</mark>.
+      <span class="src">真实素材示例 · 需标注真实来源（此处为演示占位）</span>
+    </div>
+    <div class="card hl"><div class="t">你读懂了 78%</div>
+      <div class="d">高考纲词构成，但这是一句真实的新闻。你没背过它 —— 你还是读懂了。</div></div>
+    <p class="sp">这是能力跃迁的具身确认，不是积分奖励。峰值-终值定律的「峰」。</p>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">继续</button>`
+}),
+
+peakalt: ()=>({
+  stage:'peak', title:'第 9′ 屏 · 边缘情况：素材缺失的备选高峰',
+  html:`
+    <span class="pill">目标语言暂无真实素材</span>
+    <h2 class="st">换上第二高峰时刻</h2>
+    <div class="card"><div class="t">📈 复利可视化</div>
+      <div class="d">「30 天前你能读懂真实文章的 12%，现在是 47%。」用自我效能感替代外部素材，同样制造能力跃迁的顿悟。</div></div>
+    <p class="sp">主引擎缺位时必须有备选 —— 高峰体验不能依赖单一素材管线。</p>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">继续</button>`
+}),
+
+celebrate: ()=>({
+  stage:'peak', title:'第 10 屏 · 安静庆祝 + 会话总结',
+  html:`
+    <div class="duo"><div class="owl">🦉</div><div class="bubble">24 分钟没被打断。这个状态，很少见。</div></div>
+    <div class="stat3">
+      <div class="c"><div class="v">24′</div><div class="k">专注时长</div></div>
+      <div class="c"><div class="v">12</div><div class="k">完成课数</div></div>
+      <div class="c"><div class="v">34</div><div class="k">新掌握词</div></div>
+    </div>
+    <p class="sp">刻意克制：不撒彩纸、不放大音效。安静的个人化确认，才像「真事」—— 这是「高级」感的来源。</p>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">完成</button>`
+}),
+
+offer: ()=>({
+  stage:'conv', title:'第 11 屏 · 峰值后的 offer（动机最高点）',
+  html:`
+    <span class="pill g">就在刚才那 24 分钟之后</span>
+    <h2 class="st">想每天都有<br>这 24 分钟吗？</h2>
+    <p class="sp">这条 offer 没有出现在「能量耗尽时」（动机谷底），而是出现在「刚体验完高峰时」（动机峰值）。</p>
+    <div class="card hl"><div class="t">7 天免费 Flow Mode</div>
+      <div class="d">每天一段无打扰深度学习 + 结尾一个为你定制的高峰时刻。随时取消。</div></div>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="next()">开始 7 天免费</button>
+    <button class="btn gh sm" onclick="next()">以后再说</button>`
+}),
+
+day2: ()=>({
+  stage:'d1', title:'第 12 屏 · D1 回访 → 高原体验',
+  html:`
+    <span class="pill g">欢迎回来</span>
+    <div class="timerbox"><div class="big">Flow 已就绪</div><div class="sm">今天的 20 分钟，已经为你留好</div></div>
+    <div class="card hl"><div class="t">从「高峰」到「高原」</div>
+      <div class="d">第一次是惊喜，之后是习惯。付费买的不是「没有广告」，而是「那个不被打断、感觉自己变厉害的自己」。</div></div>
+    <div class="stat3">
+      <div class="c"><div class="v">44%</div><div class="k">D1 回访</div></div>
+      <div class="c"><div class="v">2.3×</div><div class="k">第 2 日练习量</div></div>
+      <div class="c"><div class="v">90d</div><div class="k">订阅留存观测</div></div>
+    </div>
+    <div style="flex:1"></div>
+    <button class="btn g" onclick="reset()">↻ 重新走查</button>`
+})
+};
+
+/* ============================================================
+   渲染
+   ============================================================ */
+function render(){
+  const key = S.seq[S.step];
+  const sc = SCREENS[key]();
+  document.getElementById('screen').innerHTML = sc.html;
+  document.getElementById('stepLabel').textContent = (S.step+1) + ' / ' + S.seq.length + ' · ' + sc.title;
+  document.getElementById('btnPrev').disabled = S.step === 0;
+  document.getElementById('btnNext').disabled = S.step === S.seq.length-1;
+  document.getElementById('hStreak').textContent = S.streak;
+  document.getElementById('hGem').textContent = S.gem;
+  document.getElementById('hEnergy').textContent =
+    (key==='flowon'||key==='deepflow'||key==='peak'||key==='celebrate'||key==='offer'||key==='day2') ? '∞' : S.energy;
+  renderFunnel(sc.stage);
+  if(key === 'adplay') animateAd();
+  if(key === 'flowon') startFlow();
+  else stopFlow();
+}
+
+function renderFunnel(active){
+  const box = document.getElementById('funnel');
+  box.innerHTML = FUNNEL.map(f=>`
+    <div class="furow ${f.id===active?'on':''}">
+      <span class="nm">${f.nm}</span>
+      <span class="tr"><i style="width:${f.w}%"></i></span>
+      <span class="vv">${f.val}</span>
+    </div>`).join('');
+}
+
+function animateAd(){
+  const bar = document.getElementById('adBar');
+  if(!bar) return;
+  let p = 0; bar.style.width = '0%';
+  const iv = setInterval(()=>{ p += 4; if(bar) bar.style.width = p+'%'; if(p>=100) clearInterval(iv); }, 60);
+}
+
+function startFlow(){
+  if(S.timerId) return;
+  S.flowLeft = 15*60;
+  const el = document.getElementById('flowTimer');
+  if(!el) return;
+  S.timerId = setInterval(()=>{
+    S.flowLeft--;
+    const t = document.getElementById('flowTimer');
+    if(!t || S.flowLeft<=0){ clearInterval(S.timerId); S.timerId=null; return; }
+    t.textContent = String(Math.floor(S.flowLeft/60)).padStart(2,'0')+':'+String(S.flowLeft%60).padStart(2,'0');
+  }, 1000);
+}
+function stopFlow(){ if(S.timerId){ clearInterval(S.timerId); S.timerId=null; } }
+
+/* ============================================================
+   交互
+   ============================================================ */
+function next(){
+  const key = S.seq[S.step];
+  if(key==='lesson'){ S.lessons++; if(document.querySelector('.opt.ok')){ /* already */ } }
+  if(S.step < S.seq.length-1){ S.step++; render(); }
+}
+function prev(){ if(S.step>0){ S.step--; render(); } }
+function reset(){ S.step=0; S.lessons=0; S.seq=buildSeq(); stopFlow(); render(); }
+function answer(btn){
+  document.querySelectorAll('.opt').forEach(b=>b.style.opacity='.55');
+  btn.classList.add('ok'); btn.style.opacity='1';
+  S.lessons++;
+  setTimeout(()=>{ if(S.seq[S.step]==='lesson'){ S.energy=24; S.step++; render(); } }, 550);
+}
+function noPoints(){ alert('积分不足 20 —— 学生可继续通过看广告积累（每日上限 20 分）。'); }
+function convert(how){ alert('转化路径：' + how + '\n→ 漏斗第 ⑥ 格「峰值后转化」上调'); }
+function onToggle(){ const cur = S.seq[S.step]; S.seq = buildSeq(); S.step = Math.min(S.seq.indexOf(cur), S.seq.length-1); if(S.step<0) S.step=0; render(); }
+
+/* 启动 */
+S.seq = buildSeq();
+render();
+</script>
+</body>
+</html>

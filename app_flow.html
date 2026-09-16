@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duolingo · Brand-Sponsored Flow Level (App Front-End)</title>
+<style>
+  :root{
+    --g:#58CC02; --g-d:#58A700; --g-l:#D7FFB8;
+    --b:#1CB0F6; --b-d:#1899D6; --b-l:#DDF4FF;
+    --purple:#CE82FF; --purple-d:#A568CC; --purple-l:#F3E4FF;
+    --gold:#FFC800; --gold-d:#E6A500;
+    --red:#FF4B4B; --red-d:#E03E3E; --red-l:#FFDFE0;
+    --txt:#4B4B4B; --sub:#777; --mut:#AFAFAF;
+    --bd:#E5E5E5; --bg:#FFFFFF; --snow:#F7F7F7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    background:#1D2B26; min-height:100vh; color:var(--txt);
+    display:flex; flex-direction:column; align-items:center; padding:18px 12px 40px;
+  }
+  .hidebar .ctl{display:none !important;}
+  .hidebar{padding-top:10px;}
+
+  /* ============ PHONE ============ */
+  .phone{
+    width:390px; max-width:100%; background:var(--bg); border-radius:40px; overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.5); border:9px solid #0f0f0f; position:relative;
+  }
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:118px;height:20px;
+    background:#0f0f0f;border-radius:0 0 14px 14px;z-index:9;}
+  .status{display:flex;justify-content:space-between;font-size:10.5px;color:#9a9a9a;
+    font-weight:800;padding:7px 18px 2px;letter-spacing:.2px;}
+  .hud{display:flex;justify-content:space-between;align-items:center;padding:4px 16px 6px;font-size:13.5px;font-weight:900;}
+  .hud .it{display:flex;align-items:center;gap:4px;}
+  .hud .on{color:#FF9600;} .hud .oe{color:var(--gold-d);} .hud .og{color:var(--b-d);}
+  .hud .close{color:var(--mut);font-size:19px;font-weight:900;line-height:1;}
+
+  .body{padding:0 16px 20px;min-height:610px;display:flex;flex-direction:column;}
+
+  /* --- Duolingo primitives --- */
+  .btn{display:block;width:100%;border:none;border-radius:16px;padding:15px;font-size:15.5px;font-weight:900;
+    color:#fff;font-family:inherit;cursor:pointer;letter-spacing:.3px;margin-bottom:10px;
+    border-bottom:4px solid rgba(0,0,0,.22);transition:transform .08s;}
+  .btn:active{transform:translateY(2px);border-bottom-width:2px;}
+  .btn.g{background:var(--g);border-bottom-color:var(--g-d);}
+  .btn.b{background:var(--b);border-bottom-color:var(--b-d);}
+  .btn.p{background:var(--purple);border-bottom-color:var(--purple-d);}
+  .btn.gh{background:#fff;color:var(--sub);border:2px solid var(--bd);border-bottom-width:4px;}
+  .btn.sm{padding:11px;font-size:13.5px;}
+
+  .card{border:2px solid var(--bd);border-radius:16px;padding:14px;background:#fff;margin-bottom:11px;}
+  .card.soft{background:var(--snow);border-color:#EDEDED;}
+
+  .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;
+    font-weight:900;color:#fff;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12);letter-spacing:.5px;}
+  .av-lily{background:linear-gradient(150deg,#CE82FF,#9B5DE5);}
+  .av-duo{background:linear-gradient(150deg,#58CC02,#3FA000);}
+
+  .bubblerow{display:flex;gap:10px;align-items:flex-start;margin:10px 0 14px;}
+  .bubble{background:var(--snow);border-radius:16px;padding:11px 14px;font-size:13.5px;
+    line-height:1.5;font-weight:700;position:relative;}
+  .bubble.tip::after{content:"";position:absolute;left:-6px;top:14px;width:12px;height:12px;
+    background:var(--snow);transform:rotate(45deg);border-radius:2px;}
+
+  .h2{font-size:21px;font-weight:900;line-height:1.32;margin-bottom:7px;}
+  .sp{font-size:13px;color:var(--sub);line-height:1.6;font-weight:600;margin-bottom:12px;}
+  .tag{display:inline-block;font-size:10.5px;font-weight:900;padding:3px 9px;border-radius:7px;letter-spacing:.4px;}
+  .tag.sponsor{background:#EFE9FF;color:#6B4FBB;}
+  .tag.max{background:linear-gradient(90deg,#CE82FF,#1CB0F6);color:#fff;}
+  .tag.ad{background:#EDEDED;color:#8A8A8A;}
+  .tag.new{background:var(--g-l);color:var(--g-d);}
+
+  /* --- Learning path --- */
+  .path{display:flex;flex-direction:column;align-items:center;gap:14px;margin:6px 0 16px;}
+  .node{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:26px;font-weight:900;color:#fff;border-bottom:5px solid rgba(0,0,0,.22);position:relative;}
+  .node.done{background:var(--g);border-bottom-color:var(--g-d);}
+  .node.cur{background:var(--g);border-bottom-color:var(--g-d);box-shadow:0 0 0 6px var(--g-l);}
+  .node.lock{background:#E5E5E5;border-bottom-color:#CFCFCF;color:#AFAFAF;}
+  .node .ring{position:absolute;inset:-9px;border-radius:50%;border:3px dashed var(--purple);opacity:.85;
+    animation:spin 9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .nlabel{font-size:10.5px;font-weight:900;color:var(--sub);margin-top:-6px;}
+
+  /* --- Sponsored video --- */
+  .stage{background:linear-gradient(160deg,#0E2B4A,#14476E 60%,#1B6FA8);border-radius:18px;
+    height:290px;position:relative;overflow:hidden;margin-bottom:12px;display:flex;align-items:center;justify-content:center;}
+  .stage .brandrow{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;}
+  .brandpill{background:rgba(255,255,255,.92);border-radius:9px;padding:5px 10px;font-size:11px;font-weight:900;color:#123;}
+  .adlen{background:rgba(0,0,0,.42);color:#fff;border-radius:9px;padding:5px 9px;font-size:11px;font-weight:900;}
+  .stage .duoart{font-size:76px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.35));}
+  .stage .caption{position:absolute;bottom:40px;left:16px;right:16px;color:#fff;font-size:12.5px;
+    font-weight:800;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,.5);}
+  .pbar{height:6px;background:rgba(255,255,255,.28);border-radius:4px;overflow:hidden;position:absolute;
+    bottom:16px;left:16px;right:16px;}
+  .pbar>i{display:block;height:100%;background:#fff;border-radius:4px;width:0%;}
+
+  /* --- Bridge --- */
+  .bridge{background:radial-gradient(circle at 50% 38%,#2A1B3D,#150E22 72%);border-radius:18px;height:330px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;position:relative;overflow:hidden;}
+  .phones{position:relative;}
+  .phones .headset{position:absolute;top:-8px;left:-6px;right:-6px;font-size:30px;text-align:center;
+    animation:drop .7s cubic-bezier(.3,1.4,.5,1) forwards;}
+  @keyframes drop{from{transform:translateY(-26px);opacity:0;} to{transform:translateY(0);opacity:1;}}
+  .bridge .line{color:#fff;font-size:17px;font-weight:900;letter-spacing:.4px;text-align:center;padding:0 22px;}
+  .micring{width:56px;height:56px;border-radius:50%;background:rgba(88,204,2,.16);border:2px solid var(--g);
+    display:flex;align-items:center;justify-content:center;font-size:22px;animation:pulse 1.5s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(88,204,2,.4);}50%{transform:scale(1.07);box-shadow:0 0 0 14px rgba(88,204,2,0);}}
+
+  /* --- Flow session --- */
+  .flow{background:#101820;border-radius:18px;padding:16px;color:#fff;margin-bottom:12px;position:relative;}
+  .flow .fhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .flow .clock{font-size:12.5px;font-weight:900;color:#7FE0A8;letter-spacing:1px;}
+  .flow .vad{font-size:10px;font-weight:900;color:#7FE0A8;display:flex;align-items:center;gap:5px;}
+  .flow .vad i{width:6px;height:6px;border-radius:50%;background:#7FE0A8;animation:blink 1s infinite;}
+  @keyframes blink{50%{opacity:.25;}}
+  .wave{display:flex;align-items:center;justify-content:center;gap:3px;height:56px;margin:6px 0 12px;}
+  .wave i{width:3.5px;border-radius:3px;background:linear-gradient(180deg,#7FE0A8,#58CC02);height:8px;}
+  .turn{display:flex;gap:9px;margin-bottom:10px;align-items:flex-start;}
+  .turn.me{flex-direction:row-reverse;}
+  .turn .txt{border-radius:14px;padding:9px 12px;font-size:12.5px;line-height:1.5;font-weight:700;max-width:252px;}
+  .turn.me .txt{background:#243447;color:#DCE7F2;}
+  .turn.ai .txt{background:#1E2B22;color:#C9F0D6;border:1px solid #2C4436;}
+  .turn .lbl{font-size:9.5px;color:#6C8399;font-weight:900;margin-bottom:3px;letter-spacing:.6px;}
+  .mirror{background:rgba(28,176,246,.12);border:1px dashed var(--b);border-radius:12px;padding:9px 11px;
+    font-size:11.5px;color:#9BD8F8;font-weight:800;margin:2px 0 10px;}
+  .interrupt{display:flex;align-items:center;gap:6px;font-size:10.5px;color:#8AA0B4;font-weight:800;}
+  .interrupt b{color:#7FE0A8;}
+  .nudge{background:#1E2B22;border:1px dashed #3C6B4E;border-radius:12px;padding:11px;margin-top:4px;}
+  .nudge .t{font-size:11px;color:#8FC7A6;font-weight:900;letter-spacing:.5px;margin-bottom:6px;}
+  .nudge .fr{font-size:14px;color:#EAFBF0;font-weight:900;margin-bottom:9px;}
+  .nudge .b{display:block;width:100%;background:#2C4436;color:#C9F0D6;border:none;border-radius:10px;
+    padding:9px;font-size:12px;font-weight:900;font-family:inherit;cursor:pointer;}
+
+  /* --- Diagnostic --- */
+  .score{display:flex;align-items:center;gap:14px;background:var(--g-l);border-radius:16px;padding:14px;margin-bottom:12px;}
+  .score .num{font-size:40px;font-weight:900;color:var(--g-d);line-height:1;}
+  .score .meta{font-size:11.5px;color:#4E7A22;font-weight:800;line-height:1.5;}
+  .wavfix{background:var(--snow);border-radius:14px;padding:12px;margin-bottom:12px;}
+  .wavfix .w{display:flex;align-items:flex-end;gap:2px;height:42px;}
+  .wavfix .w i{flex:1;background:#CFE8FF;border-radius:2px;}
+  .wavfix .w i.bad{background:#FFB3B3;}
+  .wavfix .w i.fix{background:var(--g);}
+  .wavfix .lg{display:flex;gap:12px;font-size:10px;font-weight:800;color:var(--sub);margin-top:8px;}
+  .wavfix .lg s{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;text-decoration:none;}
+  .wordcards{display:flex;gap:9px;margin-bottom:12px;}
+  .wc{flex:1;border:2px solid var(--bd);border-bottom-width:4px;border-radius:13px;padding:10px 8px;text-align:center;}
+  .wc .es{font-size:13.5px;font-weight:900;color:var(--b-d);}
+  .wc .zh{font-size:10.5px;color:var(--sub);font-weight:700;margin-top:3px;}
+
+  .hint{font-size:11px;color:var(--mut);text-align:center;font-weight:700;line-height:1.5;}
+
+  /* ============ Presenter chrome (not part of the app) ============ */
+  .ctl{margin-top:16px;width:390px;max-width:100%;}
+  .bar{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.1);
+    border:1.5px solid rgba(255,255,255,.28);border-radius:14px;padding:9px;margin-bottom:9px;}
+  .bar button{background:#fff;border:none;border-radius:10px;padding:9px 12px;font-family:inherit;
+    font-weight:900;font-size:12px;cursor:pointer;color:#0B3D2C;}
+  .bar button:disabled{opacity:.35;cursor:default;}
+  .bar .lb{color:#fff;font-size:11px;font-weight:800;flex:1;text-align:center;line-height:1.4;}
+  .tgl{display:flex;gap:8px;flex-wrap:wrap;}
+  .tgl label{display:flex;align-items:center;gap:7px;color:#CFE3D9;font-size:11.5px;font-weight:700;
+    background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;padding:7px 10px;cursor:pointer;}
+  .tgl input{accent-color:var(--g);width:14px;height:14px;}
+  .foot{color:#7E968B;font-size:11px;text-align:center;margin-top:14px;line-height:1.7;max-width:540px;}
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status"><span id="clk">9:41</span><span>Duolingo</span><span>▮▮▮</span></div>
+    <div class="hud" id="hud"></div>
+    <div class="body" id="screen"></div>
+  </div>
+
+  <div class="ctl">
+    <div class="bar">
+      <button id="bPrev" onclick="prev()">◀ Back</button>
+      <span class="lb" id="lbl">—</span>
+      <button id="bNext" onclick="next()">Next ▶</button>
+      <button onclick="reset()">↻</button>
+      <button onclick="document.body.classList.toggle('hidebar')">👁 Clean</button>
+    </div>
+    <div class="tgl">
+      <label><input type="checkbox" id="tNoFill" onchange="rebuild()"> Sponsor video: no fill</label>
+      <label><input type="checkbox" id="tMic" onchange="rebuild()"> Microphone denied</label>
+      <label><input type="checkbox" id="tSilent" onchange="rebuild()"> User silent for 3s</label>
+    </div>
+  </div>
+
+  <p class="foot">App front-end prototype · product UI only, no dashboards. Analytics live on a separate page: <b>monitor.html</b>.</p>
+
+<script>
+/* Scenario: English native speaker learning FRENCH.
+   UI copy = English · learning content & dialogue = French. */
+const S = { step:0, seq:[], clock:null, wave:null };
+
+const HUDS = {
+  normal: `<span class="it on">🔥 <span>7</span></span>
+           <span class="it oe">⚡ <span>25</span></span>
+           <span class="it og">💎 <span>120</span></span>
+           <span class="close">✕</span>`,
+  ad:     `<span class="it" style="color:#AFAFAF">🔥 7</span>
+           <span class="it" style="color:#AFAFAF">⚡ 25</span>
+           <span class="tag ad">AD</span>`,
+  imm:    `<span class="it" style="color:#AFAFAF">🔥 7</span>
+           <span class="it" style="color:#AFAFAF">⚡ 25</span>
+           <span class="tag" style="background:#1B2B22;color:#7FE0A8">FLOW LEVEL</span>`
+};
+
+const SCREENS = {
+
+  /* 1 — Trigger · Desire building */
+  trigger: ()=>({
+    hud:'normal', title:'1 · Trigger — Desire Building',
+    html:`
+      <div class="path">
+        <div class="node done">✓</div><div class="nlabel">Completed</div>
+        <div class="node cur">★</div><div class="nlabel">Current level</div>
+        <div class="node lock">🎙<span class="ring"></span></div>
+        <div class="nlabel">Speaking Challenge · Max</div>
+      </div>
+      <div class="bubblerow">
+        <div class="avatar av-lily" style="width:46px;height:46px;font-size:13px">LILY</div>
+        <div class="bubble tip">Want to try a 3-minute AI speaking session that actually lets you interrupt — and actually understands you?</div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn p" onclick="next()">Try it</button>
+      <button class="btn gh sm" onclick="alert('Back to the path — regular practice continues.')">Maybe later</button>
+      <p class="hint">Trigger: main-path speaking challenge / locked Max Video Call node</p>`
+  }),
+
+  /* 2 — Value exchange gateway */
+  gateway: ()=>({
+    hud:'normal', title:'2 · Value Exchange Gateway',
+    html:`
+      <div style="flex:1"></div>
+      <div class="card" style="border-color:#D9CCF7;background:#FBF8FF">
+        <span class="tag sponsor">BRAND SPONSORED</span>
+        <div class="h2" style="margin-top:9px;font-size:19px">3-Minute Flow Speaking Level</div>
+        <div class="sp" style="margin-bottom:6px">Paid for by our sponsor</div>
+        <div style="font-size:12px;color:#6B4FBB;font-weight:800;line-height:1.6">
+          · 3 uninterrupted minutes of AI speaking practice<br>
+          · Interrupt anytime — you're understood instantly<br>
+          · Pronunciation report at the end
+        </div>
+      </div>
+      <button class="btn b" onclick="next()">🎬 Watch a 30-second sponsor video to unlock 1 session</button>
+      <button class="btn gh sm" onclick="alert('Back to the path. This entry returns next week.')">Maybe later</button>
+      <p class="hint">Clear exchange: you watch, the brand pays, you get the experience</p>`
+  }),
+
+  /* 2′ — Edge: no ad fill */
+  nofill: ()=>({
+    hud:'normal', title:'2′ Edge — Sponsor video, no fill',
+    html:`
+      <div style="flex:1"></div>
+      <span class="tag" style="background:#FFF1D6;color:#9A6B00">SPONSOR SLOT HAS NO FILL</span>
+      <div class="h2" style="margin-top:10px">This one's on us</div>
+      <p class="sp">The ad wasn't ready — that shouldn't cost you. Free this time. Same experience, just no ad revenue.</p>
+      <div class="card soft">
+        <div style="font-size:12.5px;font-weight:800;color:#555;line-height:1.6">
+          Experience beats single-impression revenue.<br>The sponsor slot simply reappears at the next trigger.
+        </div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn p" onclick="go('bridge')">Go straight to the 3-minute Flow Level</button>`
+  }),
+
+  /* 3 — Sponsored video */
+  ad: ()=>({
+    hud:'ad', title:'3 · Sponsor Video — 15–30s',
+    html:`
+      <div class="stage">
+        <div class="brandrow">
+          <span class="brandpill">Marriott Bonvoy × Duo</span>
+          <span class="adlen" id="adLeft">00:30</span>
+        </div>
+        <div class="duoart">🦉</div>
+        <div class="caption">Duo turns the hotel luggage cart into a skateboard — and lands in the pool.</div>
+        <div class="pbar"><i id="adBar"></i></div>
+      </div>
+      <div class="card soft" style="margin-bottom:10px">
+        <div style="font-size:12px;font-weight:800;color:#555;line-height:1.6">
+          Branded animation · 15–30s · unlocks on completion
+        </div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn b" onclick="next()">Done — continue</button>`
+  }),
+
+  /* 4 — Seamless bridge */
+  bridge: ()=>({
+    hud:'imm', title:'4 · Seamless Bridge — 2s',
+    html:`
+      <div class="bridge" style="flex:1">
+        <div class="phones">
+          <div class="headset">🎧</div>
+          <div class="avatar av-lily" style="width:96px;height:96px;font-size:22px">LILY</div>
+        </div>
+        <div class="line">Hey, I'm ready! Let's talk.</div>
+        <div class="micring">🎤</div>
+        <div style="color:#8E7AA8;font-size:10.5px;font-weight:800">Mic is live · no bounce back to home</div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn p" onclick="next()">Start talking</button>
+      <p class="hint">The ad ends without returning home; the mic wakes here, so there's no cold start</p>`
+  }),
+
+  /* 4′ — Edge: mic denied */
+  micdenied: ()=>({
+    hud:'imm', title:'4′ Edge — Microphone denied',
+    html:`
+      <div class="bridge" style="flex:1;background:radial-gradient(circle at 50% 38%,#3A2B1D,#1A130E 72%)">
+        <div class="avatar av-lily" style="width:80px;height:80px;font-size:18px">LILY</div>
+        <div class="line" style="font-size:15px">No mic? No problem.<br>We'll switch to “I read, you tap.”</div>
+        <div style="color:#B99A7A;font-size:10.5px;font-weight:800;padding:0 26px;text-align:center">
+          Fallback: Lily reads → you tap the right reply.<br>Same experience; voice diagnostics become sentence diagnostics.
+        </div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn p" onclick="go('flow')">Enter the text-based Flow Level</button>`
+  }),
+
+  /* 5 — 3-minute micro-flow */
+  flow: ()=>({
+    hud:'imm', title:'5 · 3-Min Micro-Flow — VAD + Semantic Mirroring',
+    html:`
+      <div class="flow" style="flex:1">
+        <div class="fhead">
+          <span class="vad"><i></i> LISTENING</span>
+          <span class="clock" id="flowClock">03:00</span>
+        </div>
+        <div class="wave" id="wave"></div>
+
+        <div class="turn me"><div><div class="lbl">YOU</div>
+          <div class="txt">Bonjour, je voudrais réserver une chambre.</div></div></div>
+
+        <div class="mirror">SEMANTIC MIRROR · Got it — you'd like to book a room, right?</div>
+
+        <div class="turn ai"><div><div class="lbl">LILY</div>
+          <div class="txt">Bien sûr. Avec vue sur mer ou sur la ville ?</div></div></div>
+
+        <div class="turn me"><div><div class="lbl">YOU</div>
+          <div class="txt">Vue sur mer, s'il vous plaît.</div></div></div>
+
+        <div class="turn ai"><div><div class="lbl">LILY</div>
+          <div class="txt">Parfait. Pour combien de nuits ?</div></div></div>
+
+        <div class="interrupt" style="margin-top:8px">
+          <span>⏸</span> Interrupt anytime — <b>speak up and Lily stops to listen</b>
+        </div>
+      </div>
+      <button class="btn p" onclick="next()">End conversation</button>
+      <p class="hint">High-frame-rate VAD · millisecond barge-in · 3 minutes of dense scene exchange</p>`
+  }),
+
+  /* 5′ — Edge: user silent */
+  flowsilent: ()=>({
+    hud:'imm', title:'5′ Edge — User silent for 3s',
+    html:`
+      <div class="flow" style="flex:1">
+        <div class="fhead">
+          <span class="vad"><i></i> LISTENING</span>
+          <span class="clock" id="flowClock">02:48</span>
+        </div>
+        <div class="wave" id="wave"></div>
+        <div class="turn ai"><div><div class="lbl">LILY</div>
+          <div class="txt">Take your time. I'm not going anywhere.</div></div></div>
+        <div class="nudge">
+          <div class="t">NO RUSH — TRY THIS LINE</div>
+          <div class="fr">« Bonjour, je voudrais réserver une chambre. »</div>
+          <button class="b" onclick="alert('Lily repeats the line slowly — tap any word to hear it alone.')">🔊 Hear it slowly</button>
+        </div>
+        <div class="interrupt" style="margin-top:10px">
+          <span>⏸</span> Silence is handled by a nudge, <b>never by a timeout or a paywall</b>
+        </div>
+      </div>
+      <button class="btn p" onclick="next()">Resume conversation</button>
+      <p class="hint">Edge case: no dead air, no penalty — the learner is invited, not judged</p>`
+  }),
+
+  /* 6 — Peak-end diagnostic */
+  diag: ()=>({
+    hud:'normal', title:'6 · Peak-End Diagnostic — Multimodal Report',
+    html:`
+      <span class="tag new">3 MINUTES COMPLETE</span>
+      <div class="h2" style="margin-top:9px">You just finished your first real conversation</div>
+      <div class="score">
+        <div class="num">87</div>
+        <div class="meta">Pronunciation clarity<br><span style="color:#3C6B14">+9 vs last time</span></div>
+      </div>
+      <div class="wavfix">
+        <div class="w" id="wavfix"></div>
+        <div class="lg">
+          <span><s style="background:#CFE8FF"></s>Standard</span>
+          <span><s style="background:#FFB3B3"></s>Off</span>
+          <span><s style="background:#58CC02"></s>Fixed</span>
+        </div>
+      </div>
+      <div class="wordcards">
+        <div class="wc"><div class="es">réserver</div><div class="zh">to book</div></div>
+        <div class="wc"><div class="es">vue sur mer</div><div class="zh">sea view</div></div>
+        <div class="wc"><div class="es">nuits</div><div class="zh">nights</div></div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn p" onclick="next()">Continue</button>
+      <p class="hint">Waveform corrections · pronunciation score · new word cards</p>`
+  }),
+
+  /* 7 — Peak-end upsell */
+  upsell: ()=>({
+    hud:'normal', title:'7 · Peak-End Upsell',
+    html:`
+      <div style="flex:1"></div>
+      <div class="bubblerow">
+        <div class="avatar av-lily" style="width:44px;height:44px;font-size:12px">LILY</div>
+        <div class="bubble tip">That 3 minutes? That was just the warm-up.</div>
+      </div>
+      <div class="h2">Want more of that conversation?</div>
+      <p class="sp">Start your <b>3-day free trial of Duolingo Max</b> — unlimited, ad-free AI video calls.</p>
+      <div class="card soft">
+        <div style="font-size:12.5px;font-weight:800;color:#555;line-height:1.7">
+          · Unlimited talk time, interrupt anytime<br>
+          · No ads, ever<br>
+          · Pronunciation report after every round
+        </div>
+      </div>
+      <button class="btn p" onclick="alert('Entering the Duolingo Max 3-day free trial flow.')">Start 3-day free trial</button>
+      <button class="btn gh sm" onclick="alert('Ending the session — back to the path.')">Maybe later</button>
+      <p class="hint">The offer lands after the emotional peak, not when energy runs out</p>`
+  })
+};
+
+/* ---------- Sequence ---------- */
+function rebuild(){
+  const noFill = document.getElementById('tNoFill').checked;
+  const mic    = document.getElementById('tMic').checked;
+  const silent = document.getElementById('tSilent').checked;
+  const seq = ['trigger','gateway'];
+  seq.push(noFill ? 'nofill' : 'ad');
+  seq.push('bridge');
+  if(mic)         seq.push('micdenied');
+  else if(silent) seq.push('flowsilent');
+  else            seq.push('flow');
+  seq.push('diag','upsell');
+  const cur = S.seq[S.step];
+  S.seq = seq;
+  const i = seq.indexOf(cur);
+  S.step = i >= 0 ? i : 0;
+  render();
+}
+
+/* ---------- Render ---------- */
+function render(){
+  const key = S.seq[S.step];
+  const sc = SCREENS[key]();
+  document.getElementById('hud').innerHTML = HUDS[sc.hud];
+  document.getElementById('screen').innerHTML = sc.html;
+  document.getElementById('lbl').textContent = (S.step+1)+' / '+S.seq.length+' · '+sc.title;
+  document.getElementById('bPrev').disabled = S.step===0;
+  document.getElementById('bNext').disabled = S.step===S.seq.length-1;
+  stopAll();
+  if(key==='ad') runAd();
+  if(key==='flow'||key==='flowsilent') runFlow();
+  if(key==='diag') drawWav();
+}
+function next(){ if(S.step<S.seq.length-1){ S.step++; render(); } }
+function prev(){ if(S.step>0){ S.step--; render(); } }
+function reset(){ S.step=0; rebuild(); }
+function go(k){ const i=S.seq.indexOf(k); S.step = i>=0?i:0; render(); }
+function stopAll(){ if(S.clock){clearInterval(S.clock);S.clock=null;} if(S.wave){clearInterval(S.wave);S.wave=null;} }
+
+/* Sponsored video: countdown + progress */
+function runAd(){
+  let left=30;
+  const b=document.getElementById('adBar'), t=document.getElementById('adLeft');
+  if(!b) return;
+  S.clock=setInterval(()=>{
+    left-=0.5;
+    if(left<=0){ left=0; clearInterval(S.clock); S.clock=null; if(t) t.textContent='00:00'; }
+    if(t) t.textContent='00:'+String(Math.ceil(left)).padStart(2,'0');
+    if(b) b.style.width=((30-left)/30*100)+'%';
+  },500);
+}
+
+/* Flow: waveform + timer */
+function runFlow(){
+  const w=document.getElementById('wave');
+  if(w){ w.innerHTML=''; for(let i=0;i<44;i++){ const s=document.createElement('i'); s.style.height='8px'; w.appendChild(s);} }
+  let t=180;
+  const c=document.getElementById('flowClock');
+  S.clock=setInterval(()=>{
+    t--; if(t<=0){ clearInterval(S.clock); S.clock=null; }
+    if(c) c.textContent='0'+Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+  },1000);
+  S.wave=setInterval(()=>{
+    const bars=document.querySelectorAll('#wave i');
+    if(!bars.length) return;
+    bars.forEach((el,i)=>{
+      const mid=Math.abs(i-22)/22;
+      const h=8+Math.random()*46*(1-mid*0.55)*(0.6+Math.random());
+      el.style.height=Math.max(6,h)+'px';
+      el.style.opacity=String(0.55+Math.random()*0.45);
+    });
+  },90);
+}
+
+/* Diagnostic waveform */
+function drawWav(){
+  const box=document.getElementById('wavfix'); if(!box) return;
+  box.innerHTML='';
+  const bad=new Set([6,7,18,19,20,31]), fix=new Set([8,21]);
+  for(let i=0;i<40;i++){
+    const el=document.createElement('i');
+    const base=14+Math.sin(i/3)*9+Math.random()*10;
+    el.style.height=Math.max(6,base)+'px';
+    if(bad.has(i)) el.className='bad';
+    if(fix.has(i)) el.className='fix';
+    box.appendChild(el);
+  }
+}
+
+/* Boot */
+S.seq=['trigger'];
+rebuild();
+
+/* #hash deep links: e.g. app_flow.html#flow */
+(function(){
+  const h = decodeURIComponent(location.hash.replace('#',''));
+  if(h && SCREENS[h] !== undefined){
+    const i = S.seq.indexOf(h);
+    if(i >= 0){ S.step = i; } else { S.seq.push(h); S.step = S.seq.length - 1; }
+    render();
+  }
+})();
+</script>
+</body>
+</html>

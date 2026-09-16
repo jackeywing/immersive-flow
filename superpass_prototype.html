@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Pass 可交互原型 · Duolingo Monetization PM Case</title>
+<style>
+  :root{
+    --dl-green:#58CC02; --dl-green-dark:#46A302; --dl-green-bg:#E5F8D4;
+    --dl-blue:#1CB0F6; --dl-blue-dark:#1899D6; --dl-gold:#FFC800; --dl-gold-dark:#E6A500;
+    --dl-red:#FF4B4B; --dl-red-dark:#E03E3E; --dl-gray:#AFAFAF; --dl-gray-dark:#777;
+    --dl-text:#3C3C3C; --dl-border:#E5E5E5; --dl-bg:#FFFFFF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Segoe UI",Roboto,sans-serif;
+    background:linear-gradient(135deg,#0B6E4F 0%,#12855F 55%,#1CB0F6 130%);
+    min-height:100vh; color:var(--dl-text); padding:24px 16px 60px;
+  }
+  .wrap{max-width:1180px; margin:0 auto;}
+  header{text-align:center; color:#fff; margin-bottom:22px;}
+  header h1{font-size:26px; letter-spacing:.5px;}
+  header p{opacity:.88; margin-top:8px; font-size:14px; line-height:1.6;}
+  .toggles{display:flex; gap:10px; justify-content:center; margin:18px 0 22px; flex-wrap:wrap;}
+  .toggle{
+    padding:11px 22px; border-radius:14px; border:2px solid rgba(255,255,255,.5);
+    background:rgba(255,255,255,.12); color:#fff; font-weight:700; font-size:14px;
+    cursor:pointer; transition:.18s; font-family:inherit;
+  }
+  .toggle:hover{background:rgba(255,255,255,.22);}
+  .toggle.active{background:#fff; color:#0B6E4F; border-color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.18);}
+  .layout{display:grid; grid-template-columns:400px 1fr; gap:26px; align-items:start;}
+  @media(max-width:900px){.layout{grid-template-columns:1fr;}}
+  .phone{
+    background:#fff; border-radius:34px; padding:16px; box-shadow:0 22px 60px rgba(0,0,0,.32);
+    border:8px solid #1b1b1b; min-height:660px; position:relative; overflow:hidden;
+  }
+  .statusbar{display:flex; justify-content:space-between; font-size:11px; color:var(--dl-gray-dark); padding:2px 8px 8px;}
+  .energy-row{display:flex; align-items:center; gap:8px; margin-bottom:6px;}
+  .energy-label{font-size:12px; font-weight:800; color:var(--dl-gray-dark); white-space:nowrap;}
+  .energy-track{flex:1; height:16px; background:#EFEFEF; border-radius:10px; overflow:hidden; position:relative;}
+  .energy-fill{height:100%; width:100%; background:linear-gradient(90deg,#FFD84D,#FFC800); transition:width .4s ease;}
+  .energy-fill.low{background:linear-gradient(90deg,#FF8A8A,#FF4B4B);}
+  .energy-fill.unlimited{background:linear-gradient(90deg,#58CC02,#1CB0F6); width:100%;}
+  .pass-banner{
+    display:none; background:linear-gradient(90deg,#58CC02,#1CB0F6); color:#fff; font-size:12px; font-weight:800;
+    border-radius:10px; padding:8px 10px; margin:4px 0 10px; justify-content:space-between; align-items:center;
+  }
+  .pass-banner.show{display:flex;}
+  .q-num{font-size:12px; color:var(--dl-gray-dark); font-weight:700; margin-bottom:6px;}
+  .q-text{font-size:19px; font-weight:800; margin:10px 0 18px; line-height:1.4;}
+  .opt{
+    border:2px solid var(--dl-border); border-bottom-width:4px; border-radius:14px; padding:14px 16px;
+    font-size:15px; font-weight:600; margin-bottom:10px; cursor:pointer; background:#fff; transition:.12s; font-family:inherit;
+    width:100%; text-align:left; color:var(--dl-text);
+  }
+  .opt:hover{border-color:#d0d0d0; background:#FAFAFA;}
+  .opt.correct{border-color:var(--dl-green); background:var(--dl-green-bg); color:var(--dl-green-dark);}
+  .opt:disabled{cursor:default; opacity:.75;}
+  .stat-strip{display:flex; gap:8px; margin-top:14px;}
+  .chip{
+    flex:1; text-align:center; background:#F7F9FB; border-radius:12px; padding:8px 4px; border:1.5px solid #EDF1F4;
+  }
+  .chip .v{font-size:16px; font-weight:900; color:var(--dl-blue-dark);}
+  .chip .k{font-size:10px; color:var(--dl-gray-dark); font-weight:700; margin-top:2px;}
+  .overlay{
+    position:absolute; inset:0; background:rgba(20,30,25,.62); display:none;
+    align-items:flex-end; justify-content:center; padding:14px; backdrop-filter:blur(2px);
+  }
+  .overlay.show{display:flex;}
+  .sheet{
+    background:#fff; border-radius:22px; padding:20px 18px; width:100%;
+    box-shadow:0 -8px 30px rgba(0,0,0,.25); animation:slideUp .26s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(28px); opacity:.4;} to{transform:translateY(0); opacity:1;}}
+  .sheet h3{font-size:18px; margin-bottom:6px; text-align:center;}
+  .sheet .sub{font-size:12.5px; color:var(--dl-gray-dark); text-align:center; margin-bottom:16px; line-height:1.5;}
+  .btn{
+    display:block; width:100%; border:none; border-radius:14px; padding:14px; font-size:15px; font-weight:800;
+    cursor:pointer; margin-bottom:10px; color:#fff; font-family:inherit; border-bottom:4px solid rgba(0,0,0,.18); transition:.12s;
+  }
+  .btn:active{transform:translateY(2px); border-bottom-width:2px;}
+  .btn.green{background:var(--dl-green); box-shadow:0 2px 0 var(--dl-green-dark);}
+  .btn.blue{background:var(--dl-blue); box-shadow:0 2px 0 var(--dl-blue-dark);}
+  .btn.gold{background:var(--dl-gold); color:#7A5800; box-shadow:0 2px 0 var(--dl-gold-dark);}
+  .btn.ghost{background:#fff; color:var(--dl-gray-dark); border:2px solid var(--dl-border); border-bottom-width:4px; box-shadow:none;}
+  .btn.disabled{background:#EDEDED; color:#B0B0B0; box-shadow:none; cursor:not-allowed; border-bottom-color:#DDD;}
+  .ad-card{
+    display:flex; gap:12px; align-items:center; border:2px solid var(--dl-border); border-bottom-width:4px;
+    border-radius:14px; padding:12px; margin-bottom:10px; cursor:pointer; background:#fff; width:100%; font-family:inherit; text-align:left;
+  }
+  .ad-card:hover{border-color:var(--dl-blue);}
+  .ad-thumb{width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; flex:0 0 48px;}
+  .ad-meta .t{font-size:13.5px; font-weight:800;}
+  .ad-meta .d{font-size:11.5px; color:var(--dl-gray-dark); margin-top:2px;}
+  .ad-progress{height:10px; background:#EFEFEF; border-radius:8px; overflow:hidden; margin:14px 0 6px;}
+  .ad-progress > i{display:block; height:100%; width:0; background:var(--dl-blue); transition:width .1s linear;}
+  .panel{background:#fff; border-radius:20px; padding:22px; box-shadow:0 18px 50px rgba(0,0,0,.22);}
+  .panel h2{font-size:17px; margin-bottom:4px;}
+  .panel .hint{font-size:12.5px; color:var(--dl-gray-dark); margin-bottom:16px; line-height:1.55;}
+  .kpi-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+  .kpi{border:1.5px solid var(--dl-border); border-radius:14px; padding:12px 14px;}
+  .kpi .lbl{font-size:11.5px; color:var(--dl-gray-dark); font-weight:700;}
+  .kpi .num{font-size:22px; font-weight:900; margin:4px 0 2px;}
+  .kpi .delta{font-size:11px; font-weight:800;}
+  .up{color:var(--dl-green-dark);} .down{color:var(--dl-red-dark);} .flat{color:var(--dl-gray-dark);}
+  .guard{border:1.5px solid #DCEBFF; background:#F4F9FF; border-radius:14px; padding:12px 14px; margin-top:12px;}
+  .guard .lbl{font-size:11.5px; font-weight:800; color:var(--dl-blue-dark); margin-bottom:6px;}
+  .guard ul{margin-left:16px; font-size:12px; color:#41525e; line-height:1.7;}
+  .log{
+    margin-top:16px; border-top:1px dashed var(--dl-border); padding-top:12px; max-height:190px; overflow-y:auto;
+  }
+  .log .li{font-size:12px; color:#4a4a4a; padding:6px 0; border-bottom:1px solid #F4F4F4; line-height:1.5;}
+  .log .li b{color:var(--dl-green-dark);}
+  .tag{display:inline-block; font-size:10px; font-weight:800; padding:2px 7px; border-radius:6px; margin-right:6px; color:#fff;}
+  .tag.rev{background:var(--dl-gold-dark);} .tag.dau{background:var(--dl-blue-dark);} .tag.learn{background:var(--dl-green-dark);}
+  .note{font-size:11.5px; color:#ffffff; opacity:.85; text-align:center; margin-top:24px; line-height:1.7;}
+  .badge-24h{font-size:11px; font-weight:900; background:#fff; color:var(--dl-green-dark); padding:3px 8px; border-radius:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Super Pass 超级通行证 · 可交互原型</h1>
+    <p>Duolingo Monetization PM Case — 演示「能量 → 安全网 → 广告/积分 → Super Pass → 转化」完整链路<br>
+    切换下方两种模式，对比「现状靠摩擦变现」与「Super Pass 靠价值变现」对 <b>收入 / DAU / 学习效率</b> 的不同影响</p>
+  </header>
+
+  <div class="toggles">
+    <button class="toggle active" id="mode-current" onclick="setMode('current')">现状模式 · 能量墙</button>
+    <button class="toggle" id="mode-pass" onclick="setMode('pass')">Super Pass 模式</button>
+    <button class="toggle" onclick="resetAll()">↻ 重置演示</button>
+  </div>
+
+  <div class="layout">
+    <!-- PHONE -->
+    <div class="phone">
+      <div class="statusbar"><span id="clock">9:41</span><span id="modeTag">现状模式</span><span>Duolingo</span></div>
+
+      <div class="energy-row">
+        <span class="energy-label">⚡ 能量</span>
+        <div class="energy-track"><div class="energy-fill" id="energyFill"></div></div>
+        <span class="energy-label" id="energyText">25/25</span>
+      </div>
+      <div class="pass-banner" id="passBanner">
+        <span>👑 Super Pass 生效中 · 无限能量 + 无广告</span>
+        <span class="badge-24h" id="passTimer">23:59:59</span>
+      </div>
+
+      <div class="q-num" id="qNum">第 1 题 · 基础练习</div>
+      <div class="q-text" id="qText">请选择正确答案：<br>「苹果」对应的英文是？</div>
+      <div id="options"></div>
+
+      <div class="stat-strip">
+        <div class="chip"><div class="v" id="chipPoints">0</div><div class="k">超级积分</div></div>
+        <div class="chip"><div class="v" id="chipLessons">0</div><div class="k">练习题数</div></div>
+        <div class="chip"><div class="v" id="chipStreak">7</div><div class="k">连续天数</div></div>
+      </div>
+
+      <!-- overlays -->
+      <div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
+    </div>
+
+    <!-- PANEL -->
+    <div class="panel">
+      <h2>模拟 KPI 影响看板</h2>
+      <div class="hint">每做一个动作，看板实时更新 —— 注意观察：现状模式下收入上升但 DAU/学习效率下滑；Super Pass 模式下三者同向。</div>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="lbl">免费→付费转化率（模拟）</div><div class="num up" id="kpiConv">2.4%</div><div class="delta flat" id="kpiConvD">freemium 基准区间</div></div>
+        <div class="kpi"><div class="lbl">激励广告 ARPDAU（模拟）</div><div class="num" id="kpiAd">$0.00</div><div class="delta flat" id="kpiAdD">广告变现效率</div></div>
+        <div class="kpi"><div class="lbl">次日留存意愿（模拟）</div><div class="num" id="kpiRet">68%</div><div class="delta flat" id="kpiRetD">能量墙人群</div></div>
+        <div class="kpi"><div class="lbl">学习效率指数（模拟）</div><div class="num" id="kpiLearn">100</div><div class="delta flat" id="kpiLearnD">练习题数/会话</div></div>
+      </div>
+
+      <div class="guard">
+        <div class="lbl">护栏指标（不可劣化 · 非劣判据 ≤ 2%）</div>
+        <ul>
+          <li>DAU：能量墙人群次日留存率 / streak 存活率</li>
+          <li>学习效率：免费用户日均练习题数 / 单会话完成课数</li>
+        </ul>
+      </div>
+
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+  <p class="note">原型为纯前端演示，所有数字为模拟值，用于表达机制与 KPI 逻辑，非真实数据。<br>配套交付：Duolingo_SuperPass_Case.pptx（10 页方案）</p>
+</div>
+
+<script>
+/* ============ 状态 ============ */
+const S = {
+  mode: 'current',
+  energy: 25, maxEnergy: 25,
+  points: 0, lessons: 0, streak: 7,
+  passActive: false, passSeconds: 0, passTimerId: null,
+  adRevenue: 0, convRate: 2.4, retention: 68, learnIdx: 100,
+  qIndex: 0, answered: false, dead: false
+};
+
+const QUESTIONS = [
+  {q:'请选择正确答案：<br>「苹果」对应的英文是？', opts:['apple','banana','orange'], ok:0},
+  {q:'请选择正确答案：<br>「书」对应的英文是？', opts:['pen','book','desk'], ok:1},
+  {q:'请选择正确答案：<br>「水」对应的英文是？', opts:['fire','milk','water'], ok:2},
+  {q:'请选择正确答案：<br>「朋友」对应的英文是？', opts:['friend','family','teacher'], ok:0}
+];
+
+/* ============ 工具 ============ */
+const $ = id => document.getElementById(id);
+function log(html, tag){
+  const t = tag ? `<span class="tag ${tag}">${tag==='rev'?'收入':tag==='dau'?'DAU':'学习'}</span>` : '';
+  const el = document.createElement('div');
+  el.className = 'li'; el.innerHTML = t + html;
+  $('log').prepend(el);
+}
+function render(){
+  const pct = S.passActive ? 100 : (S.energy / S.maxEnergy * 100);
+  const fill = $('energyFill');
+  fill.style.width = pct + '%';
+  fill.className = 'energy-fill' + (S.passActive ? ' unlimited' : (S.energy <= 5 ? ' low' : ''));
+  $('energyText').textContent = S.passActive ? '∞' : S.energy + '/' + S.maxEnergy;
+  $('chipPoints').textContent = S.points;
+  $('chipLessons').textContent = S.lessons;
+  $('chipStreak').textContent = S.streak;
+  $('passBanner').className = 'pass-banner' + (S.passActive ? ' show' : '');
+  $('modeTag').textContent = S.mode === 'current' ? '现状模式' : 'Super Pass 模式';
+
+  $('kpiConv').textContent = S.convRate.toFixed(1) + '%';
+  $('kpiAd').textContent = '$' + S.adRevenue.toFixed(2);
+  $('kpiRet').textContent = Math.round(S.retention) + '%';
+  $('kpiLearn').textContent = S.learnIdx;
+
+  // KPI colors
+  const convEl = $('kpiConv');
+  convEl.className = 'num ' + (S.convRate >= 8 ? 'up' : (S.convRate < 2 ? 'down' : 'flat'));
+  $('kpiAdD').className = 'delta ' + (S.adRevenue > 0 ? 'up' : 'flat');
+  $('kpiAdD').textContent = S.adRevenue > 0 ? '激励广告已产生收入' : '广告变现效率';
+  const retEl = $('kpiRet');
+  $('kpiRetD').textContent = S.retention < 60 ? '⚠ 流失风险高' : '能量墙人群';
+  retEl.className = 'num ' + (S.retention >= 70 ? 'up' : (S.retention < 60 ? 'down' : 'flat'));
+  $('kpiLearnD').textContent = S.learnIdx >= 105 ? '↑ 练习量提升' : (S.learnIdx < 95 ? '⚠ 因省能量减少练习' : '练习题数/会话');
+  $('kpiLearn').className = 'num ' + (S.learnIdx >= 105 ? 'up' : (S.learnIdx < 95 ? 'down' : 'flat'));
+}
+function resetAll(){
+  clearInterval(S.passTimerId);
+  Object.assign(S,{energy:25,points:0,lessons:0,streak:7,passActive:false,passSeconds:0,
+    adRevenue:0,convRate:2.4,retention:68,learnIdx:100,qIndex:0,answered:false,dead:false});
+  $('log').innerHTML = '';
+  closeOverlay();
+  log('演示已重置。当前模式：<b>' + (S.mode==='current'?'现状（能量墙）':'Super Pass') + '</b>');
+  renderQuestion();
+  render();
+}
+function setMode(m){
+  S.mode = m;
+  document.querySelectorAll('.toggle').forEach(b=>b.classList.remove('active'));
+  $(m==='current'?'mode-current':'mode-pass').classList.add('active');
+  closeOverlay();
+  log('已切换到 <b>' + (m==='current'?'现状模式 · 能量墙':'Super Pass 模式') + '</b>');
+  if(!S.dead) renderQuestion();
+  render();
+}
+function closeOverlay(){ $('overlay').className = 'overlay'; $('sheet').innerHTML = ''; }
+
+/* ============ 题目 ============ */
+function renderQuestion(){
+  const cur = QUESTIONS[S.qIndex % QUESTIONS.length];
+  $('qNum').textContent = '第 ' + (S.qIndex+1) + ' 题 · 基础练习';
+  $('qText').innerHTML = cur.q;
+  const box = $('options'); box.innerHTML = '';
+  cur.opts.forEach((o,i)=>{
+    const b = document.createElement('button');
+    b.className = 'opt'; b.textContent = o;
+    b.disabled = S.answered;
+    b.onclick = ()=>answer(i === cur.ok, b);
+    box.appendChild(b);
+  });
+}
+function answer(correct, btn){
+  if(S.dead) return;
+  S.answered = true;
+  const cur = QUESTIONS[S.qIndex % QUESTIONS.length];
+  const btns = $('options').querySelectorAll('.opt');
+  btns[cur.ok].classList.add('correct');
+  btns.forEach(b=>b.disabled = true);
+  S.lessons++;
+  S.learnIdx = Math.min(130, S.learnIdx + 1);
+
+  if(S.passActive){
+    log('完成练习（Super Pass 期间不扣能量）· 练习题数 +1', 'learn');
+  }else{
+    S.energy = Math.max(0, S.energy - 1);
+    log('完成练习 → 能量 -1（答对答错都扣）· 练习题数 +1', 'learn');
+  }
+  render();
+
+  setTimeout(()=>{
+    if(!S.passActive && S.energy <= 0){ handleEnergyEmpty(); return; }
+    S.qIndex++; S.answered = false; renderQuestion();
+  }, 620);
+}
+
+/* ============ 能量耗尽分支 ============ */
+function handleEnergyEmpty(){
+  S.qIndex++; S.answered = false;
+  renderQuestion();                       // 保持题目区可作答：任意路径返回课程都能继续
+  if(S.mode === 'current') showDeadEnd();
+  else showSafetyNet();
+}
+
+// —— 现状模式：死路弹窗（3 个被动选项，无免费出口）
+function showDeadEnd(){
+  S.dead = true;
+  S.retention -= 14; S.learnIdx -= 8;
+  log('⚠ 能量耗尽：现状仅提供「等待 / 花宝石 / 升级」，<b>无免费出口</b> → 用户退出或卸载', 'dau');
+  log('⚠ 用户为省能量改做更短课程 → 学习效率下降', 'learn');
+  $('sheet').innerHTML = `
+    <h3>能量已用完</h3>
+    <p class="sub">你已用完全部 25 点能量。<br>等待回充需要约 18 小时。</p>
+    <button class="btn blue" onclick="fakeUpgrade()">升级 Super · 无限能量</button>
+    <button class="btn gold" onclick="fakeGems()">花 600 宝石回满能量</button>
+    <button class="btn ghost" onclick="fakeWait()">等待 18 小时后再来</button>
+    <p class="sub" style="margin-top:12px;color:#E03E3E;font-weight:700">⚠ 没有其他选择 —— 用户只能退出或付费</p>
+  `;
+  $('overlay').className = 'overlay show';
+  render();
+}
+function fakeWait(){
+  closeOverlay();
+  log('用户选择「等待 18 小时」→ 当日学习中断，<b>streak 断裂风险上升</b>', 'dau');
+  S.streak = Math.max(0, S.streak - 1);
+  S.retention -= 6;
+  render();
+  $('sheet').innerHTML = `<h3>今日学习结束</h3><p class="sub">连续天数已中断。明天回来时请重新开始。<br><br><b style="color:#E03E3E">这就是「摩擦变现」的代价：收入与留存、学习效率反向。</b></p>
+    <button class="btn green" onclick="closeOverlay();S.dead=false;S.energy=25;S.qIndex=0;renderQuestion();render();">模拟第二天 →</button>`;
+  $('overlay').className = 'overlay show';
+}
+function fakeGems(){ closeOverlay(); log('用户花宝石回能量（消耗既有资产，非新增收入）· 体验仍被打断','learn'); S.dead=false; S.energy=15; renderQuestion(); render(); }
+function fakeUpgrade(){ convert('直接付费升级（压力型转化）'); }
+
+// —— Super Pass 模式：能量安全网（3 个选项，永不死路）
+function showSafetyNet(){
+  S.dead = false;
+  log('能量见底 → 触发<b>能量安全网</b>（三选项，无死路）','dau');
+  const canPass = S.points >= 20;
+  $('sheet').innerHTML = `
+    <h3>能量见底了，别停下 👋</h3>
+    <p class="sub">选一种方式继续 —— 学习不该被你答对了多少题而中断。</p>
+    <button class="btn blue" onclick="showAdChoice()">🎬 看一条广告 · 能量 +5（积分 +1）</button>
+    <button class="btn ${canPass?'green':'disabled'}" onclick="${canPass?'unlockPass()':'noPoints()'}">🎁 用 20 超级积分兑换 Super Pass（当前 ${S.points} 分）</button>
+    <button class="btn gold" onclick="convert('安全网内直接升级（价值型转化）')">👑 升级 Super · 无限能量 + 无广告</button>
+  `;
+  $('overlay').className = 'overlay show';
+}
+function noPoints(){ log('积分不足 20，无法兑换 Pass —— 引导学生继续积累','learn'); }
+
+/* ============ 激励广告 + Ad Choice（Hulu 原则）============ */
+function showAdChoice(){
+  $('sheet').innerHTML = `
+    <h3>选择你想看的广告</h3>
+    <p class="sub">由你决定看哪一条（Ad Choice）。选择权提升完播率与有效 eCPM。</p>
+    <button class="ad-card" onclick="playAd('语言学习品牌','🗣️','#E5F8D4')">
+      <div class="ad-thumb" style="background:#E5F8D4">🗣️</div>
+      <div class="ad-meta"><div class="t">语言学习品牌 · 30 秒</div><div class="d">推荐给你 · 完播率高</div></div>
+    </button>
+    <button class="ad-card" onclick="playAd('跨境旅行 App','✈️','#E1F3FF')">
+      <div class="ad-thumb" style="background:#E1F3FF">✈️</div>
+      <div class="ad-meta"><div class="t">跨境旅行 App · 30 秒</div><div class="d">与你兴趣相关</div></div>
+    </button>
+    <button class="btn ghost" onclick="closeOverlay()">返回</button>
+  `;
+}
+function playAd(name, icon, color){
+  $('sheet').innerHTML = `
+    <h3>${icon} ${name}</h3>
+    <p class="sub">正在播放激励视频…</p>
+    <div class="ad-progress"><i id="adBar"></i></div>
+    <p class="sub" id="adTip">观看完成即可获得能量奖励</p>
+  `;
+  let p = 0;
+  const bar = $('adBar');
+  const iv = setInterval(()=>{
+    p += 5; bar.style.width = p + '%';
+    if(p >= 100){ clearInterval(iv); rewardAd(name); }
+  }, 90);
+}
+function rewardAd(name){
+  S.energy = Math.min(S.maxEnergy, S.energy + 5);
+  S.points += 1;
+  S.adRevenue += 0.03;                 // 模拟激励广告 ARPDAU 累积
+  S.learnIdx = Math.min(135, S.learnIdx + 2);
+  S.retention += 2;
+  log('看完激励广告（' + name + '）→ 能量 +5、积分 +1；<b>广告收入累积</b>','rev');
+  log('用户得以继续练习 → streak 保住、学习不中断','dau');
+  $('sheet').innerHTML = `
+    <h3>🎉 奖励到账</h3>
+    <p class="sub">能量 +5 · 超级积分 +1<br>（距离 Super Pass 还差 ${Math.max(0,20-S.points)} 分）</p>
+    <button class="btn green" onclick="closeOverlay();renderQuestion();render();">继续练习</button>
+  `;
+  render();
+}
+
+/* ============ Super Pass 解锁与到期转化 ============ */
+function unlockPass(){
+  S.points -= 20;
+  S.passActive = true;
+  S.passSeconds = 24*60*60;
+  S.learnIdx = Math.min(140, S.learnIdx + 6);
+  S.retention += 6;
+  log('🎁 解锁 <b>Super Pass（24h）</b>：无限能量 + 无广告 + Max AI —— 逆向试用开始','rev');
+  log('用户首次体验到「无限能量」，学习强度与留存同步上升','learn');
+  closeOverlay();
+  startPassTimer();
+  render();
+  $('sheet').innerHTML = `
+    <h3>👑 Super Pass 已激活</h3>
+    <p class="sub">24 小时内：无限能量 · 无广告 · 任选一项 Max AI 能力<br><br>去尽情练习吧 —— 到期时我们会提醒你。</p>
+    <button class="btn green" onclick="closeOverlay();renderQuestion();render();">开始体验</button>`;
+  $('overlay').className = 'overlay show';
+  setTimeout(()=>{ if($('overlay').className.includes('show')) closeOverlay(); }, 1800);
+}
+function startPassTimer(){
+  clearInterval(S.passTimerId);
+  S.passTimerId = setInterval(()=>{
+    S.passSeconds--;
+    if(S.passSeconds <= 0){ expirePass(); return; }
+    const h = String(Math.floor(S.passSeconds/3600)).padStart(2,'0');
+    const m = String(Math.floor(S.passSeconds%3600/60)).padStart(2,'0');
+    const s = String(S.passSeconds%60).padStart(2,'0');
+    $('passTimer').textContent = h+':'+m+':'+s;
+  }, 1000);
+  $('passTimer').textContent = '23:59:59';
+}
+function expirePass(){
+  clearInterval(S.passTimerId);
+  S.passActive = false;
+  log('⏰ Super Pass 到期 → 展示「刚才 vs 现在」价值对比 + 个性化优惠（损失厌恶）','rev');
+  const saved = Math.max(9, S.lessons);
+  $('sheet').innerHTML = `
+    <h3>你的 Super Pass 已到期</h3>
+    <p class="sub">刚才 24 小时里，你完成了 <b>${saved} 节课</b>，相当于平时的 3 天进度。<br>现在无限能量与无广告已结束 —— 要丢掉这个节奏吗？</p>
+    <button class="btn green" onclick="convert('通过 Super Pass 体验后转化（价值型）')">保留我的进度 · 免费试用 Super 7 天</button>
+    <button class="btn ghost" onclick="closeOverlay();log('用户放弃转化 → 但仍是活跃学习者，可再次通过积分积累回到 Pass','learn');render();">暂不需要</button>
+    <p class="sub" style="color:#46A302;font-weight:800">体验过价值的人，转化率显著高于被摩擦逼迫的人。</p>`;
+  $('overlay').className = 'overlay show';
+}
+
+/* ============ 转化 ============ */
+function convert(reason){
+  closeOverlay();
+  S.convRate = Math.min(11.5, S.convRate + 3.2);
+  S.retention += 4;
+  S.learnIdx = Math.min(145, S.learnIdx + 4);
+  log('✅ 完成转化：' + reason + ' → 免费→付费转化率上调','rev');
+  $('sheet').innerHTML = `
+    <h3>🎉 欢迎加入 Super</h3>
+    <p class="sub">你已解锁无限能量、无广告与全部练习。<br>转化路径：<b>${reason}</b></p>
+    <button class="btn green" onclick="closeOverlay()">返回演示</button>`;
+  $('overlay').className = 'overlay show';
+  render();
+}
+
+/* ============ 启动 ============ */
+log('演示开始。当前模式：<b>现状（能量墙）</b>。请连续作答，观察能量扣减。');
+renderQuestion();
+render();
+</script>
+</body>
+</html>

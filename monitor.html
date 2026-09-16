@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics · Brand-Sponsored Flow Level</title>
+<style>
+  :root{
+    --g:#58CC02; --g-d:#46A302; --b:#1CB0F6; --b-d:#1899D6;
+    --purple:#CE82FF; --gold:#FFC800; --red:#FF4B4B;
+    --ink:#15211C; --sub:#6B7A73; --mut:#95A39C;
+    --line:#E4EAE7; --snow:#F6F9F7; --card:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    background:var(--snow);color:var(--ink);padding:22px 20px 50px;}
+  .wrap{max-width:1240px;margin:0 auto;}
+
+  header{display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:2px solid var(--line);padding-bottom:14px;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  header h1{font-size:20px;letter-spacing:.2px;}
+  header h1 span{color:var(--g-d);}
+  header .meta{font-size:12px;color:var(--sub);font-weight:700;line-height:1.6;text-align:right;}
+  .pill{display:inline-block;background:#EAF9DC;color:var(--g-d);font-size:11px;font-weight:900;
+    padding:3px 9px;border-radius:7px;margin-left:8px;vertical-align:2px;}
+  .note{background:#FFF9E6;border:1.5px solid #F0DFA8;border-radius:12px;padding:11px 14px;
+    font-size:12px;color:#7A6420;font-weight:700;line-height:1.6;margin-bottom:20px;}
+
+  h2{font-size:14px;margin:24px 0 12px;color:var(--ink);letter-spacing:.3px;}
+  h2 small{font-weight:700;color:var(--mut);font-size:11.5px;margin-left:7px;}
+
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  @media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr);}}
+  .kpi{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;}
+  .kpi.main{border-color:#C9E9A8;background:linear-gradient(180deg,#F7FDEB,#FFFFFF);}
+  .kpi .k{font-size:11.5px;color:var(--sub);font-weight:800;line-height:1.4;}
+  .kpi .v{font-size:26px;font-weight:900;margin:7px 0 3px;letter-spacing:-.4px;}
+  .kpi.main .v{color:var(--g-d);}
+  .kpi .d{font-size:11px;font-weight:800;color:var(--g-d);}
+  .kpi .d.dn{color:var(--red);} .kpi .d.flat{color:var(--mut);}
+
+  .cols{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start;}
+  @media(max-width:1000px){.cols{grid-template-columns:1fr;}}
+  .box{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:18px;}
+
+  /* Funnel */
+  .fu{display:flex;flex-direction:column;gap:11px;}
+  .fr{display:grid;grid-template-columns:168px 1fr 66px 92px;gap:10px;align-items:center;}
+  .fr .nm{font-size:12px;font-weight:800;color:#3C4A44;}
+  .fr .tr{height:20px;background:#EEF2F0;border-radius:6px;overflow:hidden;}
+  .fr .tr>i{display:block;height:100%;background:linear-gradient(90deg,var(--b),#5FC8F8);border-radius:6px;}
+  .fr.key .tr>i{background:linear-gradient(90deg,var(--g),#8FE05F);}
+  .fr .vv{font-size:12.5px;font-weight:900;text-align:right;color:var(--b-d);}
+  .fr.key .vv{color:var(--g-d);}
+  .fr .pp{font-size:11px;font-weight:800;color:var(--mut);text-align:right;white-space:nowrap;}
+
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);font-weight:700;}
+  th{color:var(--mut);font-size:11px;font-weight:900;letter-spacing:.3px;}
+  td.num{font-weight:900;text-align:right;}
+  .up{color:var(--g-d);} .dn{color:var(--red);}
+
+  .guards{display:flex;gap:10px;flex-wrap:wrap;}
+  .gd{flex:1;min-width:150px;border:1.5px solid #DCEBFA;background:#F5FAFF;border-radius:12px;padding:12px 13px;}
+  .gd .k{font-size:11px;color:#4E7A96;font-weight:800;}
+  .gd .v{font-size:18px;font-weight:900;color:var(--b-d);margin-top:4px;}
+  .gd .s{font-size:10.5px;font-weight:800;color:var(--mut);margin-top:2px;}
+
+  .stream{max-height:300px;overflow-y:auto;}
+  .ev{display:flex;gap:10px;font-size:11.5px;padding:7px 0;border-bottom:1px solid #F1F5F3;font-weight:700;color:#46554E;}
+  .ev .t{color:var(--mut);font-weight:800;flex:none;width:62px;}
+  .ev .tag{font-size:10px;font-weight:900;padding:2px 7px;border-radius:6px;flex:none;height:fit-content;}
+  .t-trigger{background:#E7F5FF;color:#12628C;}
+  .t-gate{background:#F0E9FF;color:#6B4FBB;}
+  .t-ad{background:#FFF3D6;color:#8A6A00;}
+  .t-flow{background:#E4F8EA;color:#1E7A45;}
+  .t-upsell{background:#E9FBE0;color:#3C6B14;}
+  .ev .b{color:var(--ink);font-weight:900;}
+
+  footer{margin-top:26px;font-size:11px;color:var(--mut);font-weight:700;line-height:1.8;
+    border-top:1.5px solid var(--line);padding-top:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Brand-Sponsored Flow Level · Analytics<span class="pill">STANDALONE</span></h1>
+    <div class="meta">
+      Environment: production · Segment: all free users<br>
+      Window: last 14 days · Updated 5 min ago
+    </div>
+  </header>
+
+  <div class="note">
+    Standalone backend analytics — <b>never rendered inside the app</b>. The app carries product UI only
+    (app_flow.html); this page consumes events from the tracking pipeline. In production this is
+    tracking → warehouse → BI.
+  </div>
+
+  <!-- Top KPIs -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="k">Trigger impressions</div>
+      <div class="v">1.00</div>
+      <div class="d flat">normalized baseline</div>
+    </div>
+    <div class="kpi">
+      <div class="k">Gateway CTR</div>
+      <div class="v">34.2%</div>
+      <div class="d">▲ 5.1pp</div>
+    </div>
+    <div class="kpi">
+      <div class="k">Sponsor video completion</div>
+      <div class="v">71.6%</div>
+      <div class="d">▲ 12.4pp</div>
+    </div>
+    <div class="kpi">
+      <div class="k">3-min session completion</div>
+      <div class="v">58.3%</div>
+      <div class="d">▲ 2.1× industry</div>
+    </div>
+    <div class="kpi main">
+      <div class="k">Trial conversion (primary)</div>
+      <div class="v">+3.2pp</div>
+      <div class="d">▲ vs non-flow cohort</div>
+    </div>
+  </div>
+
+  <!-- Funnel + Brand -->
+  <div class="cols" style="margin-top:22px">
+    <div>
+      <h2>Conversion funnel <small>30s ad gateway → 2s bridge → 3min flow → diagnostic → subscribe</small></h2>
+      <div class="box">
+        <div class="fu">
+          <div class="fr"><span class="nm">1 Trigger impression</span><span class="tr"><i style="width:100%"></i></span><span class="vv">100.0%</span><span class="pp">baseline</span></div>
+          <div class="fr"><span class="nm">2 Gateway click</span><span class="tr"><i style="width:34.2%"></i></span><span class="vv">34.2%</span><span class="pp">—</span></div>
+          <div class="fr"><span class="nm">3 Sponsor video complete</span><span class="tr"><i style="width:24.5%"></i></span><span class="vv">24.5%</span><span class="pp">71.6% rate</span></div>
+          <div class="fr"><span class="nm">4 Bridge → flow started</span><span class="tr"><i style="width:23.1%"></i></span><span class="vv">23.1%</span><span class="pp">94.3% handoff</span></div>
+          <div class="fr"><span class="nm">5 3-min session complete</span><span class="tr"><i style="width:13.5%"></i></span><span class="vv">13.5%</span><span class="pp">58.3% rate</span></div>
+          <div class="fr"><span class="nm">6 Diagnostic viewed</span><span class="tr"><i style="width:11.8%"></i></span><span class="vv">11.8%</span><span class="pp">87.4%</span></div>
+          <div class="fr key"><span class="nm">7 Trial conversion (primary)</span><span class="tr"><i style="width:4.6%"></i></span><span class="vv">4.6%</span><span class="pp">+3.2pp</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2>Brand-side view <small>what the sponsor pays for</small></h2>
+      <div class="box">
+        <table>
+          <tr><th>Metric</th><th style="text-align:right">Value</th><th style="text-align:right">Benchmark</th></tr>
+          <tr><td>Video completion rate</td><td class="num up">71.6%</td><td class="num">28% interstitial</td></tr>
+          <tr><td>Avg. watch time</td><td class="num">26.4s</td><td class="num">—</td></tr>
+          <tr><td>Brand recall uplift (survey)</td><td class="num up">+19pp</td><td class="num">+7pp industry</td></tr>
+          <tr><td>Engagement rate (tap / ask)</td><td class="num up">8.9%</td><td class="num">—</td></tr>
+          <tr><td>Cost per completed view (eCPM)</td><td class="num">$38</td><td class="num">$22 interstitial</td></tr>
+        </table>
+        <div style="font-size:11.5px;color:var(--sub);font-weight:700;line-height:1.7;margin-top:12px">
+          The sponsor pays for <b>voluntary completion</b>, not for impressions — completion rate is the pricing basis.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Segments -->
+  <h2>Segment comparison <small>core experiment: interactive flow vs silent control</small></h2>
+  <div class="box">
+    <table>
+      <tr>
+        <th>Cohort</th><th style="text-align:right">Gateway CTR</th><th style="text-align:right">Video completion</th>
+        <th style="text-align:right">3-min completion</th><th style="text-align:right">Trial conversion</th>
+        <th style="text-align:right">D7 retention</th>
+      </tr>
+      <tr>
+        <td><b>Interactive Flow</b> (barge-in + semantic mirror)</td>
+        <td class="num">34.2%</td><td class="num up">71.6%</td>
+        <td class="num up">58.3%</td><td class="num up">4.6%</td><td class="num up">41.2%</td>
+      </tr>
+      <tr>
+        <td>Silent viewing (control)</td>
+        <td class="num">29.8%</td><td class="num">63.1%</td>
+        <td class="num">—</td><td class="num">1.4%</td><td class="num">33.7%</td>
+      </tr>
+      <tr>
+        <td style="color:var(--g-d)">Incremental</td>
+        <td class="num up">+4.4pp</td><td class="num up">+8.5pp</td>
+        <td class="num">—</td><td class="num up">+3.2pp</td><td class="num up">+7.5pp</td>
+      </tr>
+    </table>
+    <div style="font-size:11.5px;color:var(--sub);font-weight:700;line-height:1.7;margin-top:12px">
+      Key finding: the conversion lift comes from being understood, not from ad volume.
+    </div>
+  </div>
+
+  <!-- Guardrails -->
+  <h2>Guardrail metrics <small>non-inferiority ≤ 2%</small></h2>
+  <div class="guards">
+    <div class="gd"><div class="k">Ad ARPDAU index</div><div class="v">104</div><div class="s">Not degraded · sponsor slot is net-new</div></div>
+    <div class="gd"><div class="k">Main-path lesson completion</div><div class="v">99.1%</div><div class="s">Not degraded</div></div>
+    <div class="gd"><div class="k">Free-user streak survival</div><div class="v">100.4%</div><div class="s">Not degraded</div></div>
+    <div class="gd"><div class="k">Sponsor slots per user</div><div class="v">2.1 / wk</div><div class="s">Cap: 3 / wk</div></div>
+    <div class="gd"><div class="k">Mic permission grant rate</div><div class="v">88.6%</div><div class="s">Declines → text fallback</div></div>
+  </div>
+
+  <!-- Event stream -->
+  <h2>Live event stream <small>instrumentation contract</small></h2>
+  <div class="box stream" id="stream"></div>
+
+  <footer>
+    Event names: flow_trigger_shown · gateway_clicked · sponsor_video_complete · bridge_mic_ready ·
+    flow_session_start / complete · diag_viewed · upsell_converted<br>
+    Analytics is separated from the client: the app renders no dashboards.
+  </footer>
+</div>
+
+<script>
+const EVENTS = [
+  ["09:41:02","flow","3-min session complete","u_8f21a","41.2% returned within 24h"],
+  ["09:40:55","upsell","Trial converted","u_8f21a","Max 3-day trial started"],
+  ["09:40:51","gate","Gateway clicked","u_8f21a","copy variant A"],
+  ["09:40:38","flow","Semantic mirror matched","u_c73e9","intent confidence 0.94"],
+  ["09:39:47","ad","Sponsor video complete","u_1b44d","Marriott × Duo · 28.6s"],
+  ["09:38:20","bridge","Mic ready (2s bridge)","u_1b44d","no cold start"],
+  ["09:37:12","trigger","Speaking challenge shown","u_1b44d","main path level 4-2"],
+  ["09:36:05","gate","Gateway skipped","u_aa910","3rd slot this week · capped"],
+  ["09:35:41","flow","Mic denied → text fallback","u_55c02","experience preserved"],
+  ["09:34:22","ad","No fill → unlocked free","u_77f13","experience over revenue"],
+  ["09:33:10","upsell","Trial converted","u_20d8b","+3.2pp vs silent control"],
+  ["09:32:04","trigger","Locked Max node shown","u_20d8b","Video Call node"]
+];
+const CLS={trigger:"t-trigger",gate:"t-gate",ad:"t-ad",flow:"t-flow",upsell:"t-upsell"};
+document.getElementById('stream').innerHTML = EVENTS.map(([t,c,a,b,d])=>`
+  <div class="ev">
+    <span class="t">${t}</span>
+    <span class="tag ${CLS[c]}">${c}</span>
+    <span class="b">${a}</span>
+    <span style="color:#8B9A93">${b}</span>
+    <span style="color:#A9B6B0;margin-left:auto">${d}</span>
+  </div>`).join('');
+</script>
+</body>
+</html>

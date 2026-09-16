@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireflow · Brand-Sponsored Flow Level (Greyscale Wireframes)</title>
+<style>
+  /* ---------- Greyscale tokens only. No brand colour anywhere. ---------- */
+  :root{
+    --ink:#1A1A1A;        /* primary stroke / text */
+    --line:#4B4B4B;       /* key component stroke, 2px */
+    --soft:#E5E5E5;       /* secondary stroke */
+    --fill:#FFFFFF;
+    --alt:#F7F7F7;
+    --place:#EDEDED;      /* placeholder blocks */
+    --place2:#E0E0E0;
+    --mut:#9A9A9A;        /* annotation text */
+    --anno:#6B6B6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    background:#F2F2F2;color:var(--ink);padding:26px 20px 70px;}
+  .wrap{max-width:1420px;margin:0 auto;}
+
+  /* ---------- page header ---------- */
+  header.top{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:22px;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+  header.top h1{font-size:20px;letter-spacing:.2px;}
+  header.top h1 small{font-weight:700;color:var(--mut);font-size:12px;margin-left:10px;letter-spacing:0;}
+  header.top .principles{font-size:11.5px;font-weight:700;color:var(--anno);line-height:1.7;text-align:right;}
+  .togglebtn{background:#fff;border:2px solid var(--line);border-radius:8px;padding:7px 12px;
+    font-family:inherit;font-weight:800;font-size:11.5px;cursor:pointer;color:var(--ink);}
+  .nanno .callout,.nanno .legend,.nanno .flowlabel{display:none !important;}
+
+  h2.sec{font-size:13px;letter-spacing:.6px;margin:30px 0 14px;text-transform:uppercase;
+    border-left:5px solid var(--ink);padding-left:10px;}
+  h2.sec span{font-weight:700;color:var(--mut);text-transform:none;letter-spacing:0;font-size:11.5px;margin-left:8px;}
+
+  /* ---------- wireflow overview ---------- */
+  .overview{background:#fff;border:2px solid var(--soft);border-radius:12px;padding:20px;overflow-x:auto;}
+  .ovrow{display:flex;align-items:center;gap:10px;min-width:1180px;}
+  .ovbox{border:2px solid var(--line);border-radius:8px;background:var(--fill);padding:10px 12px;
+    font-size:11.5px;font-weight:800;text-align:center;min-width:118px;line-height:1.45;flex:none;}
+  .ovbox.key{background:var(--ink);color:#fff;}
+  .ovbox.ghost{border-style:dashed;border-color:var(--mut);color:var(--anno);}
+  .ovbox small{display:block;font-weight:700;font-size:9.5px;color:var(--mut);margin-top:3px;}
+  .ovbox.key small{color:#CFCFCF;}
+  .arw{flex:none;font-size:15px;color:var(--line);font-weight:900;}
+  .branchline{margin-top:12px;font-size:11px;font-weight:800;color:var(--anno);display:flex;gap:20px;flex-wrap:wrap;}
+  .branchline b{color:var(--ink);}
+
+  /* ---------- wireframe frames ---------- */
+  .frames{display:flex;gap:44px;flex-wrap:wrap;align-items:flex-start;}
+  .unit{width:393px;flex:none;}
+  .unittitle{font-size:12.5px;font-weight:900;margin-bottom:8px;letter-spacing:.3px;}
+  .unittitle em{font-style:normal;color:var(--mut);font-weight:700;font-size:11px;margin-left:6px;}
+
+  /* iPhone 15 Pro 393 x 852 */
+  .phone{width:393px;height:852px;background:var(--fill);border:2px solid var(--ink);
+    border-radius:26px;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+  .phone::before{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:96px;height:20px;background:var(--place2);border-radius:11px;z-index:6;}
+  .statusbar{display:flex;justify-content:space-between;font-size:10px;font-weight:800;color:var(--mut);
+    padding:11px 18px 4px;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:6px 16px 10px;
+    border-bottom:2px solid var(--soft);}
+  .tbgrp{display:flex;gap:10px;align-items:center;}
+  .tbp{width:34px;height:12px;background:var(--place);border-radius:4px;}
+  .tbx{width:16px;height:16px;border:2px solid var(--mut);border-radius:4px;}
+  .canvas{flex:1;padding:18px 16px;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+  .canvas.immersive{background:var(--alt);border-top:2px solid var(--soft);}
+
+  /* placeholders */
+  .ph{background:var(--place);border-radius:4px;}
+  .ph.txt{height:11px;}
+  .phline{height:2px;background:var(--soft);border-radius:0;}
+  .phbox{border:2px solid var(--soft);border-radius:10px;background:var(--fill);}
+  .phbox.dark{border-color:var(--line);}
+  .phavatar{width:44px;height:44px;border:2px solid var(--line);border-radius:12px;background:var(--alt);
+    display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;color:var(--anno);
+    letter-spacing:.4px;flex:none;}
+  .phavatar.sm{width:30px;height:30px;font-size:8.5px;border-radius:9px;}
+
+  /* 3D pill button — Duolingo signature geometry, greyscale */
+  .pill3d{display:block;width:100%;border:2px solid var(--line);border-radius:24px;background:var(--ink);
+    color:#fff;font-weight:900;font-size:13px;letter-spacing:.7px;text-align:center;padding:15px 12px;
+    font-family:inherit;cursor:pointer;box-shadow:0 5px 0 0 var(--line);margin-bottom:14px;}
+  .pill3d.sec{background:#fff;color:var(--ink);box-shadow:0 5px 0 0 var(--soft);}
+  .pill3d.sm{padding:11px;font-size:11.5px;box-shadow:0 4px 0 0 var(--line);}
+  .pill3d.sec.sm{box-shadow:0 4px 0 0 var(--soft);}
+
+  /* node path */
+  .pathcol{display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .node{width:62px;height:62px;border:2px solid var(--line);border-radius:50%;background:var(--fill);
+    display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:var(--anno);}
+  .node.locked{border-style:dashed;background:var(--alt);}
+  .node.cur{box-shadow:0 0 0 5px var(--soft);}
+
+  /* block card */
+  .blockcard{border:2px solid var(--ink);border-radius:16px;background:var(--fill);padding:16px;}
+  .bctl{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+
+  /* waveform placeholder */
+  .waveph{display:flex;align-items:center;gap:3px;height:56px;border:2px solid var(--line);
+    border-radius:10px;padding:0 8px;background:var(--fill);}
+  .waveph i{width:3px;background:var(--place2);border-radius:2px;flex:1;}
+  .waveph.hot i{background:var(--line);}
+
+  /* turn bubbles */
+  .turn{display:flex;gap:8px;margin-bottom:9px;align-items:flex-start;}
+  .turn.me{flex-direction:row-reverse;}
+  .tbub{border:2px solid var(--soft);border-radius:12px;padding:9px 11px;min-width:120px;}
+  .turn.me .tbub{border-color:var(--line);}
+  .tlab{font-size:9px;font-weight:900;color:var(--mut);letter-spacing:.7px;margin-bottom:5px;}
+  .mirror{border:2px dashed var(--line);border-radius:12px;padding:10px 12px;background:var(--fill);margin:2px 0 10px;}
+
+  /* callouts */
+  .callout{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;
+    font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 3px #fff,0 0 0 5px var(--ink);z-index:7;}
+  .callout.lt{background:#fff;color:var(--ink);box-shadow:0 0 0 3px #fff,0 0 0 5px var(--ink);}
+  .legend{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .lgd{display:flex;gap:9px;font-size:11.5px;line-height:1.5;font-weight:700;color:var(--anno);}
+  .lgd .n{flex:none;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;
+    font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+  .lgd b{color:var(--ink);}
+  .lgd .tag{display:inline-block;border:1.5px solid var(--line);border-radius:5px;padding:0 5px;
+    font-size:9.5px;font-weight:900;margin-right:5px;}
+
+  /* small supporting frames */
+  .mini .phone{height:620px;width:286px;}
+  .mini{width:286px;}
+  .mini .canvas{padding:14px 12px;}
+  .mini .pill3d{font-size:11px;padding:12px 8px;border-radius:20px;}
+
+  footer{margin-top:34px;border-top:2px solid var(--soft);padding-top:16px;font-size:11px;
+    color:var(--anno);font-weight:700;line-height:1.85;}
+  footer b{color:var(--ink);}
+  .cuts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px;}
+  @media(max-width:900px){.cuts{grid-template-columns:1fr;}}
+  .cutbox{border:2px solid var(--soft);border-radius:10px;padding:12px 14px;background:#fff;font-size:11.5px;line-height:1.8;}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .togglebtn{display:none;}
+    .frames{gap:18px;}
+    h2.sec{break-before:page;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>Brand-Sponsored Flow Level<small>Greyscale Wireflow · English UI / French lesson</small></h1>
+    </div>
+    <div class="principles">
+      Frame: iPhone 15 Pro 393 × 852 · Fill #FFFFFF / #F7F7F7 · Stroke #4B4B4B (2px) / #E5E5E5<br>
+      No illustration · placeholders only · mechanism shown by callouts, not by craft
+    </div>
+    <button class="togglebtn" onclick="document.body.classList.toggle('nanno')">👁 Toggle annotations</button>
+  </header>
+
+  <!-- ================= WIREFLOW OVERVIEW ================= -->
+  <h2 class="sec">A · Wireflow<span>state transitions and every branch, before any pixel</span></h2>
+  <div class="overview">
+    <div class="ovrow">
+      <div class="ovbox">① Trigger<small>locked node</small></div>
+      <div class="arw">▶</div>
+      <div class="ovbox">② Gateway<small>ad exchange</small></div>
+      <div class="arw">▶</div>
+      <div class="ovbox key">③ Check<small>mic + noise</small></div>
+      <div class="arw">▶</div>
+      <div class="ovbox">④ Bridge<small>2s, mic wakes</small></div>
+      <div class="arw">▶</div>
+      <div class="ovbox key">⑤ Core Interaction<small>barge-in + mirror</small></div>
+      <div class="arw">▶</div>
+      <div class="ovbox key">⑥ Peak-End Report<small>diagnostic</small></div>
+      <div class="arw">▶</div>
+      <div class="ovbox">⑦ Try Max<small>conversion</small></div>
+    </div>
+    <div class="branchline">
+      <span><b>Branch A</b> — no ad fill: ② → ⑤ directly, still free</span>
+      <span><b>Branch B</b> — noisy room: ③ → tap mode (no mic)</span>
+      <span><b>Branch C</b> — mic denied: ③ → tap mode</span>
+      <span><b>Branch D</b> — 3s silence: ⑤ shows a nudge, never a timeout</span>
+    </div>
+  </div>
+
+  <!-- ================= 3 CORE COMPONENTS ================= -->
+  <h2 class="sec">B · Three core components<span>nothing else gets a hi-fi pass</span></h2>
+  <div class="frames">
+
+    <!-- ---------- C1 TRIGGER ---------- -->
+    <div class="unit">
+      <div class="unittitle">Component 1 — Trigger <em>the friction point</em></div>
+      <div class="phone">
+        <div class="statusbar"><span class="ph" style="width:34px;height:9px"></span><span class="ph" style="width:52px;height:9px"></span></div>
+        <div class="topbar">
+          <div class="tbgrp"><span class="tbp"></span><span class="tbp"></span></div>
+          <div class="tbgrp"><span class="tbx"></span></div>
+        </div>
+        <div class="canvas">
+          <div class="pathcol" style="margin-bottom:16px">
+            <div class="node">✓</div>
+            <div class="node cur">★</div>
+            <div class="node locked">🔒</div>
+          </div>
+
+          <div class="blockcard" style="margin-top:auto">
+            <div class="bctl">
+              <div class="phavatar">LILY</div>
+              <div style="flex:1">
+                <div class="ph txt" style="width:88%"></div>
+                <div class="ph txt" style="width:62%;margin-top:7px"></div>
+              </div>
+            </div>
+            <div class="phline" style="margin-bottom:14px"></div>
+            <button class="pill3d">WATCH AD · UNLOCK 3 MIN</button>
+            <button class="pill3d sec sm">NOT NOW</button>
+          </div>
+        </div>
+        <div class="callout" style="top:206px;left:214px">1</div>
+        <div class="callout" style="top:686px;left:330px">2</div>
+        <div class="callout" style="top:742px;left:330px">3</div>
+      </div>
+      <div class="legend">
+        <div class="lgd"><span class="n">1</span><span><b>Locked node = the friction.</b> Desire is created by the gap, not by copy.</span></div>
+        <div class="lgd"><span class="n">2</span><span><span class="tag">3D PILL</span>Primary CTA. Pill + 5px bottom edge. Greyscale here; brand green in build.</span></div>
+        <div class="lgd"><span class="n">3</span><span><b>Dismiss is a real option.</b> Ghost pill, no penalty, no nag.</span></div>
+      </div>
+    </div>
+
+    <!-- ---------- C2 CORE INTERACTION ---------- -->
+    <div class="unit">
+      <div class="unittitle">Component 2 — Core Interaction <em>the key feature</em></div>
+      <div class="phone">
+        <div class="statusbar"><span class="ph" style="width:34px;height:9px"></span><span class="ph" style="width:52px;height:9px"></span></div>
+        <div class="topbar">
+          <div class="tbgrp"><span class="tbp" style="width:52px"></span></div>
+          <div class="tbgrp"><span class="ph" style="width:44px;height:12px;border-radius:4px"></span><span style="font-size:11px;font-weight:900;color:var(--ink);letter-spacing:.6px">3:00</span></div>
+        </div>
+        <div class="canvas immersive">
+
+          <div class="waveph hot" id="wf">
+            <i style="height:14px"></i><i style="height:30px"></i><i style="height:48px"></i><i style="height:22px"></i>
+            <i style="height:38px"></i><i style="height:52px"></i><i style="height:26px"></i><i style="height:16px"></i>
+            <i style="height:34px"></i><i style="height:50px"></i><i style="height:20px"></i><i style="height:12px"></i>
+            <i style="height:28px"></i><i style="height:44px"></i><i style="height:18px"></i><i style="height:10px"></i>
+          </div>
+
+          <div class="turn me" style="margin-top:14px">
+            <div class="phavatar sm">YOU</div>
+            <div class="tbub">
+              <div class="tlab">YOU</div>
+              <div class="ph txt" style="width:150px"></div>
+              <div class="ph txt" style="width:96px;margin-top:6px"></div>
+            </div>
+          </div>
+
+          <div class="mirror">
+            <div class="tlab" style="color:var(--line);font-weight:900">SEMANTIC MIRROR · 1st SENTENCE</div>
+            <div class="ph txt" style="width:82%"></div>
+            <div class="ph txt" style="width:54%;margin-top:6px"></div>
+          </div>
+
+          <div class="turn">
+            <div class="phavatar sm">LILY</div>
+            <div class="tbub" style="position:relative">
+              <div class="tlab">LILY</div>
+              <div class="ph txt" style="width:132px"></div>
+              <div class="ph txt" style="width:78px;margin-top:6px"></div>
+              <div style="position:absolute;right:-13px;top:-13px;width:26px;height:26px;border:2px dashed var(--line);border-radius:50%"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:auto;border:2px dashed var(--mut);border-radius:10px;padding:11px;
+            font-size:9.5px;font-weight:900;color:var(--mut);text-align:center;letter-spacing:.5px">
+            PHONEME COMPARISON · REPORT ONLY
+          </div>
+          <button class="pill3d sec sm" style="margin-top:12px">END CONVERSATION</button>
+        </div>
+        <div class="callout" style="top:96px;left:310px">1</div>
+        <div class="callout" style="top:298px;left:300px">2</div>
+        <div class="callout" style="top:234px;left:352px">3</div>
+        <div class="callout" style="top:30px;left:300px">4</div>
+        <div class="callout" style="top:726px;left:310px">5</div>
+      </div>
+      <div class="legend">
+        <div class="lgd"><span class="n">1</span><span><b>VAD trigger zone.</b> Waveform is the visible proof the mic is live and full-duplex.</span></div>
+        <div class="lgd"><span class="n">2</span><span><b>Barge-in indicator.</b> Dashed ring = AI paused, yielding the floor. Target <b>&lt;100ms</b>, no "please wait".</span></div>
+        <div class="lgd"><span class="n">3</span><span><b>Semantic mirror.</b> AI's first utterance restates intent before answering. No talking over, no dead air.</span></div>
+        <div class="lgd"><span class="n">4</span><span><b>3-min timer.</b> Single budget, always visible. Not a countdown to a paywall.</span></div>
+        <div class="lgd"><span class="n">5</span><span><b>Phoneme comparison display area.</b> Reserved for the report; not shown mid-flow, to protect the flow.</span></div>
+      </div>
+    </div>
+
+    <!-- ---------- C3 PEAK-END REPORT ---------- -->
+    <div class="unit">
+      <div class="unittitle">Component 3 — Peak-End Report <em>conversion entry</em></div>
+      <div class="phone">
+        <div class="statusbar"><span class="ph" style="width:34px;height:9px"></span><span class="ph" style="width:52px;height:9px"></span></div>
+        <div class="topbar">
+          <div class="tbgrp"><span class="tbp"></span><span class="tbp"></span></div>
+          <div class="tbgrp"><span class="tbx"></span></div>
+        </div>
+        <div class="canvas">
+
+          <div style="display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:14px;padding:14px;margin-bottom:16px">
+            <div style="width:74px;height:60px;border:2px solid var(--ink);border-radius:10px;background:var(--alt);
+              display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900">87</div>
+            <div style="flex:1">
+              <div class="ph txt" style="width:70%"></div>
+              <div class="ph txt" style="width:44%;margin-top:7px"></div>
+            </div>
+          </div>
+
+          <div style="border:2px solid var(--line);border-radius:12px;padding:12px;margin-bottom:16px">
+            <div class="waveph" style="height:44px;border:none;padding:0;gap:2px">
+              <i style="height:16px"></i><i style="height:28px"></i><i style="height:22px;background:var(--line)"></i>
+              <i style="height:34px;background:var(--line)"></i><i style="height:20px;background:var(--line)"></i>
+              <i style="height:40px"></i><i style="height:26px"></i><i style="height:18px"></i>
+              <i style="height:32px"></i><i style="height:24px;background:var(--line)"></i><i style="height:38px"></i>
+              <i style="height:20px"></i><i style="height:30px"></i><i style="height:16px"></i>
+            </div>
+            <div style="display:flex;gap:14px;margin-top:10px;font-size:9.5px;font-weight:900;color:var(--mut)">
+              <span>▭ STANDARD</span><span>▮ OFF</span><span>▮ FIXED</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:9px;margin-bottom:14px">
+            <div style="flex:1;border:2px solid var(--soft);border-radius:10px;padding:10px 6px;text-align:center">
+              <div class="ph txt" style="width:70%;margin:0 auto"></div>
+              <div class="ph txt" style="width:44%;margin:7px auto 0"></div></div>
+            <div style="flex:1;border:2px solid var(--soft);border-radius:10px;padding:10px 6px;text-align:center">
+              <div class="ph txt" style="width:70%;margin:0 auto"></div>
+              <div class="ph txt" style="width:44%;margin:7px auto 0"></div></div>
+            <div style="flex:1;border:2px solid var(--soft);border-radius:10px;padding:10px 6px;text-align:center">
+              <div class="ph txt" style="width:70%;margin:0 auto"></div>
+              <div class="ph txt" style="width:44%;margin:7px auto 0"></div></div>
+          </div>
+
+          <div class="phline" style="margin-bottom:12px"></div>
+          <div style="font-size:11.5px;font-weight:900;margin-bottom:12px">WANT MORE OF THAT CONVERSATION?</div>
+          <button class="pill3d">TRY DUOLINGO MAX · 3 DAYS FREE</button>
+          <button class="pill3d sec sm">NOT NOW</button>
+          <div style="flex:1"></div>
+          <div style="font-size:10px;font-weight:800;color:var(--mut);text-align:center;letter-spacing:.5px">← BACK TO PATH</div>
+        </div>
+        <div class="callout" style="top:120px;left:352px">1</div>
+        <div class="callout" style="top:228px;left:352px">2</div>
+        <div class="callout" style="top:322px;left:20px">3</div>
+        <div class="callout" style="top:412px;left:352px">4</div>
+      </div>
+      <div class="legend">
+        <div class="lgd"><span class="n">1</span><span><b>Multimodal score.</b> Number block, not an illustration — legibility over delight.</span></div>
+        <div class="lgd"><span class="n">2</span><span><b>Phoneme comparison display area.</b> Off segments are data, not judgement. No red.</span></div>
+        <div class="lgd"><span class="n">3</span><span><b>New word cards.</b> Placeholder boxes — content is generated, layout is fixed.</span></div>
+        <div class="lgd"><span class="n">4</span><span><span class="tag">3D PILL</span>Conversion lands <b>after</b> the peak, never when energy runs out.</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= SUPPORTING STATES ================= -->
+  <h2 class="sec">C · Supporting states<span>wireframe only, no hi-fi pass</span></h2>
+  <div class="frames">
+
+    <div class="unit mini">
+      <div class="unittitle">② Gateway</div>
+      <div class="phone">
+        <div class="statusbar"><span class="ph" style="width:30px;height:8px"></span><span class="ph" style="width:44px;height:8px"></span></div>
+        <div class="topbar"><span class="tbp"></span><span class="tbx"></span></div>
+        <div class="canvas">
+          <div style="flex:1"></div>
+          <div class="phbox dark" style="padding:14px;margin-bottom:14px">
+            <div class="ph txt" style="width:44%;height:9px"></div>
+            <div class="ph txt" style="width:86%;margin-top:10px"></div>
+            <div class="phline" style="margin:12px 0"></div>
+            <div class="ph txt" style="width:92%"></div>
+            <div class="ph txt" style="width:84%;margin-top:7px"></div>
+            <div class="ph txt" style="width:88%;margin-top:7px"></div>
+          </div>
+          <button class="pill3d">WATCH 30s AD · UNLOCK 1</button>
+          <button class="pill3d sec sm">MAYBE LATER</button>
+          <div style="font-size:10px;font-weight:800;color:var(--mut);text-align:center;margin-top:6px">SPONSOR PAYS · YOU DON'T</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="unit mini">
+      <div class="unittitle">③ Check <em>mic + noise</em></div>
+      <div class="phone">
+        <div class="statusbar"><span class="ph" style="width:30px;height:8px"></span><span class="ph" style="width:44px;height:8px"></span></div>
+        <div class="topbar"><span class="tbp"></span><span class="tbx"></span></div>
+        <div class="canvas">
+          <div style="font-size:11.5px;font-weight:900;margin-bottom:12px">READY FOR 3 MIN?</div>
+          <div class="phbox" style="padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px">
+            <div class="phavatar sm">MIC</div>
+            <div style="flex:1"><div class="ph txt" style="width:74%"></div>
+              <div class="ph" style="width:100%;height:6px;margin-top:8px"></div></div>
+          </div>
+          <div class="phbox" style="padding:12px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+            <div class="phavatar sm">NOISE</div>
+            <div style="flex:1"><div class="ph txt" style="width:66%"></div>
+              <div class="ph" style="width:100%;height:6px;margin-top:8px"></div></div>
+          </div>
+          <div style="flex:1"></div>
+          <button class="pill3d">START 3-MIN FLOW</button>
+          <button class="pill3d sec sm">SWITCH TO TAP MODE</button>
+        </div>
+        <div class="callout" style="top:112px;left:250px">1</div>
+        <div class="callout" style="top:182px;left:250px">2</div>
+      </div>
+      <div class="legend">
+        <div class="lgd"><span class="n">1</span><span><b>Pre-flight check, not a loading screen.</b> User confirms before the 3 min is spent.</span></div>
+        <div class="lgd"><span class="n">2</span><span><b>Noise detected → offer tap mode.</b> Degrade smoothly; never let ASR failure break the flow.</span></div>
+      </div>
+    </div>
+
+    <div class="unit mini">
+      <div class="unittitle">④ Bridge <em>2s</em></div>
+      <div class="phone">
+        <div class="statusbar"><span class="ph" style="width:30px;height:8px"></span><span class="ph" style="width:44px;height:8px"></span></div>
+        <div class="topbar"><span class="tbp" style="width:56px"></span><span class="ph" style="width:40px;height:11px"></span></div>
+        <div class="canvas immersive" style="justify-content:center;align-items:center;gap:16px">
+          <div class="phavatar" style="width:84px;height:84px;font-size:12px">LILY</div>
+          <div style="border:2px solid var(--line);border-radius:10px;padding:10px 14px;font-size:11px;font-weight:900;letter-spacing:.5px">"LET'S TALK."</div>
+          <div style="width:52px;height:52px;border:2px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px">🎤</div>
+          <div style="font-size:10px;font-weight:800;color:var(--mut);text-align:center;line-height:1.6">MIC WAKES HERE<br>NO RETURN TO HOME</div>
+        </div>
+        <div class="callout" style="top:430px;left:250px">1</div>
+      </div>
+      <div class="legend">
+        <div class="lgd"><span class="n">1</span><span><b>The ad never bounces to home.</b> Mic permission is asked here, inside the transition — that's what removes the cold start.</span></div>
+      </div>
+    </div>
+
+    <div class="unit mini">
+      <div class="unittitle">Branch B — Tap mode</div>
+      <div class="phone">
+        <div class="statusbar"><span class="ph" style="width:30px;height:8px"></span><span class="ph" style="width:44px;height:8px"></span></div>
+        <div class="topbar"><span class="tbp" style="width:56px"></span><span class="ph" style="width:40px;height:11px"></span></div>
+        <div class="canvas">
+          <div style="border:2px dashed var(--line);border-radius:10px;padding:9px 11px;font-size:10.5px;font-weight:900;
+            text-align:center;margin-bottom:14px;color:var(--anno)">TAP MODE · NO MIC NEEDED</div>
+          <div class="turn"><div class="phavatar sm">LILY</div>
+            <div class="tbub"><div class="tlab">LILY</div>
+              <div class="ph txt" style="width:120px"></div><div class="ph txt" style="width:76px;margin-top:6px"></div></div></div>
+          <div class="phbox" style="padding:12px;margin-bottom:9px"><div class="ph txt" style="width:64%"></div></div>
+          <div class="phbox dark" style="padding:12px;margin-bottom:9px"><div class="ph txt" style="width:78%"></div></div>
+          <div class="phbox" style="padding:12px;margin-bottom:9px"><div class="ph txt" style="width:56%"></div></div>
+          <div style="flex:1"></div>
+          <div style="font-size:10px;font-weight:800;color:var(--mut);text-align:center;line-height:1.6;margin-bottom:10px">
+            SAME SCENE · SAME LENGTH<br>VOICE DIAGNOSTIC → SENTENCE DIAGNOSTIC</div>
+          <button class="pill3d sec sm">END SESSION</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= CUT LIST ================= -->
+  <h2 class="sec">D · What was cut<span>and what replaced it</span></h2>
+  <div class="cuts">
+    <div class="cutbox">
+      <b>CUT</b><br>
+      Brand colour, custom illustration, bespoke UI components<br>
+      Paragraph copy and explanatory prose on slides<br>
+      API internals in main deck (VAD model, inference stack, runtimes)<br>
+      eCPM maths and streaming-platform comparisons
+      <br><br>
+      <b>REPLACED BY</b><br>
+      Greyscale structure + placeholders<br>
+      1 point + 3 bullets ≤15 words<br>
+      Verbal only, held for backup<br>
+      One line: sponsor pays → 3 min flow → peak conversion
+    </div>
+    <div class="cutbox">
+      <b>KEPT &amp; ELEVATED</b><br>
+      Three components only: Trigger · Core Interaction · Peak-End Report<br>
+      Numbered callouts tied to zones on the frame<br>
+      The two craft moments that decide the review:<br>
+      &nbsp;&nbsp;<b>① Barge-in</b> — AI yields the floor, &lt;100ms, no "please wait"<br>
+      &nbsp;&nbsp;<b>② Semantic mirror</b> — first sentence restates intent, so the learner <i>feels</i> understood<br>
+      Micro-flow pre-flight check with graceful tap-mode fallback
+    </div>
+  </div>
+
+  <footer>
+    <b>Design system note</b> — geometry follows Duolingo's 3D pill button (full radius + 5px bottom edge) and its
+    standard top bar; icons and avatars are placeholders in this wireframe. Frame size matches iPhone 15 Pro
+    (393 × 852). No brand colour is used anywhere in this document by design.<br>
+    <b>Scenario</b> — English native speaker learning French. UI copy English; lesson content French.
+  </footer>
+</div>
+</body>
+</html>

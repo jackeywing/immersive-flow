@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1010" viewBox="0 0 1320 1010" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7A8A82"/>
+    </marker>
+    <marker id="arG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#58CC02"/>
+    </marker>
+    <linearGradient id="hd" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0B6E4F"/><stop offset="100%" stop-color="#1CB0F6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1320" height="1010" fill="#F7F9F8"/>
+  <rect x="0" y="0" width="1320" height="86" fill="url(#hd)"/>
+  <text x="40" y="42" fill="#FFFFFF" font-size="25" font-weight="800">广告换试听 · Ad-for-Trial Workflow</text>
+  <text x="40" y="68" fill="#CDEBE0" font-size="13.5" font-weight="600">改造现有插屏广告结束页 · 零新增页面 · 1–2 季度可上线 · 目标指标：免费→Super 转化率</text>
+
+  <!-- ============ 主列 ============ -->
+  <!-- N1 -->
+  <rect x="300" y="118" width="480" height="74" rx="14" fill="#FFFFFF" stroke="#D8E3DD" stroke-width="2"/>
+  <text x="322" y="148" fill="#2E3B35" font-size="15.5" font-weight="800">① 课间广告结束页（现有组件）</text>
+  <text x="322" y="172" fill="#8A9791" font-size="12.5" font-weight="600">当前行为：广告播完 → 「关闭」→ 回课程</text>
+  <line x1="540" y1="192" x2="540" y2="222" stroke="#7A8A82" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- D1 -->
+  <rect x="300" y="226" width="480" height="96" rx="14" fill="#EAF7FF" stroke="#9AD4F5" stroke-width="2"/>
+  <text x="322" y="252" fill="#12628C" font-size="14.5" font-weight="800">是否展示「交换」？</text>
+  <text x="322" y="276" fill="#3E6C86" font-size="12" font-weight="600">本次已完成 ≥3 节 · 非订阅 · 非儿童账户</text>
+  <text x="322" y="296" fill="#3E6C86" font-size="12" font-weight="600">广告有填充 · 本场未用过 · 本周 &lt;3 次</text>
+  <text x="322" y="315" fill="#12628C" font-size="11.5" font-weight="800">全部满足才展示</text>
+  <!-- 左分支：不展示 -->
+  <line x1="300" y1="274" x2="252" y2="274" stroke="#7A8A82" stroke-width="2" marker-end="url(#ar)"/>
+  <rect x="34" y="240" width="218" height="68" rx="12" fill="#F2F4F3" stroke="#D8E3DD" stroke-width="2"/>
+  <text x="50" y="266" fill="#6C7A74" font-size="12.5" font-weight="800">不展示</text>
+  <text x="50" y="286" fill="#8A9791" font-size="11.5" font-weight="600">直接返回课程（= 现状）</text>
+  <text x="50" y="301" fill="#8A9791" font-size="11.5" font-weight="600">低参与度用户不被骚扰</text>
+  <line x1="540" y1="322" x2="540" y2="352" stroke="#58CC02" stroke-width="2.5" marker-end="url(#arG)"/>
+
+  <!-- N2 -->
+  <rect x="300" y="356" width="480" height="88" rx="14" fill="#F3FCE9" stroke="#A6DE6B" stroke-width="2.5"/>
+  <text x="322" y="382" fill="#3C6B14" font-size="15" font-weight="800">② 交换 CTA</text>
+  <text x="322" y="406" fill="#4E7A22" font-size="13" font-weight="700">「再看一条广告 → 下一节免广告 + 免能量」</text>
+  <text x="322" y="428" fill="#6E8F4C" font-size="11.5" font-weight="600">用第二人称、给出明确对价，不用「解锁」「特权」等抽象词</text>
+  <!-- 左分支：拒绝 -->
+  <line x1="300" y1="400" x2="252" y2="400" stroke="#7A8A82" stroke-width="2" marker-end="url(#ar)"/>
+  <rect x="34" y="368" width="218" height="64" rx="12" fill="#F2F4F3" stroke="#D8E3DD" stroke-width="2"/>
+  <text x="50" y="393" fill="#6C7A74" font-size="12.5" font-weight="800">用户拒绝</text>
+  <text x="50" y="413" fill="#8A9791" font-size="11.5" font-weight="600">返回课程 · 无损失 · 无二次弹窗</text>
+  <line x1="540" y1="444" x2="540" y2="474" stroke="#58CC02" stroke-width="2.5" marker-end="url(#arG)"/>
+
+  <!-- N3 -->
+  <rect x="300" y="478" width="480" height="76" rx="14" fill="#FFF8E2" stroke="#F0CE6A" stroke-width="2.5"/>
+  <text x="322" y="506" fill="#7A5800" font-size="15" font-weight="800">③ 第二条广告播放</text>
+  <text x="322" y="530" fill="#9A7A2E" font-size="12.5" font-weight="700">增量曝光 = 直接广告收入，自付试听成本</text>
+  <line x1="540" y1="554" x2="540" y2="584" stroke="#58CC02" stroke-width="2.5" marker-end="url(#arG)"/>
+
+  <!-- N4 -->
+  <rect x="300" y="588" width="480" height="90" rx="14" fill="#EFFBF4" stroke="#7FD3A3" stroke-width="2.5"/>
+  <text x="322" y="614" fill="#14603F" font-size="15" font-weight="800">④ 试听课（Super 体验中）</text>
+  <text x="322" y="638" fill="#2E7A58" font-size="13" font-weight="700">无广告 · 能量不扣 · 顶部克制的状态标识</text>
+  <text x="322" y="660" fill="#5A8F76" font-size="11.5" font-weight="600">让用户亲身感受核心价值，而不是被文案说服</text>
+  <line x1="540" y1="678" x2="540" y2="708" stroke="#58CC02" stroke-width="2.5" marker-end="url(#arG)"/>
+
+  <!-- N5 -->
+  <rect x="300" y="712" width="480" height="88" rx="14" fill="#FFF1F1" stroke="#F0A6A6" stroke-width="2.5"/>
+  <text x="322" y="738" fill="#9C2B2B" font-size="15" font-weight="800">⑤ 课末转化卡</text>
+  <text x="322" y="762" fill="#B45252" font-size="13" font-weight="700">「刚才那节课没有广告，也没扣能量。想一直这样吗？」</text>
+  <text x="322" y="784" fill="#C47A7A" font-size="11.5" font-weight="600">Offer 出现在价值体验之后（动机峰值），而非能量耗尽时</text>
+  <line x1="540" y1="800" x2="540" y2="830" stroke="#7A8A82" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- D2 -->
+  <rect x="330" y="834" width="420" height="76" rx="14" fill="#EAF7FF" stroke="#9AD4F5" stroke-width="2"/>
+  <text x="352" y="862" fill="#12628C" font-size="14.5" font-weight="800">用户是否转化？</text>
+  <text x="352" y="885" fill="#3E6C86" font-size="12" font-weight="600">7 天免费 Super 试用</text>
+  <line x1="330" y1="872" x2="252" y2="872" stroke="#7A8A82" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="750" y1="872" x2="828" y2="872" stroke="#58CC02" stroke-width="2.5" marker-end="url(#arG)"/>
+  <rect x="34" y="840" width="218" height="64" rx="12" fill="#F2F4F3" stroke="#D8E3DD" stroke-width="2"/>
+  <text x="50" y="865" fill="#6C7A74" font-size="12.5" font-weight="800">未转化</text>
+  <text x="50" y="885" fill="#8A9791" font-size="11.5" font-weight="600">回常规 · 重置本场频次计数</text>
+  <rect x="832" y="840" width="188" height="64" rx="12" fill="#F3FCE9" stroke="#A6DE6B" stroke-width="2.5"/>
+  <text x="848" y="865" fill="#3C6B14" font-size="12.5" font-weight="800">转化成功</text>
+  <text x="848" y="885" fill="#6E8F4C" font-size="11.5" font-weight="600">进入订阅生命周期</text>
+
+  <!-- ============ 右栏：指标 ============ -->
+  <rect x="1064" y="118" width="222" height="792" rx="16" fill="#FFFFFF" stroke="#D8E3DD" stroke-width="2"/>
+  <text x="1084" y="148" fill="#2E3B35" font-size="14.5" font-weight="800">指标漏斗</text>
+  <text x="1084" y="168" fill="#8A9791" font-size="11" font-weight="600">每屏对应一格</text>
+
+  <g font-size="11.5" font-weight="700">
+    <rect x="1080" y="184" width="190" height="52" rx="10" fill="#F7F9F8"/>
+    <text x="1092" y="204" fill="#2E3B35">① 结束页曝光量</text>
+    <text x="1092" y="224" fill="#8A9791" font-size="11">分母 · 现有插屏基数</text>
+
+    <rect x="1080" y="244" width="190" height="52" rx="10" fill="#F7F9F8"/>
+    <text x="1092" y="264" fill="#2E3B35">② 交换 CTA 点击率</text>
+    <text x="1092" y="284" fill="#8A9791" font-size="11">文案/对价清晰度</text>
+
+    <rect x="1080" y="304" width="190" height="52" rx="10" fill="#FFF8E2"/>
+    <text x="1092" y="324" fill="#7A5800">③ 二段广告完成率</text>
+    <text x="1092" y="344" fill="#9A7A2E" font-size="11">× eCPM = 增量收入</text>
+
+    <rect x="1080" y="364" width="190" height="52" rx="10" fill="#EFFBF4"/>
+    <text x="1092" y="384" fill="#14603F">④ 试听激活率</text>
+    <text x="1092" y="404" fill="#5A8F76" font-size="11">体验触达率</text>
+
+    <rect x="1080" y="424" width="190" height="66" rx="10" fill="#FFF1F1"/>
+    <text x="1092" y="446" fill="#9C2B2B" font-weight="800">⑤ 试听→付费转化率</text>
+    <text x="1092" y="465" fill="#B45252" font-size="11">★ 主指标（北极星）</text>
+    <text x="1092" y="481" fill="#C47A7A" font-size="11">对比：非试听人群基线</text>
+
+    <rect x="1080" y="500" width="190" height="52" rx="10" fill="#F7F9F8"/>
+    <text x="1092" y="520" fill="#2E3B35">订阅 90 天留存</text>
+    <text x="1092" y="540" fill="#8A9791" font-size="11">转化质量 · 长期价值</text>
+  </g>
+
+  <line x1="1080" y1="566" x2="1270" y2="566" stroke="#E2E8E5" stroke-width="1.5"/>
+  <text x="1084" y="590" fill="#12628C" font-size="12.5" font-weight="800">护栏指标（非劣 ≤2%）</text>
+  <g font-size="11.5" font-weight="600" fill="#4E6B7D">
+    <text x="1084" y="614">· 广告 ARPDAU 指数（防总收入下滑）</text>
+    <text x="1084" y="636">· streak 存活率（防体验恶化）</text>
+    <text x="1084" y="658">· 单场练习题数（防学习效率下降）</text>
+    <text x="1084" y="680">· 试听课完成的正确率（防敷衍点击）</text>
+  </g>
+
+  <line x1="1080" y1="704" x2="1270" y2="704" stroke="#E2E8E5" stroke-width="1.5"/>
+  <text x="1084" y="728" fill="#9C2B2B" font-size="12.5" font-weight="800">成本与频次控制</text>
+  <g font-size="11.5" font-weight="600" fill="#8A6A6A">
+    <text x="1084" y="752">· 试听成本 = 1 节课广告曝光</text>
+    <text x="1084" y="774">· 由第 ② 条广告覆盖</text>
+    <text x="1084" y="796">· 每场限 1 次 · 每周限 3 次</text>
+    <text x="1084" y="818">· 无填充 / 已订阅 / 儿童：不展示</text>
+  </g>
+
+  <line x1="1080" y1="842" x2="1270" y2="842" stroke="#E2E8E5" stroke-width="1.5"/>
+  <text x="1084" y="866" fill="#58CC02" font-size="12.5" font-weight="800">为什么不是新功能</text>
+  <text x="1084" y="890" fill="#5A7A4E" font-size="11.5" font-weight="600">零新增页面与导航，只改</text>
+  <text x="1084" y="908" fill="#5A7A4E" font-size="11.5" font-weight="600">现有插屏的最后一屏。</text>
+
+  <!-- 底部说明 -->
+  <text x="40" y="962" fill="#8A9791" font-size="11.5" font-weight="600">灰色 = 与现状一致的分支（不展示 / 拒绝 / 未转化）· 绿色 = 新增价值路径 · 黄色 = 增量广告收入节点</text>
+  <text x="40" y="984" fill="#8A9791" font-size="11.5" font-weight="600">主路径共 4 个用户可见画面：交换 CTA → 第二条广告 → 试听课 → 课末转化卡</text>
+</svg>
