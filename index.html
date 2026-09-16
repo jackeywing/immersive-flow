@@ -6,9 +6,14 @@
 <title>Wireflow Viewer · Brand-Sponsored Flow Level</title>
 <style>
   /* ============================================================
-     Design system
-     Greyscale base + ONE accent (#58CC02) reserved for exactly three
-     surfaces: VAD barge-in bars · 3-min timer · primary conversion CTA.
+     Design system — v2
+     Greyscale base (>85% of every screen) + TWO semantic accents:
+       GREEN #58CC02 → primary path actions & completion states
+                       (3-D primary buttons, success/restore, progress fill)
+       BLUE  #1CB0F6 → AI interaction & multimodal delta
+                       (VAD barge-in bars, Lily's live bubble, 3-min timer,
+                        AI phoneme diagnostic)
+     No third colour. Red is permitted only on the depleted heart, tiny area.
      ============================================================ */
   :root{
     --ink:#4B4B4B;          /* main text */
@@ -19,8 +24,11 @@
     --place:#EDEDED; --place2:#E0E0E0;
     --mut:#AFAFAF; --anno:#777;
     --page:#F7F7F7;
-    --accent:#58CC02; --accent-d:#46A302;   /* the only colour in the product */
-    --r-card:16px; --r-modal:18px; --r-pill:9999px;
+    --accent:#58CC02; --accent-d:#46A302;   /* GREEN · primary action / completion */
+    --ai:#1CB0F6;    --ai-d:#1899D6;        /* BLUE  · AI & immersive surfaces   */
+    --ai-wash:#EAF7FE;                      /* blue family, tinted wash          */
+    --warn:#FF4B4B;                         /* RED   · depleted heart only       */
+    --r-card:16px; --r-modal:20px; --r-pill:9999px;
     --s:0.80;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
@@ -42,6 +50,8 @@
   .tbtn:hover{background:var(--alt);}
   .hint{font-size:10.5px;color:var(--mut);font-weight:700;}
   .accentchip{border:2px solid var(--accent-d);color:var(--accent-d);border-radius:var(--r-pill);
+    padding:3px 9px;font-size:9.5px;font-weight:900;letter-spacing:.5px;}
+  .aichip{border:2px solid var(--ai-d);color:var(--ai-d);border-radius:var(--r-pill);
     padding:3px 9px;font-size:9.5px;font-weight:900;letter-spacing:.5px;}
 
   .strip{display:flex;align-items:center;gap:6px;overflow-x:auto;padding:8px 2px 10px;}
@@ -71,9 +81,9 @@
   .tbgrp{display:flex;gap:10px;align-items:center;}
   .tbp{width:34px;height:12px;background:var(--place);border-radius:4px;}
   .tbx{width:16px;height:16px;border:2px solid var(--mut);border-radius:4px;}
-  /* ACCENT SURFACE 1 of 3 — the 3-minute timer */
-  .timer{font-size:11.5px;font-weight:900;letter-spacing:.6px;color:var(--accent-d);
-    border:2px solid var(--accent);border-radius:var(--r-pill);padding:2px 9px;}
+  /* BLUE SURFACE — the 3-minute session timer (AI budget, never a paywall clock) */
+  .timer{font-size:11.5px;font-weight:900;letter-spacing:.6px;color:var(--ai-d);
+    border:2px solid var(--ai);border-radius:var(--r-pill);padding:2px 9px;}
   .canvas{flex:1;padding:18px 16px;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--alt);}
   .canvas.flush{padding:0;}
 
@@ -95,9 +105,12 @@
     -webkit-user-select:none;user-select:none;}
   .btn:active{transform:translateY(2px);border-bottom-width:2px;}
   .btn.sec{background:#fff;color:var(--ink);border-color:var(--soft);}
-  /* ACCENT SURFACE 3 of 3 — primary conversion CTA only */
+  /* GREEN SURFACE — primary path action / completion (restore + conversion CTA) */
   .btn.accent{background:var(--accent);border-color:var(--accent-d);color:#fff;}
   .btn.sm{padding:11px;font-size:11px;}
+  .btn.tx{background:transparent;border:0;color:#777;font-size:11.5px;font-weight:900;
+    letter-spacing:.3px;padding:11px;text-decoration:underline;text-underline-offset:3px;}
+  .btn.tx:active{transform:none;border-bottom-width:0;}
   .btn .ic{width:16px;height:16px;}
 
   /* path */
@@ -177,8 +190,8 @@
   .adtag{border:2px solid var(--ink);border-radius:var(--r-pill);padding:4px 9px;font-size:8.5px;
     font-weight:900;letter-spacing:.6px;color:var(--strong);}
   .adcount{font-size:11px;font-weight:900;letter-spacing:.5px;color:var(--strong);}
-  .adcreative{flex:1;margin:0 16px;border:2px solid var(--soft);border-radius:var(--r-card);background:var(--alt);
-    display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:14px;
+  .adcreative{flex:1;margin:0 16px;border-radius:var(--r-card);background:var(--alt);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
     padding:20px 18px;position:relative;}
   .admid{display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;}
   .adcap{display:flex;flex-direction:column;align-items:center;gap:6px;}
@@ -189,8 +202,11 @@
   .adstory .sframe{flex:1;height:112px;border:2px solid var(--soft);border-radius:10px;background:#fff;
     display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:900;
     color:var(--mut);letter-spacing:.5px;}
-  .adbumper{border:2px solid var(--soft);border-radius:var(--r-pill);padding:5px 12px;font-size:8.5px;
-    font-weight:900;letter-spacing:.7px;color:var(--mut);}
+  .adlogo{border:2px solid var(--ink);border-radius:var(--r-card);background:#fff;
+    padding:26px 30px;text-align:center;}
+  .adlogo .lm{font-size:15px;font-weight:900;letter-spacing:1.2px;color:var(--strong);}
+  .adlogo .ls{font-size:8.5px;font-weight:900;letter-spacing:.9px;color:var(--mut);margin-top:7px;}
+  .adlogo .lbox{width:64px;height:10px;background:var(--place2);border-radius:3px;margin:14px auto 0;}
   .adcreative .cap{font-size:9.5px;font-weight:900;letter-spacing:.8px;color:var(--anno);}
   .adcreative .sub{font-size:9px;font-weight:700;color:var(--mut);text-align:center;}
   .adsound{font-size:8.5px;font-weight:900;letter-spacing:.5px;color:var(--mut);}
@@ -200,7 +216,7 @@
     margin-bottom:8px;}
   .adskip{text-align:center;font-size:9px;font-weight:900;letter-spacing:.5px;color:var(--mut);margin-bottom:10px;}
   .adbar{height:8px;border:2px solid var(--soft);border-radius:var(--r-pill);overflow:hidden;margin-bottom:7px;}
-  .adbar i{display:block;height:100%;width:12%;background:var(--ink);}
+  .adbar i{display:block;height:100%;width:12%;background:var(--accent);}
   .adhint{font-size:9px;font-weight:900;letter-spacing:.6px;color:var(--anno);text-align:center;}
 
   /* modal / prep */
@@ -208,8 +224,7 @@
     padding:16px;position:relative;overflow:hidden;}
   .ghostunder{position:absolute;inset:14px;display:flex;flex-direction:column;justify-content:flex-start;gap:13px;opacity:.8;}
   .ghostunder .gb{background:#D8D8D8;border-radius:6px;height:13px;}
-  .ghostunder .gwave{display:flex;align-items:center;justify-content:center;gap:6px;height:50px;
-    border:2px solid #D8D8D8;border-radius:var(--r-card);}
+  .ghostunder .gwave{display:flex;align-items:center;justify-content:center;gap:6px;height:50px;}
   .ghostunder .gwave i{width:9px;border-radius:var(--r-pill);background:#D8D8D8;}
   .ghostunder .gbtn{background:#D8D8D8;border-radius:var(--r-pill);height:38px;}
   .modal{position:relative;border:2px solid var(--strong);border-radius:var(--r-modal);background:#fff;
@@ -262,15 +277,15 @@
     font-weight:900;letter-spacing:.7px;color:var(--anno);}
 
   /* ============ flow session ============ */
-  .vadbanner{border:2px solid var(--accent);border-radius:var(--r-pill);padding:6px 11px;margin-bottom:11px;
-    display:flex;align-items:center;gap:8px;background:#F4FDEA;}
-  .vadbanner .ic{width:15px;height:15px;color:var(--accent-d);flex:none;}
-  .vadbanner .tx{font-size:9.5px;font-weight:900;letter-spacing:.5px;color:var(--accent-d);}
-  .vadbanner .live{margin-left:auto;font-size:8.5px;font-weight:900;letter-spacing:.6px;color:var(--accent-d);}
-  /* ACCENT SURFACE 2 of 3 — barge-in bars (5 rounded pill bars, not a generic waveform) */
+  .vadbanner{border:2px solid var(--ai);border-radius:var(--r-pill);padding:6px 11px;margin-bottom:11px;
+    display:flex;align-items:center;gap:8px;background:var(--ai-wash);}
+  .vadbanner .ic{width:15px;height:15px;color:var(--ai-d);flex:none;}
+  .vadbanner .tx{font-size:9.5px;font-weight:900;letter-spacing:.5px;color:var(--ai-d);}
+  .vadbanner .live{margin-left:auto;font-size:8.5px;font-weight:900;letter-spacing:.6px;color:var(--ai-d);}
+  /* BLUE SURFACE — barge-in bars (5 rounded pill bars, never a generic waveform) */
   .vadbars{display:flex;align-items:center;justify-content:center;gap:9px;height:76px;
-    border:2px solid var(--accent);border-radius:var(--r-card);background:#fff;margin-bottom:12px;}
-  .vadbars i{width:11px;border-radius:var(--r-pill);background:var(--accent);height:18px;
+    border:2px solid var(--ai);border-radius:var(--r-card);background:#fff;margin-bottom:12px;}
+  .vadbars i{width:11px;border-radius:var(--r-pill);background:var(--ai);height:18px;
     animation:pill 1.15s ease-in-out infinite;}
   .vadbars i:nth-child(1){animation-delay:0s}
   .vadbars i:nth-child(2){animation-delay:.14s}
@@ -285,38 +300,85 @@
   .tlab{font-size:9px;font-weight:900;color:var(--mut);letter-spacing:.7px;margin-bottom:6px;}
   .frline{font-size:12.5px;font-weight:800;color:var(--strong);line-height:1.5;}
   .bubbletxt{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.5;}
-  /* semantic mirroring — highlighted first AI line (greyscale craft, no colour) */
-  .turn.ai .tbub{border-color:var(--strong);border-left-width:5px;}
-  .mirrorchip{display:inline-block;border:2px solid var(--strong);border-radius:var(--r-pill);
-    padding:2px 7px;font-size:8px;font-weight:900;letter-spacing:.6px;color:var(--strong);margin-bottom:7px;}
+  /* BLUE SURFACES — Lily's live channel + the semantic-mirroring highlight */
+  .turn.ai .tbub{border-color:var(--ai);border-left-width:5px;}
+  .mirrorchip{display:inline-block;border:2px solid var(--ai);border-radius:var(--r-pill);
+    padding:2px 7px;font-size:8px;font-weight:900;letter-spacing:.6px;color:var(--ai-d);margin-bottom:7px;}
   .mirrorline{font-size:12.5px;font-weight:900;color:var(--strong);line-height:1.45;
-    background:var(--place);border-radius:8px;padding:7px 9px;margin-bottom:7px;}
+    background:var(--ai-wash);border-radius:8px;padding:7px 9px;margin-bottom:7px;}
   .tbub{position:relative;}
-  .bargin{position:absolute;right:-13px;top:-13px;width:26px;height:26px;border:2px dashed var(--strong);border-radius:50%;}
+  .bargin{position:absolute;right:-13px;top:-13px;width:26px;height:26px;border:2px dashed var(--ai);border-radius:50%;}
   .reserved{border:2px dashed var(--mut);border-radius:var(--r-card);padding:11px;font-size:9.5px;font-weight:900;
     color:var(--mut);text-align:center;letter-spacing:.5px;}
 
   /* report */
-  .scorebox{display:flex;gap:12px;align-items:center;border:2px solid var(--ink);border-radius:var(--r-card);
-    padding:13px;margin-bottom:12px;background:#fff;}
-  .scorebox .num{width:72px;height:58px;border:2px solid var(--strong);border-radius:var(--r-card);background:var(--alt);
-    display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;flex:none;color:var(--strong);}
-  .phoneme{border:2px solid var(--ink);border-radius:var(--r-card);padding:12px;margin-bottom:12px;background:#fff;}
+  /* no nested card borders — the report is flat by design */
+  .scorebox{display:flex;gap:12px;align-items:center;padding:0 2px;margin-bottom:15px;background:transparent;}
+  .scorebox .num{width:66px;height:52px;border-radius:var(--r-card);background:var(--alt);
+    display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:900;flex:none;color:var(--strong);}
+  .phoneme{padding:0 2px;margin-bottom:15px;background:transparent;}
+  .ailabel{font-size:8.5px;font-weight:900;letter-spacing:.7px;color:var(--ai-d);margin-bottom:8px;}
   .phonbars{display:flex;align-items:flex-end;gap:3px;height:44px;}
-  .phonbars i{flex:1;background:var(--place2);border-radius:2px;}
-  .phonbars i.off{background:var(--strong);}
-  .phonlegend{display:flex;gap:14px;margin-top:10px;font-size:9px;font-weight:900;color:var(--mut);}
+  .phonbars i{flex:1;background:var(--ai);border-radius:var(--r-pill);}
+  .phonbars i.off{background:var(--place2);}
+  .phonlegend{display:flex;gap:14px;margin-top:9px;font-size:9px;font-weight:900;color:var(--mut);}
   .wordcards{display:flex;gap:9px;margin-bottom:12px;}
-  .wc{flex:1;border:2px solid var(--soft);border-radius:var(--r-card);padding:10px 6px;text-align:center;}
+  .wc{flex:1;border-radius:var(--r-card);padding:10px 6px;text-align:center;background:var(--alt);}
   .wordcards .w{font-size:11.5px;font-weight:900;color:var(--strong);}
   .wordcards .g{font-size:9px;font-weight:700;color:var(--mut);margin-top:4px;}
   .rewardrow{display:flex;gap:9px;margin-bottom:12px;}
-  .rw{flex:1;border:2px solid var(--soft);border-radius:var(--r-card);padding:9px 6px;text-align:center;
+  .rw{flex:1;border-radius:var(--r-card);padding:9px 6px;text-align:center;background:var(--alt);
     font-size:8.5px;font-weight:900;letter-spacing:.4px;color:var(--anno);}
   .rw span{display:block;font-size:15px;color:var(--strong);margin-bottom:2px;}
-  .practise{border:2px dashed var(--ink);border-radius:var(--r-pill);padding:10px;text-align:center;
-    font-size:10px;font-weight:900;letter-spacing:.5px;color:var(--strong);margin-bottom:12px;background:#fff;}
+  .practise{border-radius:var(--r-pill);padding:10px;text-align:center;
+    font-size:10px;font-weight:900;letter-spacing:.5px;color:var(--strong);margin-bottom:12px;background:var(--alt);}
   .footline{font-size:9px;font-weight:900;color:var(--mut);text-align:center;letter-spacing:.5px;}
+
+  /* ============ out-of-hearts trigger (new Frame 1) ============ */
+  .lesson{flex:1;display:flex;flex-direction:column;padding:16px;position:relative;background:var(--alt);}
+  .lhead{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+  .lbar{flex:1;height:12px;border-radius:var(--r-pill);background:var(--place2);overflow:hidden;}
+  .lbar i{display:block;height:100%;width:62%;background:var(--accent);border-radius:var(--r-pill);}
+  .hrow{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:900;color:var(--warn);}
+  .hrow .ic{width:17px;height:17px;}
+  .qstem{font-size:14.5px;font-weight:900;color:var(--strong);line-height:1.5;margin-bottom:4px;}
+  .qsub{font-size:9.5px;font-weight:800;color:var(--mut);letter-spacing:.5px;margin-bottom:16px;}
+  .opt{border:2px solid var(--soft);border-radius:var(--r-card);padding:12px;margin-bottom:9px;background:#fff;
+    font-size:12.5px;font-weight:800;color:var(--strong);}
+  .opt.bad{border-color:var(--warn);border-style:dashed;color:var(--anno);}
+  .scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:3;}
+  .hsheet{position:absolute;left:0;right:0;bottom:0;background:#fff;
+    border-radius:var(--r-modal) var(--r-modal) 0 0;padding:10px 16px 15px;z-index:4;}
+  .hpair{display:flex;align-items:center;justify-content:center;gap:13px;margin:2px 0 12px;}
+  .hcell{width:64px;height:64px;border-radius:var(--r-card);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:3px;background:var(--alt);}
+  .hcell .hico{width:25px;height:25px;display:flex;}
+  .hcell .hico svg{width:100%;height:100%;}
+  .hcell.low .hico{color:var(--warn);}
+  .hcell.full .hico{color:var(--accent-d);}
+  .hcell .hcap{font-size:7.5px;font-weight:900;letter-spacing:.4px;color:var(--mut);}
+  .harrow{font-size:16px;font-weight:900;color:var(--mut);}
+  .htitle{font-size:17px;font-weight:900;color:var(--strong);line-height:1.2;margin-bottom:6px;}
+  .hsub{font-size:11px;font-weight:700;color:var(--anno);line-height:1.6;margin-bottom:11px;}
+  .sponbadge{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--soft);
+    border-radius:var(--r-pill);padding:4px 10px;font-size:8.5px;font-weight:900;
+    letter-spacing:.5px;color:var(--anno);margin-bottom:11px;}
+  .sponbadge .ic{width:12px;height:12px;color:var(--anno);}
+  .hnote{font-size:8.5px;font-weight:900;letter-spacing:.4px;color:var(--mut);text-align:center;}
+  .caprow{display:flex;gap:8px;margin-bottom:11px;}
+  .capopt{flex:1;border:2px solid var(--soft);border-radius:var(--r-card);padding:11px 8px;text-align:center;
+    font-size:9px;font-weight:900;color:var(--strong);background:#fff;line-height:1.5;letter-spacing:.3px;}
+  .capopt .big{display:flex;align-items:center;justify-content:center;height:22px;margin-bottom:6px;color:var(--strong);}
+  .capopt .big svg{width:20px;height:20px;}
+  .mclose{position:absolute;top:10px;right:10px;width:26px;height:26px;border:0;background:transparent;
+    color:var(--anno);cursor:pointer;padding:3px;font-family:inherit;}
+  .mclose svg{width:100%;height:100%;}
+  .fnhead{font-size:9px;font-weight:900;letter-spacing:.8px;color:var(--mut);margin-bottom:7px;}
+  .fnlist{list-style:none;display:flex;flex-direction:column;gap:6px;}
+  .fnlist li{font-size:11.5px;line-height:1.5;color:var(--ink);padding-left:13px;position:relative;}
+  .fnlist li::before{content:'';position:absolute;left:0;top:6px;width:5px;height:5px;
+    border-radius:50%;background:var(--mut);}
+  .fnlist li b{color:var(--strong);}
 
   /* callouts + notes */
   .callout{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--strong);color:#fff;
@@ -355,9 +417,10 @@
 <body>
 
 <header>
-  <h1>Brand-Sponsored Flow Level<small>Frame-by-frame wireflow · greyscale + one accent</small></h1>
+  <h1>Brand-Sponsored Flow Level<small>Frame-by-frame wireflow · greyscale base with two semantic accents</small></h1>
   <div class="tools">
-    <span class="accentchip">ACCENT #58CC02 · VAD bars / timer / conversion CTA only</span>
+    <span class="accentchip">GREEN #58CC02 · primary action / completion</span>
+    <span class="aichip">BLUE #1CB0F6 · AI surfaces only</span>
     <span class="hint">Click a number to link frame ↔ notes</span>
     <button class="tbtn" id="annoBtn" onclick="toggleCo()">Hide callouts</button>
   </div>
@@ -399,6 +462,8 @@ const I = {
   shield:'<svg viewBox="0 0 24 24"><path d="M12 2.6l7.6 3.1v6c0 4.5-3.1 8.1-7.6 9.6-4.5-1.5-7.6-5.1-7.6-9.6v-6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>',
   bag:'<svg viewBox="0 0 24 24"><path d="M4.1 7.3h15.8l-1.4 12.6H5.5z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M8.5 9.3V6.5a3.5 3.5 0 017 0v2.8" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>',
   person:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8.1" r="3.8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M4.4 20.5c1.4-3.8 4.2-5.7 7.6-5.7s6.2 1.9 7.6 5.7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  bolt:'<svg viewBox="0 0 24 24"><path d="M13.6 2.1L4.4 13.3h5.5l-1.5 8.6 8.9-11.2h-5.5z" fill="currentColor"/></svg>',
+  heartbreak:'<svg viewBox="0 0 24 24"><path d="M12 20.6l-1.6-1.5C5.4 14.6 2.2 11.6 2.2 8 2.2 5.4 4.2 3.5 6.8 3.5c1.6 0 3.1.7 4.2 2.1l1 1.3 1-1.3c1.1-1.4 2.6-2.1 4.2-2.1 2.6 0 4.6 1.9 4.6 4.5 0 3.6-3.2 6.6-8.2 11.1L12 20.6z" fill="currentColor"/><path d="M12.7 3.4l-2.3 5.2 3.2 2.2-2.7 4.7" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>',
   mic:'<svg viewBox="0 0 24 24"><rect x="9" y="2.2" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.2 11.4a6.8 6.8 0 0013.6 0" fill="none" stroke="currentColor" stroke-width="2.3"/><path d="M12 18.2v3.6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg>',
   headphones:'<svg viewBox="0 0 24 24"><path d="M4 14.5v-2.6a8 8 0 0116 0v2.6" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="1.6" y="13.2" width="5.2" height="8.2" rx="2.2" fill="currentColor"/><rect x="17.2" y="13.2" width="5.2" height="8.2" rx="2.2" fill="currentColor"/></svg>',
   noise:'<svg viewBox="0 0 24 24"><path d="M3 12h2.2l2-5.2 3 10.4 3-14 2.8 12 1.8-3.2H21" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -418,8 +483,51 @@ const TBFLOW = `<div class="topbar"><div class="tbgrp"><span class="tbp" style="
 
 const FRAMES = [
 
-  /* ================= 1 ================= */
-  { id:'trigger', title:'Frame 1 — Trigger Sheet', sub:'Native bottom sheet · the ad-gated offer', core:true, strip:'1 Trigger Sheet',
+  /* ================= 1 · NEW — out-of-hearts trigger ================= */
+  { id:'hearts', title:'Frame 1 — Out of Hearts Trigger', sub:'Rewarded-ad interrupt at hearts = 0 · the highest-intent moment a free learner has', core:true, strip:'1 Out of Hearts',
+    body: SB + `
+      <div class="canvas flush">
+        <div class="lesson">
+          <div class="lhead">
+            <div class="lbar"><i></i></div>
+            <div class="hrow">${ic('heartbreak',17)}0</div>
+          </div>
+          <div class="qstem">Complete the sentence</div>
+          <div class="qsub">AT THE CAFÉ · LESSON 3 OF 5</div>
+          <div class="opt">Je voudrais ___ une chambre.</div>
+          <div class="opt bad">réservation</div>
+          <div class="opt">réserver</div>
+          <div class="opt">réserve</div>
+        </div>
+
+        <div class="scrim"></div>
+
+        <div class="hsheet">
+          <div class="grab"></div>
+          <div class="hpair">
+            <div class="hcell low"><span class="hico">${I.heartbreak}</span><span class="hcap">0 HEARTS</span></div>
+            <div class="harrow">→</div>
+            <div class="hcell full"><span class="hico">${I.bolt}</span><span class="hcap">100% ENERGY</span></div>
+          </div>
+          <div class="htitle">Out of Hearts!</div>
+          <div class="hsub">Watch a 30s sponsored video to refill your energy — and we’ll throw in one free 3-minute AI Flow session.</div>
+          <div class="sponbadge">${ic('play',12)} SPONSORED BY MARRIOTT</div>
+          <button class="btn accent cta2"><span>${ic('play',14)} WATCH AD TO RESTORE ENERGY</span><span style="font-size:9px;font-weight:800;opacity:.9">+ UNLOCKS 1 FREE 3-MIN AI FLOW</span></button>
+          <button class="btn tx">Give up and exit</button>
+          <div class="hnote">1 OF 2 FREE RESTORES USED TODAY</div>
+        </div>
+      </div>`,
+    callouts:[
+      {n:1, tgt:'.hpair', pos:'right', html:'<b>Delta — Heart-Out friction hook.</b> The ad is bound to two things the learner already wants: their lesson survives, and a 3-minute AI session comes free. Restore alone is a toll; restore + Flow is a trade.'}
+    ],
+    notes:[
+      '<b>Why this moment.</b> Hearts = 0 is the highest-intent point a free learner ever reaches — they have already decided the lesson matters, and they are about to lose it.',
+      '<b>Why not restore-only.</b> Selling energy back reads as a penalty. Bundling one free 3-min AI Flow session reframes the same 30 seconds as an upgrade.',
+      '<b>Guardrails.</b> Capped at 2 free restores/day → the Capac branch handles the cap and any ad-fill failure.'
+    ]},
+
+  /* ================= 2 — path entry ================= */
+  { id:'trigger', title:'Frame 2 — Path Entry', sub:'Where the AI node lives on the Duolingo learning path', core:true, strip:'2 Path Entry',
     body: SB + `
       <div class="canvas" style="padding:0">
         <div class="unitbar">
@@ -441,20 +549,16 @@ const FRAMES = [
           </svg>
 
           <div class="node done" style="left:72px;top:0;width:46px;height:46px">${I.check}</div>
-
           <div class="node done" style="left:194px;top:48px;width:46px;height:46px">${I.check}</div>
 
           <div class="bub filled" style="left:24px;top:74px">3-MIN AI CHALLENGE</div>
           <div class="node mic" style="left:60px;top:112px;width:56px;height:56px">${I.mic}</div>
-          <div class="nlab strong" style="left:40px;top:180px;width:96px">SPEAK · NO ADS</div>
 
           <div class="duo" style="left:136px;top:220px;width:40px;height:40px">DUO</div>
           <div class="bub" style="left:193px;top:172px">START</div>
           <div class="node active" style="left:190px;top:204px;width:60px;height:60px">${I.star}</div>
-          <div class="nlab strong" style="left:180px;top:268px;width:80px">LESSON 3</div>
 
           <div class="node locked" style="left:74px;top:278px;width:46px;height:46px">${I.lock}</div>
-          <div class="nlab" style="left:54px;top:328px;width:86px">SPEAKING · MAX</div>
         </div>
 
         <div class="sheet" style="bottom:58px">
@@ -468,7 +572,6 @@ const FRAMES = [
           </div>
           <div class="sponsorline">SPONSOR PAYS · YOU DON'T</div>
           <button class="btn cta2"><span>${ic('play',13)} WATCH 30s SPONSOR VIDEO</span><span style="font-size:9px;font-weight:800;opacity:.85">UNLOCKS 3-MIN AI ROLEPLAY</span></button>
-          <button class="btn sec sm">MAYBE LATER</button>
         </div>
 
         <div class="navbar">
@@ -480,16 +583,16 @@ const FRAMES = [
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.bub.filled', pos:'left', html:'<b>The entry is labelled on the path itself.</b> “3-min AI Challenge” rides above the node, so the offer is discoverable before anything is tapped — not buried in a menu.'},
-      {n:2, tgt:'.node.mic', pos:'right', html:'<b>The one node that isn’t a lesson.</b> Filled solid against the hollow lesson nodes, with a dashed halo marking it as new. No invented icon — Duolingo’s own mic.'},
-      {n:3, tgt:'.node.active', pos:'right', html:'<b>Duo marks where you actually are.</b> The active node is larger (60px), carries the avatar anchor and the “START” bubble — so the learner never loses their place behind the sheet.'},
-      {n:4, tgt:'.node.locked', pos:'left', html:'<b>The locked node is the friction.</b> Dashed single-line border, no 3-D base, muted padlock — visibly “not yet”, and visibly connected to the same snake.'},
-      {n:5, tgt:'.sheet .btn:not(.sec)', pos:'corner', html:'<b>Consideration spelled out:</b> 30s sponsor video → 3-min AI roleplay. Duration in, duration out — never a vague “unlock a level”.'}
+      {n:1, tgt:'.node.mic', pos:'right', html:'<b>Delta — a labelled AI entry on the path.</b> The one node that isn’t a lesson. Filled solid against the hollow lesson nodes, with a dashed halo and a labelled pill above it. No invented icon — Duolingo’s own mic.'}
     ],
-    footnote:'Tap the CTA → the Ad SDK opens full-screen and cross-fades into Frame 2.' },
+    notes:[
+      '<b>Node state system.</b> Four states, distinguished only by icon + 3-D base — a completed check with a flat base, the active star with its Duo anchor and START bubble, a dashed locked padlock with no base, and the new AI node.',
+      '<b>Why the snake matters.</b> The AI challenge has to read as part of the course, not a side door. Same path geometry, same node grammar.',
+      '<b>Copy.</b> “3-min AI Challenge” rides above the node so the offer is discoverable before anything is tapped.'
+    ]},
 
-  /* ================= 2 ================= */
-  { id:'ad', title:'Frame 2 — Sponsored Video', sub:'Rewarded ad container · countdown + sponsor badge', core:false, strip:'2 Sponsored Video',
+  /* ================= 3 — rewarded ad ================= */
+  { id:'ad', title:'Frame 3 — Sponsored Video', sub:'Rewarded ad container · countdown + sponsor badge, one container', core:false, strip:'3 Sponsored Video',
     body: SB + `
       <div class="canvas flush">
         <div class="adslot">
@@ -499,16 +602,12 @@ const FRAMES = [
             <div class="admeta"><span class="adtag">SPONSORED BY MARRIOTT</span><span class="adcount">0:27</span></div>
           </div>
           <div class="adcreative">
-            <div class="adbumper">BRAND BUMPER · 3s</div>
-            <div class="admid">
-              <div class="play">${I.play}</div>
-              <div class="adstory"><div class="sframe">SCENE 1</div><div class="sframe">SCENE 2</div><div class="sframe">SCENE 3</div></div>
+            <div class="adlogo">
+              <div class="lm">MARRIOTT BONVOY</div>
+              <div class="ls">BRAND LOGO PLACEHOLDER</div>
+              <div class="lbox"></div>
             </div>
-            <div class="adcap">
-              <div class="cap">BRANDED ANIMATION · 30s</div>
-              <div class="sub">Duo turns the luggage cart into a skateboard</div>
-              <div class="adsound">SOUND ON BY DEFAULT · TAP TO MUTE</div>
-            </div>
+            <div class="adcap"><div class="cap">BRANDED ANIMATION · 30s</div></div>
           </div>
           <div class="adfoot">
             <div class="adcta">EXPLORE MARRIOTT BONVOY</div>
@@ -519,15 +618,16 @@ const FRAMES = [
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.adhead', pos:'right', html:'<b>Countdown and sponsor badge, top-right.</b> “SPONSORED BY MARRIOTT” plus 0:27 — the learner always knows who paid and how long is left.'},
-      {n:2, tgt:'.adcreative', pos:'right', html:'<b>The creative owns the frame.</b> Storyboard placeholders stand in for the video; no Duolingo navigation competes with it.'},
-      {n:3, tgt:'.adcta', pos:'right', html:'<b>The advertiser’s CTA lives inside the ad container</b>, never outside it — anything tappable here is billed as ad interaction.'},
-      {n:4, tgt:'.adbar', pos:'right', html:'<b>Completion pays out, not clicks.</b> Skipping is available but forfeits the reward, stated plainly instead of hidden.'}
+      {n:1, tgt:'.adhead', pos:'right', html:'<b>Delta — Ad-to-Native handshake.</b> On the Ad SDK’s <b>AdCompleted</b> event we do not bounce to home: the WebSocket pipeline is already warm, so the next frame is native again.'}
     ],
-    footnote:'On AdCompleted → auto-advance to Frame 3. No bounce to home; the WebSocket pipeline pre-warms behind it.' },
+    notes:[
+      '<b>One container, no nested frames.</b> The player, the sponsor badge and the advertiser CTA all live inside a single ad surface — anything tappable in here is billed as ad interaction.',
+      '<b>Countdown + badge, top-right.</b> The learner always knows who paid and how long is left.',
+      '<b>Completion pays out, not clicks.</b> Skipping is offered plainly, and it forfeits the reward — stated, never hidden.'
+    ]},
 
-  /* ================= 3 — degradation logic ================= */
-  { id:'check', title:'Frame 3 — Room Check', sub:'Mic + SNR · quiet vs noisy, with the degrade path', core:false, strip:'3 Room Check',
+  /* ================= 4 — room check ================= */
+  { id:'check', title:'Frame 4 — Room Check', sub:'Mic + SNR · quiet vs noisy, with the degrade path', core:false, strip:'4 Room Check',
     body: SB + `
       <div class="canvas flush">
         <div class="overlay">
@@ -541,6 +641,7 @@ const FRAMES = [
             <div class="gbtn"></div>
           </div>
           <div class="modal">
+            <button class="mclose">${I.close}</button>
             <div class="mtitle">Ready for 3 minutes?</div>
             <div class="mrow mic"><div class="ic">${I.mic}</div>
               <div style="flex:1"><div class="lbl">MICROPHONE</div><div class="val">Connected · input level good</div>
@@ -567,21 +668,20 @@ const FRAMES = [
             </div>
 
             <button class="btn">${ic('mic',14)} I'M READY!</button>
-            <button class="btn sec sm">MAYBE LATER</button>
           </div>
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.mrow.mic', pos:'right', html:'<b>Mic check before the clock starts.</b> A failure found here costs nothing; found mid-session it costs all three minutes.'},
-      {n:2, tgt:'.mrow.noise', pos:'right', html:'<b>SNR against a stated threshold.</b> 58 dB under a 60 dB limit. Push it over and the warning fires — the number is user-visible, not just internal.'},
-      {n:3, tgt:'.noisewarn', pos:'right', html:'<b>The degrade path is announced, not silent.</b> Over 60 dB we pre-select tap mode and <i>say so</i> — the learner is never dropped into a failing mic. <i>(Visible when Noisy is selected.)</i>'},
-      {n:4, tgt:'.modesw', pos:'right', html:'<b>Mode is the user’s call.</b> Quiet keeps full-duplex barge-in; noisy swaps to taps. Same scene, same 3 minutes, only the input changes.'},
-      {n:5, tgt:'.btn:not(.sec)', pos:'right', html:'<b>“I’m Ready!”, not “Next”.</b> Explicit consent to start — we never auto-open the mic straight out of an ad.'}
+      {n:1, tgt:'.mrow.noise', pos:'right', html:'<b>Delta — SNR noise check &amp; toggle.</b> On-device SNR against a stated 60 dB threshold. Over it, we pre-select hold-to-talk so full-duplex VAD can never misfire on a train platform.'}
     ],
-    footnote:'Toggle the two mode cards to see both edge cases. Confirming wakes the mic and cross-fades to Frame 4.' },
+    notes:[
+      '<b>One exit only.</b> The close control at the top-right dismisses. The old second “Maybe later” button was a duplicate — the two mode cards already carry the real decision.',
+      '<b>Mic check before the clock starts.</b> A failure found here costs nothing; found mid-session it costs all three minutes.',
+      '<b>Mode stays the user’s call.</b> Quiet keeps full-duplex barge-in; noisy swaps to taps. Same scene, same 3 minutes — only the input changes.'
+    ]},
 
-  /* ================= 4 ================= */
-  { id:'bridge', title:'Frame 4 — Auto Hand-off', sub:'2s native transition · no user action required', core:false, strip:'4 Auto 2s',
+  /* ================= 5 — zero-touch bridge ================= */
+  { id:'bridge', title:'Frame 5 — Auto Hand-off', sub:'2s native transition · zero touchable elements', core:false, strip:'5 Auto 2s',
     body: SB + `
       <div class="canvas flush">
         <div class="bridgebox">
@@ -596,14 +696,16 @@ const FRAMES = [
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.autopill', pos:'right', html:'<b>Stated up front: nothing to tap.</b> A 2-second auto transition. Any button here would be friction disguised as agency.'},
-      {n:2, tgt:'.headsetwrap', pos:'right', html:'<b>A character moment, not a spinner.</b> Lily putting on headphones carries the emotional thread from the ad into the session.'},
-      {n:3, tgt:'.autoring', pos:'right', html:'<b>The 2s countdown is the loading state.</b> It makes the WebSocket handshake legible instead of hiding it behind an abstract spinner.'}
+      {n:1, tgt:'.bridgebox', pos:'right', html:'<b>Delta — Zero-touch transition.</b> 2 seconds, no button, no tab bar, nothing tappable at all. The WebSocket full-duplex stream opens behind the character beat.'}
     ],
-    footnote:'Purely automatic. The mic was granted one frame earlier, so this transition has no permission prompt to interrupt it.' },
+    notes:[
+      '<b>Every control removed on purpose.</b> Any button here would be friction disguised as agency.',
+      '<b>The countdown is the loading state.</b> It makes the handshake legible instead of hiding it behind an abstract spinner.',
+      '<b>A character moment, not a spinner.</b> Lily putting on headphones carries the emotional thread from the ad into the session.'
+    ]},
 
-  /* ================= 5 — visual highlight ================= */
-  { id:'core', title:'Frame 5 — 3-min Micro-Flow', sub:'barge-in + semantic mirroring · accent on VAD and timer', core:true, strip:'5 Micro-Flow',
+  /* ================= 6 — micro-flow ================= */
+  { id:'core', title:'Frame 6 — 3-min Micro-Flow', sub:'barge-in + semantic mirroring · blue marks every AI surface', core:true, strip:'6 Micro-Flow',
     body: SB + TBFLOW + `
       <div class="canvas">
         <div class="vadbanner">
@@ -642,21 +744,21 @@ const FRAMES = [
             <div class="frline">Parfait. Pour combien de nuits ?</div></div>
         </div>
 
-        <div class="reserved" style="margin-top:auto">PHONEME COMPARISON · SAVED FOR THE REPORT</div>
-        <button class="btn sec sm" style="margin-top:11px">END SESSION</button>
+        <button class="btn sec sm" style="margin-top:auto">END SESSION</button>
       </div>`,
     callouts:[
-      {n:1, tgt:'.vadbanner', pos:'right', html:'<b>The promise is on screen, at the top.</b> “&lt;100ms VAD · barge-in live” — one accent-coloured line carrying the whole differentiator.'},
-      {n:2, tgt:'.vadbars', pos:'right', html:'<b>Five rounded pill bars, not a web waveform.</b> Native-feeling volume motion, and the accent colour is spent here on purpose.'},
-      {n:3, tgt:'.mirrorline', pos:'right', html:'<b>Semantic mirroring, highlighted.</b> The AI’s first utterance restates intent before replying — this is the moment the learner <i>feels</i> understood.'},
-      {n:4, tgt:'.timer', pos:'left', html:'<b>Accent on the timer.</b> One visible 3-minute budget, drawn in the same colour as the voice feedback — never a countdown to a paywall.'},
-      {n:5, tgt:'.bargin', pos:'left', html:'<b>Barge-in indicator.</b> The dashed ring means the AI has yielded the floor. Target &lt;100ms, and never “please wait”.'}
+      {n:1, tgt:'.vadbanner', pos:'right', html:'<b>Delta — &lt;100ms barge-in VAD.</b> On-device voice detection physically cuts the AI’s TTS the instant the learner opens their mouth. No “please wait”.'},
+      {n:2, tgt:'.mirrorline', pos:'right', html:'<b>Delta — Semantic mirroring.</b> The AI’s first line restates intent before it answers — the moment the learner <i>feels</i> understood, not just processed.'}
     ],
-    footnote:'Accent is spent exactly three times in the whole product: these bars, the timer, and the conversion CTA on Frame 6.' },
+    notes:[
+      '<b>Blue means AI.</b> The banner, the five pill bars, the timer and Lily’s live bubble all draw from one colour so the immersive layer is legible at a glance.',
+      '<b>Five rounded pill bars, never a web waveform.</b> Native-feeling volume motion, and the only decoration on the screen.',
+      '<b>No keyboard affordance.</b> In voice mode a bottom text field would split the learner’s focus — the session ends from one clearly labelled exit.'
+    ]},
 
-  /* ================= 6 ================= */
-  { id:'report', title:'Frame 6 — Peak Diagnosis', sub:'phoneme report · conversion CTA straight under the waveform', core:true, strip:'6 Diagnosis + CTA',
-    body: SB + TB + `
+  /* ================= 7 — peak diagnosis ================= */
+  { id:'report', title:'Frame 7 — Peak Diagnosis', sub:'flat phoneme report · conversion CTA straight under the waveform', core:true, strip:'7 Diagnosis + CTA',
+    body: SB + `
       <div class="canvas">
         <div class="scorebox">
           <div class="num">87</div>
@@ -667,6 +769,7 @@ const FRAMES = [
         </div>
 
         <div class="phoneme">
+          <div class="ailabel">AI PHONEME DIAGNOSIS · CEFR A2</div>
           <div class="phonbars">
             <i style="height:16px"></i><i style="height:28px"></i><i class="off" style="height:22px"></i>
             <i class="off" style="height:34px"></i><i class="off" style="height:20px"></i>
@@ -674,10 +777,9 @@ const FRAMES = [
             <i style="height:32px"></i><i class="off" style="height:24px"></i><i style="height:38px"></i>
             <i style="height:20px"></i><i style="height:30px"></i><i style="height:16px"></i>
           </div>
-          <div class="phonlegend"><span>▭ STANDARD</span><span>▮ OFF</span></div>
+          <div class="phonlegend"><span>▮ ON TARGET</span><span>▭ OFF</span></div>
         </div>
 
-        <!-- conversion entry sits directly under the waveform: no second scroll -->
         <button class="btn accent">${ic('rocket',15)} START 3-DAY FREE TRIAL</button>
         <div class="rewardrow">
           <div class="rw"><span>+40</span>XP EARNED</div>
@@ -694,19 +796,20 @@ const FRAMES = [
         <div class="footline">SESSION SAVED · RETURNING TO UNIT 4</div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.scorebox', pos:'right', html:'<b>Multimodal score.</b> A number block, not an illustration — legibility over delight. The score is the reward.'},
-      {n:2, tgt:'.phoneme', pos:'right', html:'<b>Phoneme-level detail.</b> Off segments are data, not judgement: there is no red anywhere, only contrast.'},
-      {n:3, tgt:'.btn.accent', pos:'right', html:'<b>Conversion sits directly under the waveform.</b> No second scroll, no “learn more” step — the offer arrives while the peak is still warm.'},
-      {n:4, tgt:'.rw', pos:'right', html:'<b>Session rewards above the fold.</b> XP and new words sit below the CTA so they reinforce the value without competing with it.'},
-      {n:5, tgt:'.btn.sec', pos:'right', html:'<b>“Done · Back to Path”, never “Close”.</b> A first-class exit, and the session is marked as experienced so it is not re-offered today.'}
+      {n:1, tgt:'.phoneme', pos:'right', html:'<b>Delta — Phoneme waveform diagnostic.</b> Per-phoneme comparison against the native model, plus a CEFR read. Off-target segments are grey, never red: data, not judgement.'},
+      {n:2, tgt:'.btn.accent', pos:'right', html:'<b>Delta — Emotional-peak upsell.</b> The 1-tap trial sits directly under the waveform, no second scroll. The offer lands while the high of being understood is still warm.'}
     ],
-    footnote:'Accent surface 3 of 3: this is the only coloured button in the entire product.' },
+    notes:[
+      '<b>Flat by design.</b> The report is a score, a waveform and three word cards — no nested card borders around them, no orphaned container in the header.',
+      '<b>Green means a primary action.</b> This is the only green button outside Frame 1, because it is the same kind of thing: the path forward.',
+      '<b>Exit is first-class.</b> “Done · Back to Path”, never “Close”. The session is marked as experienced so it is not re-offered today.'
+    ]},
 
-  /* ================= branch ================= */
-  { id:'tap', title:'Branch — Tap Mode', sub:'reached from Frame 3 when noise > 60 dB', core:false, fallback:true, strip:'Branch · Tap Mode',
+  /* ================= branch · tap mode ================= */
+  { id:'tap', title:'Branch — Tap Mode', sub:'reached from Frame 4 when noise > 60 dB', core:false, fallback:true, strip:'Branch · Tap Mode',
     body: SB + TBFLOW + `
       <div class="canvas">
-        <div class="tapbanner" style="border:2px dashed var(--ink);border-radius:var(--r-pill);padding:7px 11px;
+        <div class="tapbanner" style="border:2px solid var(--mut);border-radius:var(--r-pill);padding:7px 11px;
           font-size:9.5px;font-weight:900;text-align:center;margin-bottom:13px;color:var(--anno)">
           TAP MODE · NO MIC NEEDED</div>
         <div class="turn"><div class="phavatar sm">LILY</div>
@@ -718,19 +821,59 @@ const FRAMES = [
           <div class="phbox" style="padding:11px;margin-bottom:8px"><div class="frline">Je ne sais pas encore.</div></div>
         </div>
         <div style="flex:1"></div>
-        <div class="tapnote" style="font-size:9.5px;font-weight:900;color:var(--mut);text-align:center;
+        <div style="font-size:9.5px;font-weight:900;color:var(--mut);text-align:center;
           line-height:1.6;margin-bottom:10px;letter-spacing:.4px">
           SAME SCENE · SAME 3 MINUTES<br>VOICE DIAGNOSTIC → SENTENCE DIAGNOSTIC</div>
         <button class="btn sec sm">END SESSION</button>
       </div>`,
     callouts:[
-      {n:1, tgt:'.tapbanner', pos:'right', html:'<b>The downgrade is labelled, not disguised.</b> The learner is told why the mode changed. No silent failure.'},
-      {n:2, tgt:'.tapopts', pos:'right', html:'<b>Same conversation, tapped instead of spoken.</b> Real French replies in Duolingo’s voice — no placeholder text anywhere.'},
-      {n:3, tgt:'.tapnote', pos:'right', html:'<b>The diagnostic degrades too.</b> Voice scoring becomes sentence scoring. Lower fidelity — but the session still ends on a peak.'}
+      {n:1, tgt:'.tapopts', pos:'right', html:'<b>Delta — the same conversation, tapped instead of spoken.</b> Real French replies in Duolingo’s voice, and the diagnostic downgrades from phoneme scoring to sentence scoring.'}
     ],
-    footnote:'Both entry paths (noise over 60 dB, or a denied mic) are expected states, not exceptions.' }
-];
+    notes:[
+      '<b>The downgrade is labelled, not disguised.</b> The banner tells the learner why the mode changed — no silent failure.',
+      '<b>Both entry paths are expected states,</b> not exceptions: noise over 60 dB, or a denied mic.'
+    ]},
 
+  /* ================= branch · cap / fill failure ================= */
+  { id:'cap', title:'Branch — Cap Reached / Ad Unfilled', sub:'frequency cap exhausted or the ad failed to fill · same sheet, new offer', core:false, fallback:true, strip:'Branch · Cap / No Fill',
+    body: SB + `
+      <div class="canvas flush">
+        <div class="lesson">
+          <div class="lhead">
+            <div class="lbar"><i></i></div>
+            <div class="hrow">${ic('heartbreak',17)}0</div>
+          </div>
+          <div class="qstem">Complete the sentence</div>
+          <div class="qsub">AT THE CAFÉ · LESSON 3 OF 5</div>
+          <div class="opt">Je voudrais ___ une chambre.</div>
+          <div class="opt bad">réservation</div>
+          <div class="opt">réserver</div>
+        </div>
+
+        <div class="scrim"></div>
+
+        <div class="hsheet">
+          <div class="grab"></div>
+          <div class="htitle">No free restores left today</div>
+          <div class="hsub">You’ve used both sponsored refills. Your lesson is saved — here are the other ways back in.</div>
+          <div class="caprow">
+            <div class="capopt"><span class="big">${I.bolt}</span>350 GEMS<br>REFILL NOW</div>
+            <div class="capopt"><span class="big">${I.star}</span>TRY SUPER<br>UNLIMITED HEARTS</div>
+          </div>
+          <button class="btn accent">${ic('rocket',15)} START 3-DAY FREE TRIAL</button>
+          <button class="btn tx">Not now — keep my progress</button>
+          <div class="hnote">THE AD-FAILURE PATH LANDS HERE TOO</div>
+        </div>
+      </div>`,
+    callouts:[
+      {n:1, tgt:'.caprow', pos:'right', html:'<b>Delta — same sheet, honest change of offer.</b> Frequency cap hit or the SDK returned no fill — either way the learner never sees a dead end, and never sees an ad that isn’t there.'}
+    ],
+    notes:[
+      '<b>Frequency cap (2/day).</b> Hitting the cap swaps the ad offer for gems or the Super/Max trial instead of showing a broken button.',
+      '<b>No ad fill.</b> If the SDK fails to fill, the sheet degrades to the same gems-or-trial choice — the reward is never promised and then withdrawn.',
+      '<b>Progress is never punished.</b> Both exits keep the lesson state, so the interruption costs time, not work.'
+    ]}
+];
 /* ================= viewer ================= */
 const SCALE = 0.80;
 let cur = 0, picked = null;
@@ -756,15 +899,21 @@ function setMode(m){
 }
 
 function renderStrip(){
-  document.getElementById('strip').innerHTML = FRAMES.map((f,i)=>
-    (i ? '<span class="sarrow">▶</span>' : '') +
-    `<div class="step ${f.fallback?'fb':''} ${i===cur?'on':''}" onclick="go(${i})">${f.strip}` +
-    (f.core ? '<span class="badge">CORE</span>' : '') + '</div>').join('');
+  let k = 0;
+  document.getElementById('strip').innerHTML = FRAMES.map((f,i)=>{
+    if(f.fallback) return '';
+    const arrow = (k++ ? '<span class="sarrow">▶</span>' : '');
+    return arrow + `<div class="step ${i===cur?'on':''}" onclick="go(${i})">${f.strip}` +
+      (f.core ? '<span class="badge">CORE</span>' : '') + '</div>';
+  }).join('');
+  const at = id => FRAMES.findIndex(f => f.id === id);
+  const chip = (id,label) => { const i = at(id); return i < 0 ? '' : `<div class="step fb" onclick="go(${i})">${label}</div>`; };
   document.getElementById('fbrow').innerHTML =
     '<span class="hint">Branches:</span>' +
-    '<div class="step fb" onclick="go(6)">noise &gt; 60 dB → Tap Mode</div>' +
-    '<div class="step fb" onclick="go(2)">mic denied → back to Frame 3</div>' +
-    '<div class="step fb" onclick="go(4)">3s silence → nudge, never a timeout</div>';
+    chip('tap','noise &gt; 60 dB → Tap Mode') +
+    chip('cap','cap reached / no ad fill → gems or trial') +
+    chip('check','mic denied → back to Room Check') +
+    chip('core','3s silence → nudge, never a timeout');
 }
 
 function placeCallouts(){
@@ -805,7 +954,8 @@ function render(){
   document.getElementById('fSub').textContent = f.sub;
   document.getElementById('fCore').style.display = f.core ? '' : 'none';
   document.getElementById('fCount').textContent = (cur+1) + ' / ' + FRAMES.length + ' frames';
-  document.getElementById('footnote').textContent = f.footnote;
+  document.getElementById('footnote').innerHTML = '<div class="fnhead">TALKING POINTS · the detail behind these frames</div><ul class="fnlist">' +
+    (f.notes || []).map(t => '<li>' + t + '</li>').join('') + '</ul>';
   document.getElementById('pos').textContent = (cur+1) + ' / ' + FRAMES.length;
   document.getElementById('bPrev').disabled = cur === 0;
   document.getElementById('bNext').disabled = cur === FRAMES.length-1;
