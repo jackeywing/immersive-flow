@@ -76,6 +76,36 @@
   .phone::before{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
     width:96px;height:20px;background:var(--place2);border-radius:11px;z-index:6;}
   .statusbar{display:flex;justify-content:space-between;padding:11px 18px 4px;}
+  .tk{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:900;letter-spacing:.3px;color:var(--strong);}
+  .tk .ic{color:var(--ink);}
+  .tk.low{color:var(--warn);}
+  .tk.low .ic{color:var(--warn);}
+  .switchrow{display:flex;align-items:center;gap:11px;border:2px solid var(--soft);border-radius:var(--r-card);
+    padding:11px;margin-bottom:11px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;width:100%;}
+  .switchrow .stx{flex:1;font-size:10.5px;font-weight:800;color:var(--anno);line-height:1.45;}
+  .switch{width:46px;height:26px;border-radius:var(--r-pill);background:var(--place2);position:relative;flex:none;
+    transition:background .12s;border:2px solid var(--soft);}
+  .switch::after{content:'';position:absolute;top:1px;left:1px;width:18px;height:18px;border-radius:50%;
+    background:#fff;border:2px solid var(--mut);transition:transform .12s;box-sizing:content-box;}
+  .switchrow.on .switch{background:var(--strong);border-color:var(--strong);}
+  .switchrow.on .switch::after{transform:translateX(20px);border-color:var(--strong);}
+  .adbadge{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--soft);border-radius:var(--r-pill);
+    padding:5px 11px;font-size:10px;font-weight:900;letter-spacing:.2px;color:var(--anno);background:#fff;}
+  .adbadge .ic{color:var(--anno);}
+  .adtimer{font-size:10.5px;font-weight:900;letter-spacing:.2px;color:var(--strong);}
+  .adbody{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 16px;}
+  .adframe{width:100%;aspect-ratio:16/9;border-radius:var(--r-card);background:var(--alt);
+    border:2px solid var(--soft);display:flex;align-items:center;justify-content:center;}
+  .phavatar.wm{position:relative;overflow:hidden;}
+  .phavatar.wm .wmbg{position:absolute;left:50%;top:-14px;transform:translateX(-50%);
+    width:122px;height:122px;color:var(--place2);display:flex;}
+  .phavatar.wm .wmbg svg{width:100%;height:100%;}
+  .phavatar.wm .wmfg{position:relative;z-index:1;}
+  .loadbar{width:168px;height:12px;border:2px solid var(--soft);border-radius:var(--r-pill);
+    overflow:hidden;background:#fff;}
+  .loadbar i{display:block;height:100%;width:36%;background:var(--ink);border-radius:var(--r-pill);
+    animation:load 2s ease-in-out infinite;}
+  @keyframes load{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}
   .topbar{display:flex;justify-content:space-between;align-items:center;padding:6px 16px 10px;
     border-bottom:2px solid var(--soft);}
   .tbgrp{display:flex;gap:10px;align-items:center;}
@@ -145,12 +175,17 @@
   .pline{position:absolute;left:0;top:0;width:100%;height:340px;}
   .node{position:absolute;border-radius:var(--r-pill);background:#fff;border:2px solid var(--ink);
     color:var(--ink);display:flex;align-items:center;justify-content:center;}
-  .node svg{width:52%;height:52%;}
+  .node > svg{width:52%;height:52%;}
+  .node .tick{position:absolute;right:-5px;bottom:-5px;width:17px;height:17px;border-radius:50%;
+    background:var(--strong);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+  .node .tick svg{width:8px;height:8px;}
   .node.done{box-shadow:0 4px 0 0 #D8D8D8;}
   .node.active{border-width:3px;color:var(--strong);box-shadow:0 5px 0 0 #D8D8D8;}
   .node.locked{border:2px dashed #C9C9C9;color:#C9C9C9;background:var(--alt);box-shadow:none;}
   .node.mic{background:var(--strong);border-color:var(--strong);color:#fff;box-shadow:0 5px 0 0 #242424;}
-  .node.mic::after{content:'';position:absolute;inset:-9px;border:2px dashed var(--ink);border-radius:var(--r-pill);}
+  /* the node carries a 5px 3-D base; shift the ring 2.5px so it centres on the visual mass */
+  .node.mic::after{content:'';position:absolute;inset:-9px;border:2px dashed var(--ink);
+    border-radius:var(--r-pill);transform:translateY(2.5px);}
   .nlab{position:absolute;font-size:8.5px;font-weight:900;letter-spacing:.5px;color:var(--mut);text-align:center;}
   .nlab.strong{color:var(--strong);}
   .bub{position:absolute;background:#fff;border:2px solid var(--ink);border-radius:var(--r-pill);
@@ -203,7 +238,7 @@
     display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:900;
     color:var(--mut);letter-spacing:.5px;}
   .adlogo{border:2px solid var(--ink);border-radius:var(--r-card);background:#fff;
-    padding:26px 30px;text-align:center;}
+    padding:18px 24px;text-align:center;}
   .adlogo .lm{font-size:15px;font-weight:900;letter-spacing:1.2px;color:var(--strong);}
   .adlogo .ls{font-size:8.5px;font-weight:900;letter-spacing:.9px;color:var(--mut);margin-top:7px;}
   .adlogo .lbox{width:64px;height:10px;background:var(--place2);border-radius:3px;margin:14px auto 0;}
@@ -229,7 +264,11 @@
   .ghostunder .gbtn{background:#D8D8D8;border-radius:var(--r-pill);height:38px;}
   .modal{position:relative;border:2px solid var(--strong);border-radius:var(--r-modal);background:#fff;
     padding:15px;width:100%;box-shadow:0 6px 0 0 rgba(0,0,0,.06);}
-  .mtitle{font-size:12.5px;font-weight:900;color:var(--strong);margin-bottom:12px;}
+  .mtitle{font-size:12.5px;font-weight:900;color:var(--strong);margin-bottom:9px;}
+  .mbody{font-size:10.5px;font-weight:700;color:var(--anno);line-height:1.55;margin-bottom:12px;}
+  .rhead{margin-bottom:14px;}
+  .rhead .rh1{font-size:17px;font-weight:900;color:var(--strong);line-height:1.2;}
+  .rhead .rh2{font-size:9.5px;font-weight:900;letter-spacing:.8px;color:var(--anno);margin-top:4px;}
   .mrow{border:2px solid var(--soft);border-radius:var(--r-card);padding:11px;margin-bottom:8px;
     display:flex;align-items:center;gap:10px;}
   .mrow .ic{width:26px;height:26px;border:2px solid var(--ink);border-radius:9px;
@@ -262,8 +301,8 @@
   .headsetwrap{position:relative;display:flex;align-items:center;justify-content:center;}
   .headsetwrap .hs{position:absolute;top:-18px;color:var(--ink);}
   .headsetwrap .hs svg{width:38px;height:38px;}
-  .bridgebox .line{border:2px solid var(--strong);border-radius:var(--r-pill);padding:10px 16px;font-size:11px;
-    font-weight:900;letter-spacing:.5px;background:#fff;color:var(--strong);}
+  .bridgebox .line{border:2px solid var(--strong);border-radius:var(--r-card);padding:13px 16px;font-size:12px;
+    font-weight:900;line-height:1.45;background:#fff;color:var(--strong);max-width:262px;text-align:center;}
   .micring{width:54px;height:54px;border:2px solid var(--strong);border-radius:50%;display:flex;
     align-items:center;justify-content:center;color:var(--strong);}
   .micring svg{width:22px;height:22px;}
@@ -345,18 +384,20 @@
   .qsub{font-size:9.5px;font-weight:800;color:var(--mut);letter-spacing:.5px;margin-bottom:16px;}
   .opt{border:2px solid var(--soft);border-radius:var(--r-card);padding:12px;margin-bottom:9px;background:#fff;
     font-size:12.5px;font-weight:800;color:var(--strong);}
-  .opt.bad{border-color:var(--warn);border-style:dashed;color:var(--anno);}
+  .opt.bad{border-color:var(--ink);border-style:dashed;color:var(--mut);}
   .scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:3;}
   .hsheet{position:absolute;left:0;right:0;bottom:0;background:#fff;
     border-radius:var(--r-modal) var(--r-modal) 0 0;padding:10px 16px 15px;z-index:4;}
   .hpair{display:flex;align-items:center;justify-content:center;gap:13px;margin:2px 0 12px;}
-  .hcell{width:64px;height:64px;border-radius:var(--r-card);display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:3px;background:var(--alt);}
-  .hcell .hico{width:25px;height:25px;display:flex;}
+  /* both cells share one line-height so icon + caption stay on the same baseline */
+  .hcell{width:76px;height:70px;border-radius:var(--r-card);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:6px;background:var(--alt);}
+  .hcell .hico{width:25px;height:25px;display:flex;align-items:center;justify-content:center;flex:none;}
   .hcell .hico svg{width:100%;height:100%;}
   .hcell.low .hico{color:var(--warn);}
-  .hcell.full .hico{color:var(--accent-d);}
-  .hcell .hcap{font-size:7.5px;font-weight:900;letter-spacing:.4px;color:var(--mut);}
+  .hcell.full .hico{color:var(--ink);}          /* normal grey — green is for actions, not decoration */
+  .hcell .hcap{font-size:7.5px;font-weight:900;letter-spacing:.4px;color:var(--mut);
+    white-space:nowrap;line-height:1;flex:none;}
   .harrow{font-size:16px;font-weight:900;color:var(--mut);}
   .htitle{font-size:17px;font-weight:900;color:var(--strong);line-height:1.2;margin-bottom:6px;}
   .hsub{font-size:11px;font-weight:700;color:var(--anno);line-height:1.6;margin-bottom:11px;}
@@ -464,6 +505,17 @@ const I = {
   person:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8.1" r="3.8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M4.4 20.5c1.4-3.8 4.2-5.7 7.6-5.7s6.2 1.9 7.6 5.7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
   bolt:'<svg viewBox="0 0 24 24"><path d="M13.6 2.1L4.4 13.3h5.5l-1.5 8.6 8.9-11.2h-5.5z" fill="currentColor"/></svg>',
   heartbreak:'<svg viewBox="0 0 24 24"><path d="M12 20.6l-1.6-1.5C5.4 14.6 2.2 11.6 2.2 8 2.2 5.4 4.2 3.5 6.8 3.5c1.6 0 3.1.7 4.2 2.1l1 1.3 1-1.3c1.1-1.4 2.6-2.1 4.2-2.1 2.6 0 4.6 1.9 4.6 4.5 0 3.6-3.2 6.6-8.2 11.1L12 20.6z" fill="currentColor"/><path d="M12.7 3.4l-2.3 5.2 3.2 2.2-2.7 4.7" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>',
+  /* --- global token icons --- */
+  flag:'<svg viewBox="0 0 24 24"><rect x="3.2" y="4.8" width="17.6" height="14.4" rx="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9.1 4.8v14.4M14.9 4.8v14.4" stroke="currentColor" stroke-width="2.2"/></svg>',
+  flame:'<svg viewBox="0 0 24 24"><path d="M12.6 2.2c3.3 3.8 5.5 6.6 5.5 9.7a6.1 6.1 0 01-12.2 0c0-1.8.7-3.3 1.9-4.7.2 1.1.8 1.9 1.7 2.2.1-2.6 1.1-5.1 3.1-7.2z" fill="currentColor"/></svg>',
+  gem:'<svg viewBox="0 0 24 24"><path d="M7.4 3.2h9.2l4.1 5.5L12 21.1 3.3 8.7z" fill="currentColor"/></svg>',
+  batt:'<svg viewBox="0 0 24 24"><rect x="2.4" y="7.2" width="16.2" height="9.6" rx="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="4.8" y="9.6" width="9.2" height="4.8" rx="1.2" fill="currentColor"/><path d="M20.6 10.4v3.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>',
+  batt0:'<svg viewBox="0 0 24 24"><rect x="2.4" y="7.2" width="16.2" height="9.6" rx="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M20.6 10.4v3.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M5.6 12h9.8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  scroll:'<svg viewBox="0 0 24 24"><path d="M5.6 4.6h10.6a2.2 2.2 0 012.2 2.2v11.4a2 2 0 001.9 2H7.8a2.2 2.2 0 01-2.2-2.2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M8.8 9h6.6M8.8 12.4h6.6M8.8 15.8h4.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  heartp:'<svg viewBox="0 0 24 24"><path d="M12 20.2l-1.6-1.5C5.4 14.3 2.2 11.3 2.2 7.7 2.2 5.1 4.2 3.2 6.8 3.2c1.6 0 3.1.7 4.2 2.1l1 1.3 1-1.3c1.1-1.4 2.6-2.1 4.2-2.1 2.6 0 4.6 1.9 4.6 4.5 0 3.6-3.2 6.6-8.2 11L12 20.2z" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>',
+  /* Lily — grayscale vector outline, 2px stroke */
+  /* watermark portrait — filled silhouette, meant to sit faintly behind a label */
+  wm:'<svg viewBox="0 0 120 120" fill="currentColor"><circle cx="60" cy="41" r="25"/><path d="M13 120c0-26 21-46 47-46s47 20 47 46z"/></svg>',
   mic:'<svg viewBox="0 0 24 24"><rect x="9" y="2.2" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.2 11.4a6.8 6.8 0 0013.6 0" fill="none" stroke="currentColor" stroke-width="2.3"/><path d="M12 18.2v3.6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg>',
   headphones:'<svg viewBox="0 0 24 24"><path d="M4 14.5v-2.6a8 8 0 0116 0v2.6" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="1.6" y="13.2" width="5.2" height="8.2" rx="2.2" fill="currentColor"/><rect x="17.2" y="13.2" width="5.2" height="8.2" rx="2.2" fill="currentColor"/></svg>',
   noise:'<svg viewBox="0 0 24 24"><path d="M3 12h2.2l2-5.2 3 10.4 3-14 2.8 12 1.8-3.2H21" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -475,22 +527,36 @@ const I = {
 const ic = (n,s)=>`<span class="ic" style="width:${s}px;height:${s}px">${I[n]}</span>`;
 
 const SB = '<div class="statusbar"><span class="ph" style="width:34px;height:9px"></span><span class="ph" style="width:52px;height:9px"></span></div>';
-const TB = `<div class="topbar"><div class="tbgrp"><span class="tbp"></span><span class="tbp"></span></div>
-            <div class="tbgrp"><span class="tbx"></span></div></div>`;
-/* 3-min timer carries the accent */
-const TBFLOW = `<div class="topbar"><div class="tbgrp"><span class="tbp" style="width:52px"></span></div>
-            <div class="tbgrp"><span class="timer">3:00</span></div></div>`;
+/* ---- global top bar tokens: French · Streak · Gems · Energy ---- */
+const tbar = (energy, extra) => `<div class="topbar">
+  <span class="tk"><span class="ic" style="width:15px;height:15px">${I.flag}</span>French</span>
+  <span class="tk"><span class="ic" style="width:14px;height:14px">${I.flame}</span>12</span>
+  <span class="tk"><span class="ic" style="width:14px;height:14px">${I.gem}</span>500</span>
+  <span class="tk${energy === '0' ? ' low' : ''}"><span class="ic" style="width:17px;height:17px">${energy === '0' ? I.batt0 : I.batt}</span>${energy}</span>${extra || ''}
+</div>`;
+const TB  = tbar('5');
+const TB0 = tbar('0');                                   /* depleted — Frame 1 */
+const TBFLOW = tbar('∞', '<span class="timer">3:00</span>');
+
+/* ---- bottom navigation: Home · Quests · Leaderboard · Practice · Profile ---- */
+const NAV = (on) => `<div class="navbar">
+  <span class="nb${on === 'home' ? ' on' : ''}">${I.home}</span>
+  <span class="nb${on === 'quests' ? ' on' : ''}">${I.scroll}</span>
+  <span class="nb${on === 'league' ? ' on' : ''}">${I.shield}</span>
+  <span class="nb${on === 'practice' ? ' on' : ''}">${I.heartp}</span>
+  <span class="nb${on === 'profile' ? ' on' : ''}">${I.person}</span>
+</div>`;
 
 const FRAMES = [
 
   /* ================= 1 · NEW — out-of-hearts trigger ================= */
-  { id:'hearts', title:'Frame 1 — Out of Hearts Trigger', sub:'Rewarded-ad interrupt at hearts = 0 · the highest-intent moment a free learner has', core:true, strip:'1 Out of Hearts',
-    body: SB + `
+  { id:'hearts', title:'Frame 1 — Out of Energy Trigger', sub:'Rewarded-ad interrupt at Energy = 0 · the highest-intent moment a free learner has', core:true, strip:'1 Out of Energy',
+    body: SB + TB0 + `
       <div class="canvas flush">
         <div class="lesson">
           <div class="lhead">
             <div class="lbar"><i></i></div>
-            <div class="hrow">${ic('heartbreak',17)}0</div>
+            <div class="hrow">${ic('batt0',18)}0</div>
           </div>
           <div class="qstem">Complete the sentence</div>
           <div class="qsub">AT THE CAFÉ · LESSON 3 OF 5</div>
@@ -505,38 +571,38 @@ const FRAMES = [
         <div class="hsheet">
           <div class="grab"></div>
           <div class="hpair">
-            <div class="hcell low"><span class="hico">${I.heartbreak}</span><span class="hcap">0 HEARTS</span></div>
+            <div class="hcell low"><span class="hico">${I.batt0}</span><span class="hcap">0 ENERGY</span></div>
             <div class="harrow">→</div>
-            <div class="hcell full"><span class="hico">${I.bolt}</span><span class="hcap">100% ENERGY</span></div>
+            <div class="hcell full"><span class="hico">${I.batt}</span><span class="hcap">100% CHARGE</span></div>
           </div>
-          <div class="htitle">Out of Hearts!</div>
-          <div class="hsub">Watch a 30s sponsored video to refill your energy — and we’ll throw in one free 3-minute AI Flow session.</div>
-          <div class="sponbadge">${ic('play',12)} SPONSORED BY MARRIOTT</div>
-          <button class="btn accent cta2"><span>${ic('play',14)} WATCH AD TO RESTORE ENERGY</span><span style="font-size:9px;font-weight:800;opacity:.9">+ UNLOCKS 1 FREE 3-MIN AI FLOW</span></button>
-          <button class="btn tx">Give up and exit</button>
-          <div class="hnote">1 OF 2 FREE RESTORES USED TODAY</div>
+          <div class="htitle">Out of Energy!</div>
+          <div class="hsub">Watch a 30s sponsored video to instantly refill 100% Energy and unlock a 3-minute AI Voice Challenge for FREE!</div>
+          <div class="sponbadge">${ic('play',12)} Sponsored by Marriott</div>
+          <button class="btn accent">${ic('play',15)} WATCH AD &amp; UNLOCK AI CHALLENGE</button>
+          <button class="btn tx">Quit Lesson</button>
+          <div class="hnote">1 OF 2 FREE ENERGY REFILLS USED TODAY</div>
         </div>
       </div>`,
     callouts:[
       {n:1, tgt:'.hpair', pos:'right', html:'<b>Delta — Heart-Out friction hook.</b> The ad is bound to two things the learner already wants: their lesson survives, and a 3-minute AI session comes free. Restore alone is a toll; restore + Flow is a trade.'}
     ],
     notes:[
-      '<b>Why this moment.</b> Hearts = 0 is the highest-intent point a free learner ever reaches — they have already decided the lesson matters, and they are about to lose it.',
-      '<b>Why not restore-only.</b> Selling energy back reads as a penalty. Bundling one free 3-min AI Flow session reframes the same 30 seconds as an upgrade.',
-      '<b>Guardrails.</b> Capped at 2 free restores/day → the Capac branch handles the cap and any ad-fill failure.'
+      '<b>Why this moment.</b> Energy = 0 is the highest-intent point a free learner ever reaches — they have already decided the lesson matters, and they are about to lose it.',
+      '<b>Why not refill-only.</b> Selling energy back reads as a penalty. Bundling one free 3-min AI Voice Challenge reframes the same 30 seconds as an upgrade.',
+      '<b>Guardrails.</b> Capped at 2 free refills/day → the Cap branch handles the cap and any ad-fill failure.'
     ]},
 
   /* ================= 2 — path entry ================= */
   { id:'trigger', title:'Frame 2 — Path Entry', sub:'Where the AI node lives on the Duolingo learning path', core:true, strip:'2 Path Entry',
-    body: SB + `
+    body: SB + TB + `
       <div class="canvas" style="padding:0">
         <div class="unitbar">
           <span class="ubico">${I.menu}</span>
-          <span class="ubname">UNIT 4 · AT THE CAFÉ</span>
-          <span class="ubheart">${I.heart}5</span>
+          <span class="ubname">PHASE 2 · SECTION 1</span>
+          <span class="ubname" style="color:var(--mut)">2/5</span>
         </div>
         <div class="sectcard">
-          <div><div class="st">UNIT 4: ORDER DRINKS &amp; FOOD</div><div class="ss">2 OF 5 LESSONS COMPLETE</div></div>
+          <div><div class="st">SECTION 1: ORDER DRINKS &amp; FOOD</div><div class="ss">2 OF 5 AUDIO LESSONS COMPLETE</div></div>
           <span class="ubico">${I.bag}</span>
         </div>
 
@@ -548,17 +614,17 @@ const FRAMES = [
             <path d="M220 234 L97 301" stroke="#C9C9C9" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 12"/>
           </svg>
 
-          <div class="node done" style="left:72px;top:0;width:46px;height:46px">${I.check}</div>
-          <div class="node done" style="left:194px;top:48px;width:46px;height:46px">${I.check}</div>
+          <div class="node done" style="left:72px;top:0;width:46px;height:46px">${I.headphones}<span class="tick">${I.check}</span></div>
+          <div class="node done" style="left:194px;top:48px;width:46px;height:46px">${I.headphones}<span class="tick">${I.check}</span></div>
 
           <div class="bub filled" style="left:24px;top:74px">3-MIN AI CHALLENGE</div>
           <div class="node mic" style="left:60px;top:112px;width:56px;height:56px">${I.mic}</div>
 
           <div class="duo" style="left:136px;top:220px;width:40px;height:40px">DUO</div>
           <div class="bub" style="left:193px;top:172px">START</div>
-          <div class="node active" style="left:190px;top:204px;width:60px;height:60px">${I.star}</div>
+          <div class="node active" style="left:190px;top:204px;width:60px;height:60px">${I.headphones}</div>
 
-          <div class="node locked" style="left:74px;top:278px;width:46px;height:46px">${I.lock}</div>
+          <div class="node locked" style="left:74px;top:278px;width:46px;height:46px">${I.headphones}</div>
         </div>
 
         <div class="sheet" style="bottom:58px">
@@ -574,13 +640,7 @@ const FRAMES = [
           <button class="btn cta2"><span>${ic('play',13)} WATCH 30s SPONSOR VIDEO</span><span style="font-size:9px;font-weight:800;opacity:.85">UNLOCKS 3-MIN AI ROLEPLAY</span></button>
         </div>
 
-        <div class="navbar">
-          <span class="nb on">${I.home}</span>
-          <span class="nb">${I.dumb}</span>
-          <span class="nb">${I.shield}</span>
-          <span class="nb">${I.bag}</span>
-          <span class="nb">${I.person}</span>
-        </div>
+        ${NAV('home')}
       </div>`,
     callouts:[
       {n:1, tgt:'.node.mic', pos:'right', html:'<b>Delta — a labelled AI entry on the path.</b> The one node that isn’t a lesson. Filled solid against the hollow lesson nodes, with a dashed halo and a labelled pill above it. No invented icon — Duolingo’s own mic.'}
@@ -593,21 +653,20 @@ const FRAMES = [
 
   /* ================= 3 — rewarded ad ================= */
   { id:'ad', title:'Frame 3 — Sponsored Video', sub:'Rewarded ad container · countdown + sponsor badge, one container', core:false, strip:'3 Sponsored Video',
-    body: SB + `
+    body: SB + TB + `
       <div class="canvas flush">
         <div class="adslot">
-          <div class="adslaplabel">SPONSORED</div>
           <div class="adhead">
-            <div class="adbrand">Marriott Bonvoy <span>×</span> Duo</div>
-            <div class="admeta"><span class="adtag">SPONSORED BY MARRIOTT</span><span class="adcount">0:27</span></div>
+            <span class="adbadge"><span class="ic" style="width:12px;height:12px">${I.play}</span>Sponsored by Marriott</span>
+            <span class="adtimer">Ad ends in 30s</span>
           </div>
-          <div class="adcreative">
-            <div class="adlogo">
-              <div class="lm">MARRIOTT BONVOY</div>
-              <div class="ls">BRAND LOGO PLACEHOLDER</div>
-              <div class="lbox"></div>
+          <div class="adbody">
+            <div class="adframe">
+              <div class="adlogo">
+                <div class="lm">MARRIOTT BONVOY</div>
+                <div class="ls">BRAND LOGO PLACEHOLDER</div>
+              </div>
             </div>
-            <div class="adcap"><div class="cap">BRANDED ANIMATION · 30s</div></div>
           </div>
           <div class="adfoot">
             <div class="adcta">EXPLORE MARRIOTT BONVOY</div>
@@ -618,7 +677,7 @@ const FRAMES = [
         </div>
       </div>`,
     callouts:[
-      {n:1, tgt:'.adhead', pos:'right', html:'<b>Delta — Ad-to-Native handshake.</b> On the Ad SDK’s <b>AdCompleted</b> event we do not bounce to home: the WebSocket pipeline is already warm, so the next frame is native again.'}
+      {n:1, tgt:'.adframe', pos:'right', html:'<b>Delta — Ad-to-Native handshake.</b> On the Ad SDK’s <b>AdCompleted</b> event we do not bounce to home: the WebSocket pipeline is already warm, so the next frame is native again.'}
     ],
     notes:[
       '<b>One container, no nested frames.</b> The player, the sponsor badge and the advertiser CTA all live inside a single ad surface — anything tappable in here is billed as ad interaction.',
@@ -628,7 +687,7 @@ const FRAMES = [
 
   /* ================= 4 — room check ================= */
   { id:'check', title:'Frame 4 — Room Check', sub:'Mic + SNR · quiet vs noisy, with the degrade path', core:false, strip:'4 Room Check',
-    body: SB + `
+    body: SB + TB + `
       <div class="canvas flush">
         <div class="overlay">
           <div class="ghostunder">
@@ -642,7 +701,8 @@ const FRAMES = [
           </div>
           <div class="modal">
             <button class="mclose">${I.close}</button>
-            <div class="mtitle">Ready for 3 minutes?</div>
+            <div class="mtitle">3-Minute Micro-Flow Challenge</div>
+            <div class="mbody">Environment Check: Optimal. Find a quiet spot for real-time barge-in voice feedback.</div>
             <div class="mrow mic"><div class="ic">${I.mic}</div>
               <div style="flex:1"><div class="lbl">MICROPHONE</div><div class="val">Connected · input level good</div>
               <div class="track"><i style="width:74%"></i></div></div></div>
@@ -653,21 +713,15 @@ const FRAMES = [
 
             <div class="noisewarn" id="noiseWarn" style="display:none">
               <div class="ic">${I.alert}</div>
-              <div class="tx">NOISE ABOVE 60 dB<br>WE PRE-SELECTED TAP MODE FOR YOU</div>
+              <div class="tx">NOISE ABOVE 60 dB<br>WE PRE-SELECTED HOLD-TO-TALK FOR YOU</div>
             </div>
 
-            <div class="modesw" id="modesw">
-              <button class="mode on" data-mode="quiet" onclick="setMode('quiet')">
-                <span class="dot"></span><span class="mt">QUIET</span>
-                <span class="md">Full-duplex · barge-in on</span>
-              </button>
-              <button class="mode" data-mode="noisy" onclick="setMode('noisy')">
-                <span class="dot"></span><span class="mt">NOISY</span>
-                <span class="md">Tap mode · no mic needed</span>
-              </button>
-            </div>
+            <button class="switchrow" id="modesw" onclick="toggleFallback()">
+              <span class="stx">High background noise detected? Switch to Hold-to-Talk mode</span>
+              <span class="switch"></span>
+            </button>
 
-            <button class="btn">${ic('mic',14)} I'M READY!</button>
+            <button class="btn">${ic('mic',14)} I'M READY, LET'S TALK</button>
           </div>
         </div>
       </div>`,
@@ -686,13 +740,12 @@ const FRAMES = [
       <div class="canvas flush">
         <div class="bridgebox">
           <div class="autopill">AUTO · NO TAP NEEDED</div>
-          <div class="headsetwrap">
-            <div class="hs">${I.headphones}</div>
-            <div class="phavatar" style="width:84px;height:84px;font-size:12px">LILY</div>
+          <div class="phavatar wm" style="width:104px;height:104px;font-size:12px">
+            <span class="wmbg">${I.wm}</span><span class="wmfg">LILY</span>
           </div>
-          <div class="line">"LET'S TALK."</div>
-          <div class="autoring"><span>2</span></div>
-          <div class="bridgenote">CONNECTING THE LIVE CHANNEL…<br>MIC IS ALREADY ON</div>
+          <div class="line">“Ready? Let’s practice ordering coffee in Paris!”</div>
+          <div class="loadbar"><i></i></div>
+          <div class="bridgenote">CONNECTING THE LIVE CHANNEL…<br>MIC IS ALREADY ON · 2s</div>
         </div>
       </div>`,
     callouts:[
@@ -710,15 +763,14 @@ const FRAMES = [
       <div class="canvas">
         <div class="vadbanner">
           <span class="ic" style="width:15px;height:15px">${I.mic}</span>
-          <span class="tx">&lt;100ms VAD · BARGE-IN LIVE</span>
-          <span class="live">● LISTENING</span>
+          <span class="tx">Lily is listening… (&lt;100ms Barge-in Active)</span>
         </div>
-        <div class="vadbars"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="vadbars"><i></i><i></i><i></i><i></i></div>
 
         <div class="turn me">
           <div class="phavatar sm">YOU</div>
-          <div class="tbub"><div class="tlab">YOU</div>
-            <div class="frline">Bonjour, je voudrais réserver une chambre.</div></div>
+          <div class="tbub"><div class="tlab">YOU · LIVE SUBTITLE</div>
+            <div class="frline">Un café chaud, s’il vous plaît.</div></div>
         </div>
 
         <div class="turn ai">
@@ -726,8 +778,8 @@ const FRAMES = [
           <div class="tbub">
             <div class="tlab">LILY · FIRST LINE</div>
             <div class="mirrorchip">SEMANTIC MIRROR</div>
-            <div class="mirrorline">Got it — you’d like to book a room.</div>
-            <div class="frline">Bien sûr. Avec vue sur mer ou sur la ville ?</div>
+            <div class="mirrorline">Got it! One hot coffee coming right up.</div>
+            <div class="frline">Bien sûr. Avec du sucre ou sans sucre ?</div>
             <div class="bargin"></div>
           </div>
         </div>
@@ -735,13 +787,13 @@ const FRAMES = [
         <div class="turn me">
           <div class="phavatar sm">YOU</div>
           <div class="tbub"><div class="tlab">YOU</div>
-            <div class="frline">Vue sur mer, s’il vous plaît.</div></div>
+            <div class="frline">Sans sucre, merci.</div></div>
         </div>
 
         <div class="turn ai">
           <div class="phavatar sm">LILY</div>
           <div class="tbub"><div class="tlab">LILY</div>
-            <div class="frline">Parfait. Pour combien de nuits ?</div></div>
+            <div class="frline">Très bien. À emporter ou sur place ?</div></div>
         </div>
 
         <button class="btn sec sm" style="margin-top:auto">END SESSION</button>
@@ -758,18 +810,22 @@ const FRAMES = [
 
   /* ================= 7 — peak diagnosis ================= */
   { id:'report', title:'Frame 7 — Peak Diagnosis', sub:'flat phoneme report · conversion CTA straight under the waveform', core:true, strip:'7 Diagnosis + CTA',
-    body: SB + `
+    body: SB + TB + `
       <div class="canvas">
+        <div class="rhead">
+          <div class="rh1">Lesson Complete!</div>
+          <div class="rh2">ORAL FLUENCY REPORT</div>
+        </div>
         <div class="scorebox">
-          <div class="num">87</div>
+          <div class="num">92%</div>
           <div style="flex:1">
-            <div style="font-size:10px;font-weight:900;letter-spacing:.6px;color:var(--anno)">PRONUNCIATION CLARITY</div>
+            <div style="font-size:10px;font-weight:900;letter-spacing:.6px;color:var(--anno)">PHONEME ACCURACY · CEFR B1 LEVEL</div>
             <div class="ph txt" style="width:78%;margin-top:8px"></div>
           </div>
         </div>
 
         <div class="phoneme">
-          <div class="ailabel">AI PHONEME DIAGNOSIS · CEFR A2</div>
+          <div class="ailabel">AI PHONEME DIAGNOSIS · CEFR B1</div>
           <div class="phonbars">
             <i style="height:16px"></i><i style="height:28px"></i><i class="off" style="height:22px"></i>
             <i class="off" style="height:34px"></i><i class="off" style="height:20px"></i>
@@ -780,20 +836,20 @@ const FRAMES = [
           <div class="phonlegend"><span>▮ ON TARGET</span><span>▭ OFF</span></div>
         </div>
 
-        <button class="btn accent">${ic('rocket',15)} START 3-DAY FREE TRIAL</button>
+        <button class="btn accent">${ic('rocket',15)} START 3-DAY FREE SUPER TRIAL</button>
         <div class="rewardrow">
           <div class="rw"><span>+40</span>XP EARNED</div>
           <div class="rw"><span>3</span>NEW WORDS</div>
           <div class="rw"><span>1</span>SCENE DONE</div>
         </div>
         <div class="wordcards">
-          <div class="wc"><div class="w">réserver</div><div class="g">to book</div></div>
-          <div class="wc"><div class="w">vue sur mer</div><div class="g">sea view</div></div>
-          <div class="wc"><div class="w">nuits</div><div class="g">nights</div></div>
+          <div class="wc"><div class="w">un café</div><div class="g">a coffee</div></div>
+          <div class="wc"><div class="w">chaud</div><div class="g">hot</div></div>
+          <div class="wc"><div class="w">sans sucre</div><div class="g">no sugar</div></div>
         </div>
-        <button class="btn sec sm">${ic('close',12)} DONE · BACK TO PATH</button>
+        <button class="btn tx">Claim Rewards &amp; Return Home</button>
         <div class="practise">PRACTISE THESE 3 WORDS →</div>
-        <div class="footline">SESSION SAVED · RETURNING TO UNIT 4</div>
+        <div class="footline">SESSION SAVED · RETURNING TO PHASE 2</div>
       </div>`,
     callouts:[
       {n:1, tgt:'.phoneme', pos:'right', html:'<b>Delta — Phoneme waveform diagnostic.</b> Per-phoneme comparison against the native model, plus a CEFR read. Off-target segments are grey, never red: data, not judgement.'},
@@ -802,7 +858,7 @@ const FRAMES = [
     notes:[
       '<b>Flat by design.</b> The report is a score, a waveform and three word cards — no nested card borders around them, no orphaned container in the header.',
       '<b>Green means a primary action.</b> This is the only green button outside Frame 1, because it is the same kind of thing: the path forward.',
-      '<b>Exit is first-class.</b> “Done · Back to Path”, never “Close”. The session is marked as experienced so it is not re-offered today.'
+      '<b>Exit is first-class.</b> “Claim Rewards &amp; Return Home”, never “Close”. The session is marked as experienced so it is not re-offered today.'
     ]},
 
   /* ================= branch · tap mode ================= */
@@ -814,10 +870,10 @@ const FRAMES = [
           TAP MODE · NO MIC NEEDED</div>
         <div class="turn"><div class="phavatar sm">LILY</div>
           <div class="tbub"><div class="tlab">LILY</div>
-            <div class="frline">Bien sûr. Avec vue sur mer ou sur la ville ?</div></div></div>
+            <div class="frline">Bien sûr. Avec du sucre ou sans sucre ?</div></div></div>
         <div class="tapopts">
-          <div class="phbox" style="padding:11px;margin-bottom:8px"><div class="frline">Vue sur mer, s’il vous plaît.</div></div>
-          <div class="phbox dark" style="padding:11px;margin-bottom:8px"><div class="frline">Avec vue sur la ville.</div></div>
+          <div class="phbox" style="padding:11px;margin-bottom:8px"><div class="frline">Sans sucre, merci.</div></div>
+          <div class="phbox dark" style="padding:11px;margin-bottom:8px"><div class="frline">Avec du sucre, s’il vous plaît.</div></div>
           <div class="phbox" style="padding:11px;margin-bottom:8px"><div class="frline">Je ne sais pas encore.</div></div>
         </div>
         <div style="flex:1"></div>
@@ -836,12 +892,12 @@ const FRAMES = [
 
   /* ================= branch · cap / fill failure ================= */
   { id:'cap', title:'Branch — Cap Reached / Ad Unfilled', sub:'frequency cap exhausted or the ad failed to fill · same sheet, new offer', core:false, fallback:true, strip:'Branch · Cap / No Fill',
-    body: SB + `
+    body: SB + TB0 + `
       <div class="canvas flush">
         <div class="lesson">
           <div class="lhead">
             <div class="lbar"><i></i></div>
-            <div class="hrow">${ic('heartbreak',17)}0</div>
+            <div class="hrow">${ic('batt0',18)}0</div>
           </div>
           <div class="qstem">Complete the sentence</div>
           <div class="qsub">AT THE CAFÉ · LESSON 3 OF 5</div>
@@ -854,7 +910,7 @@ const FRAMES = [
 
         <div class="hsheet">
           <div class="grab"></div>
-          <div class="htitle">No free restores left today</div>
+          <div class="htitle">No free energy refills left today</div>
           <div class="hsub">You’ve used both sponsored refills. Your lesson is saved — here are the other ways back in.</div>
           <div class="caprow">
             <div class="capopt"><span class="big">${I.bolt}</span>350 GEMS<br>REFILL NOW</div>
@@ -880,6 +936,8 @@ let cur = 0, picked = null;
 
 function setMode(m){
   document.querySelectorAll('#phone .mode').forEach(b=>b.classList.toggle('on', b.dataset.mode===m));
+  const sw = document.querySelector('#phone .switchrow');
+  if(sw) sw.classList.toggle('on', m === 'noisy');
   const warn = document.getElementById('noiseWarn');
   const val  = document.getElementById('dbVal');
   const bar  = document.getElementById('dbBar');
@@ -896,6 +954,11 @@ function setMode(m){
     if(bar){ bar.style.width = '58%'; }
   }
   placeCallouts();
+}
+
+function toggleFallback(){
+  const sw = document.querySelector('#phone .switchrow');
+  setMode(sw && sw.classList.contains('on') ? 'quiet' : 'noisy');
 }
 
 function renderStrip(){
