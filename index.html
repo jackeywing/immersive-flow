@@ -55,6 +55,14 @@
     padding:3px 9px;font-size:9.5px;font-weight:900;letter-spacing:.5px;}
 
   .strip{display:flex;align-items:center;gap:6px;overflow-x:auto;padding:8px 2px 10px;}
+  /* 1.1 and 1.2 run in parallel and converge on the same next step */
+  .mergebox{display:flex;align-items:center;flex:none;}
+  .mergecol{display:flex;flex-direction:column;gap:4px;}
+  .mergebracket{position:relative;width:22px;align-self:stretch;margin:0 2px;}
+  .mergebracket::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:11px;
+    border:2px solid var(--mut);border-left:0;border-radius:0 11px 11px 0;}
+  .mergebracket::after{content:'';position:absolute;right:0;top:50%;width:11px;height:2px;
+    background:var(--mut);transform:translateY(-1px);}
   .step{flex:none;border:2px solid var(--soft);background:#fff;border-radius:var(--r-pill);padding:7px 13px;
     font-size:10.5px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.12s;color:var(--anno);}
   .step:hover{border-color:var(--ink);color:var(--ink);}
@@ -93,6 +101,9 @@
     padding:5px 11px;font-size:10px;font-weight:900;letter-spacing:.2px;color:var(--anno);background:#fff;}
   .adbadge .ic{color:var(--anno);}
   .adtimer{font-size:10.5px;font-weight:900;letter-spacing:.2px;color:var(--strong);}
+  .adreward{display:flex;flex-direction:column;align-items:flex-end;gap:6px;width:132px;flex:none;}
+  .adreward .adbar{width:100%;margin-bottom:0;}
+  .adreward .adhint{font-size:8px;letter-spacing:.25px;text-align:right;white-space:nowrap;}
   .adbody{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 16px;}
   .adframe{width:100%;aspect-ratio:16/9;border-radius:var(--r-card);background:var(--alt);
     border:2px solid var(--soft);display:flex;align-items:center;justify-content:center;}
@@ -196,7 +207,6 @@
     display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:900;
     color:var(--strong);z-index:2;}
   .sheettitle{font-size:12.5px;font-weight:900;color:var(--strong);margin-bottom:5px;line-height:1.3;}
-  .cta2{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.25;}
   .navbar{position:absolute;left:0;right:0;bottom:0;height:58px;background:#fff;border-top:2px solid var(--soft);
     display:flex;align-items:center;justify-content:space-around;padding:0 14px;z-index:2;}
   .navbar .nb{position:relative;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#C9C9C9;}
@@ -206,7 +216,7 @@
     background:var(--strong);border-radius:2px;}
 
   .grab{width:42px;height:5px;background:var(--place2);border-radius:3px;margin:0 auto 11px;}
-  .sheetrow{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+  .sheetrow{display:flex;gap:10px;align-items:center;margin-bottom:10px;}
   .valuelist{font-size:11px;font-weight:700;color:var(--anno);line-height:1.7;margin-bottom:9px;}
   .sponsorline{font-size:10px;font-weight:900;letter-spacing:.5px;text-align:center;color:var(--strong);
     border:2px dashed var(--soft);border-radius:var(--r-pill);padding:6px;margin-bottom:9px;}
@@ -322,6 +332,7 @@
   .vadbars i:nth-child(4){animation-delay:.42s}
   .vadbars i:nth-child(5){animation-delay:.56s}
   @keyframes pill{0%,100%{height:16px}45%{height:54px}}
+  .dialoguehead{display:flex;justify-content:flex-end;margin-bottom:8px;}
   .turn{display:flex;gap:8px;margin-bottom:9px;align-items:flex-start;}
   .turn.me{flex-direction:row-reverse;}
   .tbub{border:2px solid var(--soft);border-radius:var(--r-card);padding:10px 12px;background:#fff;}
@@ -395,7 +406,7 @@
   .hcell .hcap{font-size:7.5px;font-weight:900;letter-spacing:.4px;color:var(--mut);
     white-space:nowrap;line-height:1;flex:none;}
   .harrow{font-size:16px;font-weight:900;color:var(--mut);}
-  .htitle{font-size:17px;font-weight:900;color:var(--strong);line-height:1.2;margin-bottom:6px;}
+  .htitle{font-size:17px;font-weight:900;color:var(--strong);line-height:1.2;margin-bottom:14px;}
   .hsub{font-size:11px;font-weight:700;color:var(--anno);line-height:1.6;margin-bottom:11px;}
   .sponbadge{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--soft);
     border-radius:var(--r-pill);padding:4px 10px;font-size:8.5px;font-weight:900;
@@ -471,11 +482,7 @@
 <body>
 
 <header>
-  <h1>Brand-Sponsored Flow Level<small>Frame-by-frame wireflow · greyscale base with two semantic accents</small></h1>
   <div class="tools">
-    <span class="accentchip">GREEN #58CC02 · primary action / completion</span>
-    <span class="aichip">BLUE #1CB0F6 · AI surfaces only</span>
-    <span class="hint">Click a number to link frame ↔ notes</span>
     <button class="tbtn" id="annoBtn" onclick="toggleCo()">Hide callouts</button>
   </div>
 </header>
@@ -522,8 +529,8 @@ const I = {
   flag:'<svg viewBox="0 0 24 24"><rect x="3.2" y="4.8" width="17.6" height="14.4" rx="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9.1 4.8v14.4M14.9 4.8v14.4" stroke="currentColor" stroke-width="2.2"/></svg>',
   flame:'<svg viewBox="0 0 24 24"><path d="M12.6 2.2c3.3 3.8 5.5 6.6 5.5 9.7a6.1 6.1 0 01-12.2 0c0-1.8.7-3.3 1.9-4.7.2 1.1.8 1.9 1.7 2.2.1-2.6 1.1-5.1 3.1-7.2z" fill="currentColor"/></svg>',
   gem:'<svg viewBox="0 0 24 24"><path d="M7.4 3.2h9.2l4.1 5.5L12 21.1 3.3 8.7z" fill="currentColor"/></svg>',
-  batt:'<svg viewBox="0 0 24 24"><rect x="2.4" y="7.2" width="16.2" height="9.6" rx="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="4.8" y="9.6" width="9.2" height="4.8" rx="1.2" fill="currentColor"/><path d="M20.6 10.4v3.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>',
-  batt0:'<svg viewBox="0 0 24 24"><rect x="2.4" y="7.2" width="16.2" height="9.6" rx="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M20.6 10.4v3.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M5.6 12h9.8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  batt:'<svg viewBox="0 0 26 26"><rect x="1" y="8.2" width="21" height="9.6" rx="2.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M24.6 11.4v3.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><rect x="3.30" y="10.6" width="2.48" height="4.8" rx=".9" fill="currentColor"/><rect x="6.78" y="10.6" width="2.48" height="4.8" rx=".9" fill="currentColor"/><rect x="10.26" y="10.6" width="2.48" height="4.8" rx=".9" fill="currentColor"/><rect x="13.74" y="10.6" width="2.48" height="4.8" rx=".9" fill="currentColor"/><rect x="17.22" y="10.6" width="2.48" height="4.8" rx=".9" fill="currentColor"/></svg>',
+  batt0:'<svg viewBox="0 0 26 26"><rect x="1" y="8.2" width="21" height="9.6" rx="2.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M24.6 11.4v3.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.2" opacity=".5"><rect x="3.30" y="10.6" width="2.48" height="4.8" rx=".9"/><rect x="6.78" y="10.6" width="2.48" height="4.8" rx=".9"/><rect x="10.26" y="10.6" width="2.48" height="4.8" rx=".9"/><rect x="13.74" y="10.6" width="2.48" height="4.8" rx=".9"/><rect x="17.22" y="10.6" width="2.48" height="4.8" rx=".9"/></g></svg>',
   scroll:'<svg viewBox="0 0 24 24"><path d="M5.6 4.6h10.6a2.2 2.2 0 012.2 2.2v11.4a2 2 0 001.9 2H7.8a2.2 2.2 0 01-2.2-2.2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M8.8 9h6.6M8.8 12.4h6.6M8.8 15.8h4.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
   heartp:'<svg viewBox="0 0 24 24"><path d="M12 20.2l-1.6-1.5C5.4 14.3 2.2 11.3 2.2 7.7 2.2 5.1 4.2 3.2 6.8 3.2c1.6 0 3.1.7 4.2 2.1l1 1.3 1-1.3c1.1-1.4 2.6-2.1 4.2-2.1 2.6 0 4.6 1.9 4.6 4.5 0 3.6-3.2 6.6-8.2 11L12 20.2z" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>',
   /* Lily — grayscale vector outline, 2px stroke */
@@ -545,11 +552,11 @@ const tbar = (energy, extra, label) => `<div class="topbar">
   <span class="tk"><span class="ic" style="width:15px;height:15px">${I.flag}</span>French</span>
   <span class="tk"><span class="ic" style="width:14px;height:14px">${I.flame}</span>126</span>
   <span class="tk"><span class="ic" style="width:14px;height:14px">${I.gem}</span>1156</span>
-  <span class="tk${energy === '0' ? ' low' : ''}"><span class="ic" style="width:17px;height:17px">${energy === '0' ? I.batt0 : I.batt}</span>${energy}${label ? ' ' + label : ''}</span>${extra || ''}
+  <span class="tk${energy === '0' ? ' low' : ''}"><span class="ic" style="width:20px;height:20px">${energy === '0' ? I.batt0 : I.batt}</span>${energy}${label ? ' ' + label : ''}</span>${extra || ''}
 </div>`;
 const TB  = tbar('5');                                   /* energy restored after the ad */
 const TB0 = tbar('0');                                   /* depleted — 1.1 / 1.2 / ad  */
-const TBFLOW = tbar('∞', '<span class="timer">02:45</span>', 'Energy');
+
 
 /* ---- bottom navigation: Home · Quests · Leaderboard · Practice · Profile ---- */
 const NAV = (on) => `<div class="navbar">
@@ -569,7 +576,6 @@ const FRAMES = [
         <div class="lesson">
           <div class="lhead">
             <div class="lbar"><i></i></div>
-            <div class="hrow">${ic('batt0',18)}0</div>
           </div>
           <div class="qstem">Complete the sentence</div>
           <div class="qsub">AT THE CAFÉ · LESSON 3 OF 5</div>
@@ -589,8 +595,6 @@ const FRAMES = [
             <div class="hcell full"><span class="hico">${I.batt}</span><span class="hcap">100% CHARGE</span></div>
           </div>
           <div class="htitle">Out of Energy! <span class="htico">${I.batt0}</span></div>
-          <div class="hsub">Don’t let your French streak pause here. Watch a quick 30s video to top up <b>100% Energy</b> and claim a <b>FREE 3-Min Express Voice Flow</b>!</div>
-          <div class="sponbadge">${ic('play',12)} Sponsored by Marriott</div>
           <button class="btn accent">${ic('play',15)} WATCH AD &amp; TOP UP ENERGY</button>
           <button class="btn tx">Quit Lesson</button>
           <div class="hnote">1 OF 2 FREE ENERGY REFILLS USED TODAY</div>
@@ -634,9 +638,7 @@ const FRAMES = [
           <div class="bub filled" style="left:14px;top:74px">3-MIN EXPRESS FLOW</div>
           <div class="node mic" style="left:60px;top:112px;width:56px;height:56px">${I.mic}</div>
 
-          <div class="duo" style="left:136px;top:220px;width:40px;height:40px">DUO</div>
-          <div class="bub" style="left:193px;top:172px">START</div>
-          <div class="node active" style="left:190px;top:204px;width:60px;height:60px">${I.headphones}</div>
+          <div class="node locked" style="left:197px;top:211px;width:46px;height:46px">${I.headphones}</div>
 
           <div class="node locked" style="left:74px;top:278px;width:46px;height:46px">${I.headphones}</div>
         </div>
@@ -648,12 +650,11 @@ const FRAMES = [
           <div class="sheetrow">
             <div class="phavatar">LILY</div>
             <div style="flex:1">
-              <div class="sheettitle">Want to test your café ordering with 3 minutes of real AI talk?</div>
-              <div class="valuelist">· Interrupt it any time — it really listens<br>· One whole scene, start to finish<br>· Pronunciation report at the end</div>
+              <div class="sheettitle" style="margin-bottom:0">Want to test your café ordering with 3 minutes of real AI talk?</div>
             </div>
           </div>
           <div class="sponsorline">SPONSOR PAYS · YOU DON'T</div>
-          <button class="btn cta2"><span>${ic('play',13)} WATCH 30s SPONSOR VIDEO</span><span style="font-size:9px;font-weight:800;opacity:.85">UNLOCKS A 3-MIN EXPRESS FLOW</span></button>
+          <button class="btn accent">${ic('play',15)} WATCH AD &amp; TOP UP ENERGY</button>
         </div>
 
         ${NAV('home')}
@@ -675,7 +676,10 @@ const FRAMES = [
         <div class="adslot">
           <div class="adhead">
             <span class="adbadge"><span class="ic" style="width:12px;height:12px">${I.play}</span>Sponsored by Marriott Bonvoy</span>
-            <span class="adtimer">Ad ends in 30s</span>
+            <span class="adreward">
+              <span class="adbar"><i style="width:83%"></i></span>
+              <span class="adhint">REWARD UNLOCKS AT 0:05</span>
+            </span>
           </div>
           <div class="adbody">
             <div class="adframe">
@@ -690,8 +694,6 @@ const FRAMES = [
           <div class="adfoot">
             <div class="adcta">EXPLORE MARRIOTT BONVOY</div>
             <div class="adskip">SKIP · GIVE UP THE REWARD</div>
-            <div class="adbar"><i></i></div>
-            <div class="adhint">REWARD UNLOCKS AT 0:00</div>
           </div>
         </div>
       </div>`,
@@ -752,12 +754,7 @@ const FRAMES = [
               <div class="tx">NOISE ABOVE 60 dB<br>WE PRE-SELECTED HOLD-TO-TALK FOR YOU</div>
             </div>
 
-            <button class="switchrow" id="modesw" onclick="toggleFallback()">
-              <span class="stx">Too noisy around you? Tap for Hold-to-Talk Mode</span>
-              <span class="switch"></span>
-            </button>
-
-            <button class="btn">${ic('mic',14)} I'M READY, LET'S TALK!</button>
+            <button class="btn accent">${ic('mic',14)} I'M READY, LET'S TALK!</button>
           </div>
         </div>
       </div>`,
@@ -772,7 +769,7 @@ const FRAMES = [
 
   /* ================= 5 — zero-touch bridge ================= */
   { id:'bridge', title:'Frame 4 — Auto Hand-off', sub:'2s native transition · zero touchable elements', core:false, strip:'4 Auto 2s',
-    body: SB + `
+    body: SB + TB + `
       <div class="canvas flush">
         <div class="bridgebox">
           <div class="autopill">Connecting to Lily…</div>
@@ -781,7 +778,7 @@ const FRAMES = [
           </div>
           <div class="line">“Enchantée! Ready to order a fresh croissant in Paris?”</div>
           <div class="loadbar"><i></i></div>
-          <div class="bridgenote">Setting up real-time voice pipeline…</div>
+          <div class="bridgenote">Lily is putting on her headphones...</div>
         </div>
       </div>`,
     callouts:[
@@ -795,13 +792,15 @@ const FRAMES = [
 
   /* ================= 6 — micro-flow ================= */
   { id:'core', title:'Frame 5 — 3-min Micro-Flow', sub:'barge-in + semantic mirroring · blue marks every AI surface', core:true, strip:'5 Micro-Flow',
-    body: SB + TBFLOW + `
+    body: SB + TB + `
       <div class="canvas">
         <div class="vadbanner">
           <span class="ic" style="width:15px;height:15px">${I.mic}</span>
           <span class="tx">LILY’S ALL EARS · JUMP IN ANYTIME</span>
         </div>
         <div class="vadbars"><i></i><i></i><i></i><i></i></div>
+
+        <div class="dialoguehead"><span class="timer">02:45</span></div>
 
         <div class="turn me">
           <div class="phavatar sm">YOU</div>
@@ -901,43 +900,13 @@ const FRAMES = [
       '<b>Exit is first-class.</b> “Claim Rewards &amp; Exit”, never “Close”. The session is marked as experienced so it is not re-offered today.'
     ]},
 
-  /* ================= branch · tap mode ================= */
-  { id:'tap', title:'Branch — Tap Mode', sub:'reached from Frame 4 when noise > 60 dB', core:false, fallback:true, strip:'Branch · Tap Mode',
-    body: SB + TBFLOW + `
-      <div class="canvas">
-        <div class="tapbanner" style="border:2px solid var(--mut);border-radius:var(--r-pill);padding:7px 11px;
-          font-size:9.5px;font-weight:900;text-align:center;margin-bottom:13px;color:var(--anno)">
-          TAP MODE · NO MIC NEEDED</div>
-        <div class="turn"><div class="phavatar sm">LILY</div>
-          <div class="tbub"><div class="tlab">LILY</div>
-            <div class="frline">Bien sûr. Avec du sucre ou sans sucre ?</div></div></div>
-        <div class="tapopts">
-          <div class="phbox" style="padding:11px;margin-bottom:8px"><div class="frline">Sans sucre, merci.</div></div>
-          <div class="phbox dark" style="padding:11px;margin-bottom:8px"><div class="frline">Avec du sucre, s’il vous plaît.</div></div>
-          <div class="phbox" style="padding:11px;margin-bottom:8px"><div class="frline">Je ne sais pas encore.</div></div>
-        </div>
-        <div style="flex:1"></div>
-        <div style="font-size:9.5px;font-weight:900;color:var(--mut);text-align:center;
-          line-height:1.6;margin-bottom:10px;letter-spacing:.4px">
-          SAME SCENE · SAME 3 MINUTES<br>VOICE DIAGNOSTIC → SENTENCE DIAGNOSTIC</div>
-        <button class="btn sec sm">END SESSION</button>
-      </div>`,
-    callouts:[
-      {n:1, tgt:'.tapopts', pos:'right', html:'<b>[Delta 1] Degraded Input Path.</b> The same conversation, tapped instead of spoken. Real French replies in Duolingo’s voice, and the diagnostic downgrades from phoneme scoring to sentence scoring.'}
-    ],
-    notes:[
-      '<b>The downgrade is labelled, not disguised.</b> The banner tells the learner why the mode changed — no silent failure.',
-      '<b>Both entry paths are expected states,</b> not exceptions: noise over 60 dB, or a denied mic.'
-    ]},
-
-  /* ================= branch · cap / fill failure ================= */
-  { id:'cap', title:'Branch — Cap Reached / Ad Unfilled', sub:'frequency cap exhausted or the ad failed to fill · same sheet, new offer', core:false, fallback:true, strip:'Branch · Cap / No Fill',
+  /* ================= backup ================= */
+  { id:'cap', title:'Backup — Cap Reached / Ad Unfilled', sub:'frequency cap exhausted or the ad failed to fill · same sheet, new offer', core:false, fallback:true, strip:'Backup · Cap / No Fill',
     body: SB + TB0 + `
       <div class="canvas flush">
         <div class="lesson">
           <div class="lhead">
             <div class="lbar"><i></i></div>
-            <div class="hrow">${ic('batt0',18)}0</div>
           </div>
           <div class="qstem">Complete the sentence</div>
           <div class="qsub">AT THE CAFÉ · LESSON 3 OF 5</div>
@@ -958,7 +927,6 @@ const FRAMES = [
           </div>
           <button class="btn accent">${ic('rocket',15)} START 3-DAY FREE TRIAL</button>
           <button class="btn tx">Not now — keep my progress</button>
-          <div class="hnote">THE AD-FAILURE PATH LANDS HERE TOO</div>
         </div>
       </div>`,
     callouts:[
@@ -1002,18 +970,21 @@ function toggleFallback(){
 }
 
 function renderStrip(){
-  let k = 0;
-  document.getElementById('strip').innerHTML = FRAMES.map((f,i)=>{
-    if(f.fallback) return '';
-    const arrow = (k++ ? '<span class="sarrow">▶</span>' : '');
-    return arrow + `<div class="step ${i===cur?'on':''}" onclick="go(${i})">${f.strip}` +
-      (f.core ? '<span class="badge">CORE</span>' : '') + '</div>';
-  }).join('');
+  const DOORS = ['hearts','trigger'];          /* two entry scenarios, one shared path */
+  const main = FRAMES.map((f,i)=>({f,i})).filter(o=>!o.f.fallback);
+  const step = o => `<div class="step ${o.i===cur?'on':''}" onclick="go(${o.i})">${o.f.strip}` +
+      (o.f.core ? '<span class="badge">CORE</span>' : '') + '</div>';
+  const doors = DOORS.map(id => main.find(o => o.f.id === id)).filter(Boolean);
+  const rest  = main.filter(o => !DOORS.includes(o.f.id));
+  document.getElementById('strip').innerHTML =
+    '<div class="mergebox"><div class="mergecol">' + doors.map(step).join('') +
+    '</div><div class="mergebracket"></div></div>' +
+    '<span class="sarrow">▶</span>' +
+    rest.map((o,k) => step(o) + (k < rest.length-1 ? '<span class="sarrow">▶</span>' : '')).join('');
   const at = id => FRAMES.findIndex(f => f.id === id);
   const chip = (id,label) => { const i = at(id); return i < 0 ? '' : `<div class="step fb" onclick="go(${i})">${label}</div>`; };
   document.getElementById('fbrow').innerHTML =
-    '<span class="hint">Branches:</span>' +
-    chip('tap','noise &gt; 60 dB → Tap Mode') +
+    '<span class="hint">Backup:</span>' +
     chip('cap','cap reached / no ad fill → gems or trial') +
     chip('check','mic denied → back to Room Check') +
     chip('core','3s silence → nudge, never a timeout');
@@ -1086,6 +1057,9 @@ function toggleCo(){
   const on = document.body.classList.toggle('noCo');
   document.getElementById('annoBtn').textContent = on ? 'Show callouts' : 'Hide callouts';
 }
+/* callouts are visible by default; the toggle only ever hides them for a clean screenshot */
+document.body.classList.remove('noCo');
+document.getElementById('annoBtn').textContent = 'Hide callouts';
 document.addEventListener('keydown', e=>{
   if(e.key === 'ArrowRight') move(1);
   if(e.key === 'ArrowLeft')  move(-1);
