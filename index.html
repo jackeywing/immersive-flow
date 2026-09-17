@@ -347,7 +347,6 @@
   .mirrorline{font-size:12.5px;font-weight:900;color:var(--strong);line-height:1.45;
     background:var(--ai-wash);border-radius:8px;padding:7px 9px;margin-bottom:7px;}
   .tbub{position:relative;}
-  .bargin{position:absolute;right:-13px;top:-13px;width:26px;height:26px;border:2px dashed var(--ai);border-radius:50%;}
   .reserved{border:2px dashed var(--mut);border-radius:var(--r-card);padding:11px;font-size:9.5px;font-weight:900;
     color:var(--mut);text-align:center;letter-spacing:.5px;}
 
@@ -438,12 +437,6 @@
   .mclose{position:absolute;top:10px;right:10px;width:26px;height:26px;border:0;background:transparent;
     color:var(--anno);cursor:pointer;padding:3px;font-family:inherit;}
   .mclose svg{width:100%;height:100%;}
-  .fnhead{font-size:9px;font-weight:900;letter-spacing:.8px;color:var(--mut);margin-bottom:7px;}
-  .fnlist{list-style:none;display:flex;flex-direction:column;gap:6px;}
-  .fnlist li{font-size:11.5px;line-height:1.5;color:var(--ink);padding-left:13px;position:relative;}
-  .fnlist li::before{content:'';position:absolute;left:0;top:6px;width:5px;height:5px;
-    border-radius:50%;background:var(--mut);}
-  .fnlist li b{color:var(--strong);}
 
   /* callouts + notes */
   .callout{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--strong);color:#fff;
@@ -457,7 +450,7 @@
   .notesHead em{font-style:normal;font-size:11.5px;color:var(--mut);font-weight:700;}
   .notesHead .core{background:var(--strong);color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;letter-spacing:.5px;}
   .notesHead .count{margin-left:auto;font-size:11px;font-weight:800;color:var(--mut);}
-  .notesBody{height:614px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding-right:6px;}
+  .notesBody{height:653px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding-right:6px;}
   .anno{border:2px solid var(--soft);border-radius:var(--r-card);background:#fff;padding:12px 14px;
     display:flex;gap:12px;cursor:pointer;transition:.14s;}
   .anno:hover{border-color:var(--ink);}
@@ -469,7 +462,6 @@
   .anno.active .n{background:#fff;color:var(--strong);}
   .anno.active .body{color:#E8E8E8;}
   .anno.active .body b{color:#fff;}
-  .footnote{margin-top:10px;font-size:10.5px;color:var(--mut);font-weight:700;line-height:1.65;}
   .nav{display:flex;gap:10px;align-items:center;margin-top:11px;}
   .nav button{background:#fff;border:2px solid var(--ink);border-bottom-width:4px;border-radius:var(--r-pill);
     padding:9px 16px;font-family:inherit;font-weight:900;font-size:11.5px;cursor:pointer;color:var(--ink);}
@@ -507,7 +499,6 @@
       <span class="count" id="fCount"></span>
     </div>
     <div class="notesBody" id="notesBody"></div>
-    <div class="footnote" id="footnote"></div>
   </div>
 </div>
 
@@ -603,12 +594,7 @@ const FRAMES = [
     callouts:[
       {n:1, tgt:'.hpair', pos:'right', html:'<b>[Delta 1] Friction-to-Value Hook.</b> Converts an out-of-energy drop-off moment into a rewarded ad view bundled with a zero-cost AI voice challenge.'}
     ],
-    notes:[
-      '<b>Scenario A — the hard interrupt.</b> Energy = 0 is the highest-intent point a free learner ever reaches: they have already decided the lesson matters and they are about to lose it.',
-      '<b>Convergence.</b> 1.1 and 1.2 are two doors into one room — the same rewarded ad (Frame 2) and the same 3-min AI Flow. Only the entry motive differs.',
-      '<b>Why not refill-only.</b> Selling energy back reads as a penalty. Bundling one free 3-min AI Voice Challenge reframes the same 30 seconds as an upgrade.',
-      '<b>Guardrails.</b> Capped at 2 free refills/day → the Cap branch handles the cap and any ad-fill failure.'
-    ]},
+  },
 
   /* ================= 2 — path entry ================= */
   { id:'trigger', title:'Frame 1.2 — Path Entry', sub:'Scenario B · the learner taps the AI challenge node on the path', core:true, strip:'1.2 Path Entry',
@@ -635,7 +621,7 @@ const FRAMES = [
           <div class="node done" style="left:72px;top:0;width:46px;height:46px">${I.headphones}<span class="tick">${I.check}</span></div>
           <div class="node done" style="left:194px;top:48px;width:46px;height:46px">${I.headphones}<span class="tick">${I.check}</span></div>
 
-          <div class="bub filled" style="left:14px;top:74px">3-MIN EXPRESS FLOW</div>
+          <div class="bub filled" style="left:14px;top:74px">3-MIN PEAK VOICE</div>
           <div class="node mic" style="left:60px;top:112px;width:56px;height:56px">${I.mic}</div>
 
           <div class="node locked" style="left:197px;top:211px;width:46px;height:46px">${I.headphones}</div>
@@ -662,12 +648,7 @@ const FRAMES = [
     callouts:[
       {n:1, tgt:'.node.mic', pos:'right', html:'<b>[Delta 1] Incentive Voice Node.</b> Visual anchor for the 3-minute oral micro-flow, seamlessly embedded into the standard learning path — the one node that isn’t a lesson.'}
     ],
-    notes:[
-      '<b>Node state system.</b> Four states, distinguished only by icon + 3-D base — a completed check with a flat base, the active star with its Duo anchor and START bubble, a dashed locked padlock with no base, and the new AI node.',
-      '<b>Scenario B — the opt-in.</b> Here the learner chooses the AI challenge while browsing the path. Same ad, same session, but self-directed rather than intercepted.',
-      '<b>Why the snake matters.</b> The AI challenge has to read as part of the course, not a side door. Same path geometry, same node grammar.',
-      '<b>Copy.</b> “3-min AI Challenge” rides above the node so the offer is discoverable before anything is tapped.'
-    ]},
+  },
 
   /* ================= 3 — rewarded ad ================= */
   { id:'ad', title:'Frame 2 — Sponsored Video', sub:'Shared convergence · 1.1 and 1.2 feed the same rewarded ad', core:false, strip:'2 Sponsored Video',
@@ -700,11 +681,7 @@ const FRAMES = [
     callouts:[
       {n:1, tgt:'.adframe', pos:'right', html:'<b>[Delta 1] Zero-Interruption Handshake.</b> Listens to the <b>AdCompleted</b> SDK event to pre-connect the backend WebSocket voice pipeline — no bounce back to the home map.'}
     ],
-    notes:[
-      '<b>One container, no nested frames.</b> The player, the sponsor badge and the advertiser CTA all live inside a single ad surface — anything tappable in here is billed as ad interaction.',
-      '<b>Countdown + badge, top-right.</b> The learner always knows who paid and how long is left.',
-      '<b>Completion pays out, not clicks.</b> Skipping is offered plainly, and it forfeits the reward — stated, never hidden.'
-    ]},
+  },
 
   /* ================= 4 — room check ================= */
   { id:'check', title:'Frame 3 — Room Check', sub:'Mic + SNR · quiet vs noisy, with the degrade path', core:false, strip:'3 Room Check',
@@ -738,7 +715,7 @@ const FRAMES = [
         <div class="modallayer">
           <div class="modal">
             <button class="mclose">${I.close}</button>
-            <div class="mtitle">Ready for a 3-Min Express Flow?</div>
+            <div class="mtitle">Ready for a 3-Min Peak Voice?</div>
             <div class="mbody">Lily’s locked in! Find a quiet spot for real-time, live conversation practice.</div>
             <div class="statuspill"><span class="dot"></span>QUIET SPOT DETECTED · LIVE JUMP-IN ACTIVE</div>
             <div class="mrow mic"><div class="ic">${I.mic}</div>
@@ -761,11 +738,7 @@ const FRAMES = [
     callouts:[
       {n:1, tgt:'.mrow.noise', pos:'right', html:'<b>[Delta 1] Adaptive SNR Fallback.</b> Evaluates ambient noise levels (&gt;60 dB) to gracefully degrade full-duplex barge-in into a hold-to-talk mode.'}
     ],
-    notes:[
-      '<b>One exit only.</b> The close control at the top-right dismisses. The old second “Maybe later” button was a duplicate — the two mode cards already carry the real decision.',
-      '<b>Mic check before the clock starts.</b> A failure found here costs nothing; found mid-session it costs all three minutes.',
-      '<b>Mode stays the user’s call.</b> Quiet keeps full-duplex barge-in; noisy swaps to taps. Same scene, same 3 minutes — only the input changes.'
-    ]},
+  },
 
   /* ================= 5 — zero-touch bridge ================= */
   { id:'bridge', title:'Frame 4 — Auto Hand-off', sub:'2s native transition · zero touchable elements', core:false, strip:'4 Auto 2s',
@@ -784,11 +757,7 @@ const FRAMES = [
     callouts:[
       {n:1, tgt:'.bridgebox', pos:'right', html:'<b>[Delta 1] Zero-Touch Transition.</b> A 2-second, zero-click animated intro that masks WebSocket handshake latency.'}
     ],
-    notes:[
-      '<b>Every control removed on purpose.</b> Any button here would be friction disguised as agency.',
-      '<b>The countdown is the loading state.</b> It makes the handshake legible instead of hiding it behind an abstract spinner.',
-      '<b>A character moment, not a spinner.</b> Lily putting on headphones carries the emotional thread from the ad into the session.'
-    ]},
+  },
 
   /* ================= 6 — micro-flow ================= */
   { id:'core', title:'Frame 5 — 3-min Micro-Flow', sub:'barge-in + semantic mirroring · blue marks every AI surface', core:true, strip:'5 Micro-Flow',
@@ -815,7 +784,6 @@ const FRAMES = [
             <div class="mirrorchip">INTENT ECHOING</div>
             <div class="mirrorline">Ah, un café chaud! One hot coffee coming right up.</div>
             <div class="frline">Anything sweet on the side ?</div>
-            <div class="bargin"></div>
           </div>
         </div>
 
@@ -837,11 +805,7 @@ const FRAMES = [
       {n:1, tgt:'.vadbanner', pos:'right', html:'<b>[Delta 1] &lt;100ms Jump-In VAD.</b> On-device voice activity detection cuts off AI text-to-speech audio within 100 ms whenever the user speaks.'},
       {n:2, tgt:'.mirrorchip', pos:'right', html:'<b>[Delta 2] Intent Echoing.</b> AI validates user intent in the opening clause before prompting the next conversational turn.'}
     ],
-    notes:[
-      '<b>Blue means AI.</b> The banner, the five pill bars, the timer and Lily’s live bubble all draw from one colour so the immersive layer is legible at a glance.',
-      '<b>Five rounded pill bars, never a web waveform.</b> Native-feeling volume motion, and the only decoration on the screen.',
-      '<b>No keyboard affordance.</b> In voice mode a bottom text field would split the learner’s focus — the session ends from one clearly labelled exit.'
-    ]},
+  },
 
   /* ================= 7 — peak diagnosis ================= */
   { id:'report', title:'Frame 6 — Peak Diagnosis', sub:'flat phoneme report · conversion CTA straight under the waveform', core:true, strip:'6 Diagnosis + CTA',
@@ -875,7 +839,7 @@ const FRAMES = [
         </div>
 
         <button class="btn accent">${ic('rocket',15)} START 3-DAY FREE SUPER TRIAL</button>
-        <div class="ctasub">Get Unlimited Energy + Infinite Express Voice Flows</div>
+        <div class="ctasub">Get Unlimited Energy + Infinite Peak Voice Flows</div>
         <div class="rewardrow">
           <div class="rw"><span>+40</span>XP EARNED</div>
           <div class="rw"><span>3</span>NEW WORDS</div>
@@ -894,11 +858,7 @@ const FRAMES = [
       {n:1, tgt:'.phoneme', pos:'right', html:'<b>[Delta 2] Phoneme-Level Diagnostic.</b> Instant audio-wave comparison that highlights specific mispronunciations — off-target segments are grey, never red: data, not judgement.'},
       {n:2, tgt:'.btn.accent', pos:'right', html:'<b>[Delta 1] Peak-End Paywall Trigger.</b> Capitalises on the emotional high of finishing a fluid voice chat to present a 1-tap Super Duolingo conversion entry point.'}
     ],
-    notes:[
-      '<b>Flat by design.</b> The report is a score, a waveform and three word cards — no nested card borders around them, no orphaned container in the header.',
-      '<b>Green means a primary action.</b> This is the only green button outside Frame 1, because it is the same kind of thing: the path forward.',
-      '<b>Exit is first-class.</b> “Claim Rewards &amp; Exit”, never “Close”. The session is marked as experienced so it is not re-offered today.'
-    ]},
+  },
 
   /* ================= backup ================= */
   { id:'cap', title:'Backup — Cap Reached / Ad Unfilled', sub:'frequency cap exhausted or the ad failed to fill · same sheet, new offer', core:false, fallback:true, strip:'Backup · Cap / No Fill',
@@ -932,11 +892,7 @@ const FRAMES = [
     callouts:[
       {n:1, tgt:'.caprow', pos:'right', html:'<b>[Delta 1] Graceful Ad Fallback.</b> Same sheet, honest change of offer. Frequency cap hit or the SDK returned no fill — either way the learner never sees a dead end, and never sees an ad that isn’t there.'}
     ],
-    notes:[
-      '<b>Frequency cap (2/day).</b> Hitting the cap swaps the ad offer for gems or the Super/Max trial instead of showing a broken button.',
-      '<b>No ad fill.</b> If the SDK fails to fill, the sheet degrades to the same gems-or-trial choice — the reward is never promised and then withdrawn.',
-      '<b>Progress is never punished.</b> Both exits keep the lesson state, so the interruption costs time, not work.'
-    ]}
+  }
 ];
 /* ================= viewer ================= */
 const SCALE = 0.80;
@@ -1028,8 +984,6 @@ function render(){
   document.getElementById('fSub').textContent = f.sub;
   document.getElementById('fCore').style.display = f.core ? '' : 'none';
   document.getElementById('fCount').textContent = (cur+1) + ' / ' + FRAMES.length + ' frames';
-  document.getElementById('footnote').innerHTML = '<div class="fnhead">TALKING POINTS · the detail behind these frames</div><ul class="fnlist">' +
-    (f.notes || []).map(t => '<li>' + t + '</li>').join('') + '</ul>';
   document.getElementById('pos').textContent = (cur+1) + ' / ' + FRAMES.length;
   document.getElementById('bPrev').disabled = cur === 0;
   document.getElementById('bNext').disabled = cur === FRAMES.length-1;
